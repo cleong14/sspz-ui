@@ -1,12 +1,12 @@
 {
-  "name": "template-vite-react",
+  "name": "sspz-ui",
   "private": true,
   "version": "0.0.0-semantic-release",
   "license": "MIT",
   "description": "Boilerplate for React + Vite project",
-  "homepage": "https://github.com/aquia-inc/template-vite-react#readme",
+  "homepage": "https://github.com/aquia-inc/sspz-ui#readme",
   "bugs": {
-    "url": "https://github.com/aquia-inc/template-vite-react/issues"
+    "url": "https://github.com/aquia-inc/sspz-ui/issues"
   },
   "author": "Aquia, Inc.",
   "contributors": [

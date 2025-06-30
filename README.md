@@ -1,4 +1,4 @@
-# template-vite-react
+# sspz-ui
 
 ## Overview
 
@@ -15,9 +15,9 @@ This project contains the application's UI built with React, Vite, TypeScript, a
 1. Clone the repository and `cd` into the root directory:
 
 ```shell
-git clone git@github.com:aquia/template-vite-react`
+git clone git@github.com:aquia/sspz-ui`
 
-cd template-vite-react
+cd sspz-ui
 ```
 
 2. Setup Node.js and Yarn
