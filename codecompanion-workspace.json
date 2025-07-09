@@ -10,20 +10,12 @@
     {
       "name": "SSP Generation Core Logic",
       "system_prompt": "You are focusing on the core logic for generating System Security Plans (SSPs). Pay close attention to how user inputs are processed, how security controls and tool mappings are integrated, and how the final SSP document is structured and rendered. Your goal is to ensure the SSP generation is accurate, comprehensive, and adheres to specified frameworks.",
-      "data": [
-        "sspGenerator",
-        "sspRenderer",
-        "inputProcessor"
-      ]
+      "data": ["sspGenerator", "sspRenderer", "inputProcessor"]
     },
     {
       "name": "Security Controls & Tool Mapping",
       "system_prompt": "You are focusing on the definitions of security control frameworks and the mapping of security tools to specific controls. Understand the structure of security controls data and how tools are associated with them. Your goal is to help ensure the mappings are correct and efficiently handled.",
-      "data": [
-        "securityFrameworks",
-        "toolMappings",
-        "securityTypes"
-      ]
+      "data": ["securityFrameworks", "toolMappings", "securityTypes"]
     },
     {
       "name": "User Interface (Frontend Components)",

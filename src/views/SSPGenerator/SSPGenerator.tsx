@@ -11,7 +11,15 @@ import InputLabel from '@mui/material/InputLabel'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
 import Fallback from '@/components/SimpleLoadingFallback'
+import { NistControl } from '@/types/nist'
 
 /**
  * Component that renders the contents of the SSP Generator view.
@@ -23,6 +31,9 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
   const [systemVersion, setSystemVersion] = React.useState('')
   const [securityFramework, setSecurityFramework] = React.useState('')
   const [securityBaseline, setSecurityBaseline] = React.useState('')
+  const [nistControls, setNistControls] = React.useState<NistControl[]>([])
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
 
   const handleSystemNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -36,8 +47,30 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
     setSystemVersion(event.target.value)
   }
 
-  const handleSecurityFrameworkChange = (event: SelectChangeEvent) => {
-    setSecurityFramework(event.target.value as string)
+  const handleSecurityFrameworkChange = async (event: SelectChangeEvent) => {
+    const selectedFramework = event.target.value as string
+    setSecurityFramework(selectedFramework)
+
+    if (selectedFramework === 'NIST SP 800-53 Rev. 5') {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const response = await fetch('/src/data/nist/nist-800-53-rev5.json')
+        if (!response.ok) {
+          throw new Error('Failed to load NIST 800-53 controls')
+        }
+        const data = await response.json()
+        setNistControls(data.controls || [])
+      } catch (err) {
+        console.error('Error loading NIST 800-53 controls:', err)
+        setError('Failed to load NIST 800-53 controls. Please try again later.')
+        setNistControls([])
+      } finally {
+        setIsLoading(false)
+      }
+    } else {
+      setNistControls([])
+    }
   }
 
   const handleSecurityBaselineChange = (event: SelectChangeEvent) => {
@@ -100,6 +133,63 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                   <MenuItem value="NIST SP 800-53B">NIST SP 800-53B</MenuItem>
                 </Select>
               </FormControl>
+
+              {isLoading && (
+                <Typography>Loading NIST 800-53 controls...</Typography>
+              )}
+              {error && (
+                <Typography color="error" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+
+              {securityFramework === 'NIST SP 800-53 Rev. 5' &&
+                nistControls.length > 0 && (
+                  <Box sx={{ mt: 4, width: '100%' }}>
+                    <Typography variant="h6" gutterBottom>
+                      NIST 800-53 Rev. 5 Controls
+                    </Typography>
+                    <TableContainer
+                      component={Paper}
+                      sx={{ mt: 2, maxHeight: 600, overflow: 'auto' }}
+                    >
+                      <Table stickyHeader size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Family</TableCell>
+                            <TableCell>Title</TableCell>
+                            <TableCell>Priority</TableCell>
+                            <TableCell>Description</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {nistControls.map((control) => (
+                            <TableRow key={control.id} hover>
+                              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                {control.id}
+                              </TableCell>
+                              <TableCell>{control.family}</TableCell>
+                              <TableCell sx={{ minWidth: 200 }}>
+                                {control.title}
+                              </TableCell>
+                              <TableCell>{control.priority}</TableCell>
+                              <TableCell
+                                sx={{
+                                  maxWidth: 500,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                {control.description}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+                )}
               <FormControl sx={{ m: 1, minWidth: 200 }}>
                 <InputLabel id="security-baseline-label">
                   Security Controls Baseline
