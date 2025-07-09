@@ -10,6 +10,14 @@ export interface NistControl {
   guidance?: string
   parameters?: string[]
   relatedControls?: string[]
+  baselines?: {
+    privacy: string | null
+    security: {
+      low: string | null
+      moderate: string | null
+      high: string | null
+    }
+  }
 }
 
 /**

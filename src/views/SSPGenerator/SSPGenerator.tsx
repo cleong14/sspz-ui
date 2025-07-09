@@ -21,6 +21,8 @@ import Paper from '@mui/material/Paper'
 import Fallback from '@/components/SimpleLoadingFallback'
 import { NistControl } from '@/types/nist'
 
+type SecurityBaseline = 'low' | 'moderate' | 'high' | ''
+
 /**
  * Component that renders the contents of the SSP Generator view.
  * @returns {JSX.Element} Component that renders the SSP Generator contents.
@@ -30,7 +32,8 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
   const [systemName, setSystemName] = React.useState('')
   const [systemVersion, setSystemVersion] = React.useState('')
   const [securityFramework, setSecurityFramework] = React.useState('')
-  const [securityBaseline, setSecurityBaseline] = React.useState('')
+  const [securityBaseline, setSecurityBaseline] =
+    React.useState<SecurityBaseline>('')
   const [nistControls, setNistControls] = React.useState<NistControl[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -74,8 +77,29 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
   }
 
   const handleSecurityBaselineChange = (event: SelectChangeEvent) => {
-    setSecurityBaseline(event.target.value as string)
+    setSecurityBaseline(event.target.value as SecurityBaseline)
   }
+
+  // Filter controls based on selected baseline
+  const filteredControls = React.useMemo(() => {
+    if (!securityBaseline || !nistControls.length) return nistControls
+
+    return nistControls.filter((control) => {
+      if (!control.baselines?.security) return false
+
+      // Check if the control has the selected baseline
+      const baselineKey =
+        securityBaseline.toLowerCase() as keyof typeof control.baselines.security
+      const baselineValue = control.baselines.security[baselineKey]
+
+      // Return true if the baseline value exists and is not empty
+      return (
+        baselineValue !== null &&
+        baselineValue !== undefined &&
+        baselineValue !== ''
+      )
+    })
+  }, [nistControls, securityBaseline])
 
   return (
     <React.Suspense fallback={<Fallback />}>
@@ -94,45 +118,95 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
             <Box
               component="form"
               sx={{
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                mt: 3,
+                '& .MuiFormControl-root': { mb: 3 },
               }}
               noValidate
               autoComplete="off"
             >
-              <TextField
-                id="system-name"
-                label="System Name"
-                variant="outlined"
-                value={systemName}
-                onChange={handleSystemNameChange}
-              />
-              <TextField
-                id="system-version"
-                label="System Version"
-                variant="outlined"
-                value={systemVersion}
-                onChange={handleSystemVersionChange}
-              />
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="security-framework-label">
-                  Security Controls Framework
-                </InputLabel>
-                <Select
-                  labelId="security-framework-label"
-                  id="security-framework-select"
-                  value={securityFramework}
-                  label="Security Controls Framework"
-                  onChange={handleSecurityFrameworkChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="NIST SP 800-53 Rev. 5">
-                    NIST SP 800-53 Rev. 5
-                  </MenuItem>
-                  <MenuItem value="NIST SP 800-53B">NIST SP 800-53B</MenuItem>
-                </Select>
-              </FormControl>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gap: 3,
+                  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                  mb: 4,
+                }}
+              >
+                <TextField
+                  id="system-name"
+                  label="System Name"
+                  variant="outlined"
+                  value={systemName}
+                  onChange={handleSystemNameChange}
+                  size="small"
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  id="system-version"
+                  label="System Version"
+                  variant="outlined"
+                  value={systemVersion}
+                  onChange={handleSystemVersionChange}
+                  size="small"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'grid',
+                  gap: 3,
+                  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                  mb: 4,
+                }}
+              >
+                <FormControl variant="outlined" size="small">
+                  <InputLabel id="security-framework-label" shrink>
+                    Security Controls Framework
+                  </InputLabel>
+                  <Select
+                    labelId="security-framework-label"
+                    id="security-framework-select"
+                    value={securityFramework}
+                    label="Security Controls Framework"
+                    onChange={handleSecurityFrameworkChange}
+                    notched
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="NIST SP 800-53 Rev. 5">
+                      NIST SP 800-53 Rev. 5
+                    </MenuItem>
+                    <MenuItem value="NIST SP 800-53B">NIST SP 800-53B</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl variant="outlined" size="small">
+                  <InputLabel id="security-baseline-label" shrink>
+                    Security Baseline
+                  </InputLabel>
+                  <Select
+                    labelId="security-baseline-label"
+                    id="security-baseline-select"
+                    value={securityBaseline}
+                    label="Security Controls Baseline"
+                    onChange={handleSecurityBaselineChange}
+                  >
+                    <MenuItem value="">
+                      <em>All Baselines</em>
+                    </MenuItem>
+                    <MenuItem value="Low">Low</MenuItem>
+                    <MenuItem value="Moderate">Moderate</MenuItem>
+                    <MenuItem value="High">High</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
 
               {isLoading && (
                 <Typography>Loading NIST 800-53 controls...</Typography>
@@ -144,7 +218,7 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
               )}
 
               {securityFramework === 'NIST SP 800-53 Rev. 5' &&
-                nistControls.length > 0 && (
+                (filteredControls.length > 0 || nistControls.length > 0) && (
                   <Box sx={{ mt: 4, width: '100%' }}>
                     <Typography variant="h6" gutterBottom>
                       NIST 800-53 Rev. 5 Controls
@@ -160,11 +234,15 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                             <TableCell>Family</TableCell>
                             <TableCell>Title</TableCell>
                             <TableCell>Priority</TableCell>
+                            <TableCell>Baseline</TableCell>
                             <TableCell>Description</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {nistControls.map((control) => (
+                          {(securityBaseline
+                            ? filteredControls
+                            : nistControls
+                          ).map((control) => (
                             <TableRow key={control.id} hover>
                               <TableCell sx={{ whiteSpace: 'nowrap' }}>
                                 {control.id}
@@ -174,9 +252,15 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                                 {control.title}
                               </TableCell>
                               <TableCell>{control.priority}</TableCell>
+                              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                {control.baselines?.security?.high && 'High '}
+                                {control.baselines?.security?.moderate &&
+                                  'Moderate '}
+                                {control.baselines?.security?.low && 'Low'}
+                              </TableCell>
                               <TableCell
                                 sx={{
-                                  maxWidth: 500,
+                                  maxWidth: 400,
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                 }}
@@ -190,25 +274,6 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                     </TableContainer>
                   </Box>
                 )}
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="security-baseline-label">
-                  Security Controls Baseline
-                </InputLabel>
-                <Select
-                  labelId="security-baseline-label"
-                  id="security-baseline-select"
-                  value={securityBaseline}
-                  label="Security Controls Baseline"
-                  onChange={handleSecurityBaselineChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Low">Low</MenuItem>
-                  <MenuItem value="Moderate">Moderate</MenuItem>
-                  <MenuItem value="High">High</MenuItem>
-                </Select>
-              </FormControl>
             </Box>
           </>
         )}
