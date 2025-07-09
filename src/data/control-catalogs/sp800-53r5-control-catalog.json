@@ -1,0 +1,36 @@
+{
+  "framework": "NIST SP 800-53 Rev. 5",
+  "version": "5.0.1",
+  "controls": [
+    {
+      "id": "AC-1",
+      "name": "Access Control Policy and Procedures",
+      "description": "The organization develops, documents, and disseminates an access control policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and procedures to facilitate the implementation of the access control policy and associated access controls; and reviews and updates the current access control policy and procedures.",
+      "family": "Access Control"
+    },
+    {
+      "id": "AC-2",
+      "name": "Account Management",
+      "description": "The organization manages information system accounts, including establishing, activating, modifying, reviewing, disabling, and removing accounts. The organization reviews accounts for compliance with account management requirements.",
+      "family": "Access Control"
+    },
+    {
+      "id": "AC-3",
+      "name": "Access Enforcement",
+      "description": "The information system enforces approved authorizations for logical access to information and system resources in accordance with applicable access control policies.",
+      "family": "Access Control"
+    },
+    {
+      "id": "AC-4",
+      "name": "Information Flow Enforcement",
+      "description": "The information system enforces approved authorizations for controlling the flow of information within the system and between interconnected systems based on organization-defined information flow control policies.",
+      "family": "Access Control"
+    },
+    {
+      "id": "AU-1",
+      "name": "Audit and Accountability Policy and Procedures",
+      "description": "The organization develops, documents, and disseminates an audit and accountability policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and procedures to facilitate the implementation of the audit and accountability policy and associated audit and accountability controls; and reviews and updates the current audit and accountability policy and procedures.",
+      "family": "Audit and Accountability"
+    }
+  ]
+}
