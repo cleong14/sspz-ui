@@ -1,4 +1,17 @@
 /**
+ * Security tool types
+ */
+export type SecurityTool =
+  | 'semgrep'
+  | 'gitleaks'
+  | 'kics'
+  | 'trivy'
+  | 'bandit'
+  | 'snyk'
+  | 'checkov'
+  | 'tfsec'
+
+/**
  * NIST 800-53 Control Interface
  */
 export interface NistControl {
@@ -18,6 +31,10 @@ export interface NistControl {
       high: string | null
     }
   }
+  /**
+   * List of security tools that can map to this control
+   */
+  tools?: SecurityTool[]
 }
 
 /**

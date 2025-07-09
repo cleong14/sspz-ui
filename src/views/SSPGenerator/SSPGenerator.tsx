@@ -18,8 +18,12 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import Chip from '@mui/material/Chip'
+import Tooltip from '@mui/material/Tooltip'
 import Fallback from '@/components/SimpleLoadingFallback'
-import { NistControl } from '@/types/nist'
+import { NistControl, SecurityTool } from '@/types/nist'
+import { SECURITY_TOOLS } from '@/utils/securityTools'
+import SecurityToolSelector from '@/components/SecurityToolSelector'
 
 type SecurityBaseline = 'low' | 'moderate' | 'high' | ''
 
@@ -34,6 +38,7 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
   const [securityFramework, setSecurityFramework] = React.useState('')
   const [securityBaseline, setSecurityBaseline] =
     React.useState<SecurityBaseline>('')
+  const [selectedTools, setSelectedTools] = React.useState<SecurityTool[]>([])
   const [nistControls, setNistControls] = React.useState<NistControl[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -80,26 +85,36 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
     setSecurityBaseline(event.target.value as SecurityBaseline)
   }
 
-  // Filter controls based on selected baseline
+  // Filter controls based on selected baseline and tools
   const filteredControls = React.useMemo(() => {
-    if (!securityBaseline || !nistControls.length) return nistControls
+    let result = [...nistControls]
 
-    return nistControls.filter((control) => {
-      if (!control.baselines?.security) return false
+    // Apply baseline filter if selected
+    if (securityBaseline) {
+      result = result.filter((control) => {
+        if (!control.baselines?.security) return false
+        const baselineKey =
+          securityBaseline.toLowerCase() as keyof typeof control.baselines.security
+        const baselineValue = control.baselines.security[baselineKey]
+        return (
+          baselineValue !== null &&
+          baselineValue !== undefined &&
+          baselineValue !== ''
+        )
+      })
+    }
 
-      // Check if the control has the selected baseline
-      const baselineKey =
-        securityBaseline.toLowerCase() as keyof typeof control.baselines.security
-      const baselineValue = control.baselines.security[baselineKey]
-
-      // Return true if the baseline value exists and is not empty
-      return (
-        baselineValue !== null &&
-        baselineValue !== undefined &&
-        baselineValue !== ''
+    // Apply tool filter if any tools are selected
+    if (selectedTools.length > 0) {
+      result = result.filter(
+        (control) =>
+          control.tools &&
+          control.tools.some((tool) => selectedTools.includes(tool))
       )
-    })
-  }, [nistControls, securityBaseline])
+    }
+
+    return result
+  }, [nistControls, securityBaseline, selectedTools])
 
   return (
     <React.Suspense fallback={<Fallback />}>
@@ -129,7 +144,7 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                   display: 'grid',
                   gap: 3,
                   gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-                  mb: 4,
+                  mb: 2,
                 }}
               >
                 <TextField
@@ -157,12 +172,29 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                 />
               </Box>
 
+              {/* Security Tools Filter */}
+              <Box sx={{ mb: 4 }}>
+                <SecurityToolSelector
+                  selectedTools={selectedTools}
+                  onChange={setSelectedTools}
+                  disabled={
+                    !nistControls.length ||
+                    securityFramework !== 'NIST SP 800-53 Rev. 5'
+                  }
+                  helperText={
+                    securityFramework === 'NIST SP 800-53 Rev. 5'
+                      ? 'Filter controls by security tools'
+                      : 'Select NIST SP 800-53 Rev. 5 framework first'
+                  }
+                />
+              </Box>
+
               <Box
                 sx={{
                   display: 'grid',
                   gap: 3,
                   gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-                  mb: 4,
+                  mb: 2,
                 }}
               >
                 <FormControl variant="outlined" size="small">
@@ -235,6 +267,7 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                             <TableCell>Title</TableCell>
                             <TableCell>Priority</TableCell>
                             <TableCell>Baseline</TableCell>
+                            <TableCell>Tools</TableCell>
                             <TableCell>Description</TableCell>
                           </TableRow>
                         </TableHead>
@@ -258,14 +291,64 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                                   'Moderate '}
                                 {control.baselines?.security?.low && 'Low'}
                               </TableCell>
+                              <TableCell>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    gap: 0.5,
+                                  }}
+                                >
+                                  {control.tools?.map((toolId) => {
+                                    const toolName =
+                                      SECURITY_TOOLS[toolId]?.name || toolId
+                                    return (
+                                      <Tooltip
+                                        key={toolId}
+                                        title={toolName}
+                                        arrow
+                                      >
+                                        <Chip
+                                          label={toolId}
+                                          size="small"
+                                          variant="outlined"
+                                          sx={{
+                                            textTransform: 'uppercase',
+                                            fontSize: '0.65rem',
+                                            height: 24,
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )
+                                  })}
+                                </Box>
+                              </TableCell>
                               <TableCell
                                 sx={{
                                   maxWidth: 400,
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
                                 }}
                               >
-                                {control.description}
+                                <Tooltip
+                                  title={control.description}
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={500}
+                                >
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      display: 'inline-block',
+                                      maxWidth: '100%',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                  >
+                                    {control.description}
+                                  </Box>
+                                </Tooltip>
                               </TableCell>
                             </TableRow>
                           ))}
