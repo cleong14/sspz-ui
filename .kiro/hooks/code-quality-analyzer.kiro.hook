@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Code Quality Analyzer",
+  "description": "Monitors source code files for changes and analyzes them for potential improvements including code smells, design patterns, best practices, readability, maintainability, and performance optimizations while preserving existing functionality",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.jsx"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the modified code files for potential improvements. Focus on:\n\n1. **Code Smells & Anti-patterns**:\n   - Long functions/components that should be split\n   - Duplicate code that could be extracted\n   - Complex conditional logic that needs simplification\n   - Unused imports, variables, or dead code\n   - Magic numbers/strings that need constants\n\n2. **Design Patterns & Architecture**:\n   - Opportunities to apply React patterns (custom hooks, compound components, render props)\n   - State management improvements (Context API usage, data flow)\n   - Component composition and reusability\n   - Separation of concerns between UI and business logic\n\n3. **Best Practices**:\n   - TypeScript usage (proper typing, avoiding `any`, interface design)\n   - React best practices (proper useEffect dependencies, key props, performance)\n   - Error handling and boundary implementation\n   - Accessibility improvements (ARIA labels, semantic HTML)\n\n4. **Performance Optimizations**:\n   - Unnecessary re-renders (React.memo, useMemo, useCallback opportunities)\n   - Bundle size optimizations (lazy loading, code splitting)\n   - Memory leaks (cleanup in useEffect, event listeners)\n   - Expensive operations that could be optimized\n\n5. **Maintainability & Readability**:\n   - Function/variable naming clarity\n   - Code organization and file structure\n   - Documentation needs (JSDoc comments for complex logic)\n   - Test coverage gaps for critical functionality\n\nFor each suggestion, provide:\n- **Issue**: Clear description of the problem\n- **Impact**: Why this matters (performance, maintainability, bugs)\n- **Solution**: Specific code example or refactoring approach\n- **Priority**: High/Medium/Low based on impact and effort\n\nFocus on actionable improvements that align with the SSP application's architecture and the established coding standards (React 18, TypeScript, Material-UI, Context API patterns)."
+  }
+}

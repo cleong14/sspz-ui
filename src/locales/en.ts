@@ -26,3 +26,5 @@ export const UNAUTHORIZED_ACCESS_MESSAGE =
 export const NOT_FOUND_ERROR_MESSAGE = 'Sorry, we could not find this page.'
 
 export const DASHBOARD_TITLE = 'Dashboard'
+
+export const SSP_GENERATOR_TITLE = 'SSP Generator'

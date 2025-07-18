@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -20,10 +21,12 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import Fallback from '@/components/SimpleLoadingFallback'
 import { NistControl, SecurityTool } from '@/types/nist'
 import { SECURITY_TOOLS } from '@/utils/securityTools'
 import SecurityToolSelector from '@/components/SecurityToolSelector'
+import { generateSSPPDF } from '@/utils/pdfGenerator'
 
 type SecurityBaseline = 'low' | 'moderate' | 'high' | ''
 
@@ -83,6 +86,20 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
 
   const handleSecurityBaselineChange = (event: SelectChangeEvent) => {
     setSecurityBaseline(event.target.value as SecurityBaseline)
+  }
+
+  const handleGeneratePDF = () => {
+    const controlsToExport = securityBaseline ? filteredControls : nistControls
+
+    generateSSPPDF({
+      systemName,
+      systemVersion,
+      securityFramework,
+      securityBaseline,
+      selectedTools,
+      controls: controlsToExport,
+      username: data.username || 'Unknown User',
+    })
   }
 
   // Filter controls based on selected baseline and tools
@@ -172,23 +189,6 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                 />
               </Box>
 
-              {/* Security Tools Filter */}
-              <Box sx={{ mb: 4 }}>
-                <SecurityToolSelector
-                  selectedTools={selectedTools}
-                  onChange={setSelectedTools}
-                  disabled={
-                    !nistControls.length ||
-                    securityFramework !== 'NIST SP 800-53 Rev. 5'
-                  }
-                  helperText={
-                    securityFramework === 'NIST SP 800-53 Rev. 5'
-                      ? 'Filter controls by security tools'
-                      : 'Select NIST SP 800-53 Rev. 5 framework first'
-                  }
-                />
-              </Box>
-
               <Box
                 sx={{
                   display: 'grid',
@@ -238,6 +238,41 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                     <MenuItem value="High">High</MenuItem>
                   </Select>
                 </FormControl>
+              </Box>
+
+              {/* Security Tools Filter */}
+              <Box sx={{ mb: 4 }}>
+                <SecurityToolSelector
+                  selectedTools={selectedTools}
+                  onChange={setSelectedTools}
+                  disabled={
+                    !nistControls.length ||
+                    securityFramework !== 'NIST SP 800-53 Rev. 5'
+                  }
+                  helperText={
+                    securityFramework === 'NIST SP 800-53 Rev. 5'
+                      ? 'Filter controls by security tools'
+                      : 'Select NIST SP 800-53 Rev. 5 framework first'
+                  }
+                />
+              </Box>
+
+              {/* Generate PDF Button */}
+              <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  startIcon={<PictureAsPdfIcon />}
+                  onClick={handleGeneratePDF}
+                  disabled={!systemName || !securityFramework}
+                  sx={{
+                    minWidth: 200,
+                    py: 1.5,
+                  }}
+                >
+                  Generate SSP PDF
+                </Button>
               </Box>
 
               {isLoading && (

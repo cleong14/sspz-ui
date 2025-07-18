@@ -7,7 +7,7 @@ import { Auth } from 'aws-amplify'
 import { defer, LoaderFunction } from 'react-router-dom'
 
 interface UserInfo {
-  username: string
+  username?: string
   // Add other user properties as needed
 }
 
@@ -17,12 +17,20 @@ interface UserInfo {
  */
 const sspGeneratorLoader: LoaderFunction = async () => {
   try {
-    const userInfo: UserInfo = await Auth.currentUserInfo()
+    const userInfo: UserInfo | null = await Auth.currentUserInfo()
+
+    if (!userInfo) {
+      console.warn('No authenticated user found, using default username')
+      return defer({
+        username: 'User',
+      })
+    }
+
     return defer({
       username: userInfo.username || 'User',
     })
   } catch (error) {
-    console.error('Error loading user info:', error)
+    console.warn('Authentication not configured or user not signed in:', error)
     return defer({
       username: 'User',
     })

@@ -18,6 +18,7 @@ export default defineConfig({
       '@': '/src',
       'npm:': '/node_modules/',
     },
+    dedupe: ['@emotion/react', '@emotion/styled'],
   },
   css: {
     preprocessorOptions: {
