@@ -59,7 +59,7 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
     const selectedFramework = event.target.value as string
     setSecurityFramework(selectedFramework)
 
-    if (selectedFramework === 'NIST SP 800-53 Rev. 5') {
+    if (selectedFramework === 'NIST SP 800-53 Rev. 5.1.1') {
       setIsLoading(true)
       setError(null)
       try {
@@ -179,12 +179,12 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                   onChange={setSelectedTools}
                   disabled={
                     !nistControls.length ||
-                    securityFramework !== 'NIST SP 800-53 Rev. 5'
+                    securityFramework !== 'NIST SP 800-53 Rev. 5.1.1'
                   }
                   helperText={
-                    securityFramework === 'NIST SP 800-53 Rev. 5'
+                    securityFramework === 'NIST SP 800-53 Rev. 5.1.1'
                       ? 'Filter controls by security tools'
-                      : 'Select NIST SP 800-53 Rev. 5 framework first'
+                      : 'Select NIST SP 800-53 Rev. 5.1.1 framework first'
                   }
                 />
               </Box>
@@ -212,8 +212,8 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value="NIST SP 800-53 Rev. 5">
-                      NIST SP 800-53 Rev. 5
+                    <MenuItem value="NIST SP 800-53 Rev. 5.1.1">
+                      NIST SP 800-53 Rev. 5.1.1
                     </MenuItem>
                     <MenuItem value="NIST SP 800-53B">NIST SP 800-53B</MenuItem>
                   </Select>
@@ -249,11 +249,11 @@ const SSPGeneratorContainer: React.FC = (): JSX.Element => {
                 </Typography>
               )}
 
-              {securityFramework === 'NIST SP 800-53 Rev. 5' &&
+              {securityFramework === 'NIST SP 800-53 Rev. 5.1.1' &&
                 (filteredControls.length > 0 || nistControls.length > 0) && (
                   <Box sx={{ mt: 4, width: '100%' }}>
                     <Typography variant="h6" gutterBottom>
-                      NIST 800-53 Rev. 5 Controls
+                      NIST 800-53 Rev. 5.1.1 Controls
                     </Typography>
                     <TableContainer
                       component={Paper}
