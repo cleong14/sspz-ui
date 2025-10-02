@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch",
+      "Bash(tree:*)",
+      "Bash(git checkout:*)",
+      "WebSearch",
+      "Bash(yarn build:*)",
+      "Bash(yarn install:*)",
+      "Bash(yarn test:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: update NIST 800-53 from Rev 5.0 to Rev 5.1.1\n\n- Update NIST SP 800-53 controls to Rev 5.1.1 (2024-02-04)\n- Increase control count from 1,189 to 1,193 controls\n- Transform official OSCAL format to application schema\n- Preserve existing tool mappings (20 controls with tools)\n- Update UI references to display \"Rev. 5.1.1\"\n- Add transformation script for future updates\n\nChanges:\n- src/data/nist/nist-800-53-rev5.json: Updated controls data\n- src/views/SSPGenerator/SSPGenerator.tsx: Updated UI strings\n- scripts/transform-nist-oscal.cjs: Added OSCAL transformer\n\nSource: NIST OSCAL GitHub (v1.3.0)\nEOF\n)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
