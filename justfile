@@ -29,6 +29,7 @@ lint:
     yarn lint
 
 dev:
+    sh ./scripts/post-install.sh
     yarn dev
 
 smoke-test:
@@ -44,4 +45,5 @@ alias run := build-dev
 
 build-dev:
     yarn build
+    sh ./scripts/post-install.sh
     yarn dev
