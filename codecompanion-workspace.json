@@ -1,0 +1,83 @@
+{
+  "$schema": "http:/.tsxon-schema.org/draft-07/schema#",
+  "title": "CodeCompanion.nvim workspace configuration file",
+  "description": "Workspace for System Security Plan (SSP) Generator application.",
+  "name": "SSP Generator Application",
+  "version": "0.1.0",
+  "system_prompt": "You are an AI assistant specialized in a React application designed to generate System Security Plans (SSPs). Your task is to provide guidance, suggest code improvements, and answer questions related to the application's architecture, functionality, and specific code implementations. Focus on clarity, accuracy, and adherence to best practices for React and SSP generation.",
+  "vars": {},
+  "groups": [
+    {
+      "name": "SSP Generation Core Logic",
+      "system_prompt": "You are focusing on the core logic for generating System Security Plans (SSPs). Pay close attention to how user inputs are processed, how security controls and tool mappings are integrated, and how the final SSP document is structured and rendered. Your goal is to ensure the SSP generation is accurate, comprehensive, and adheres to specified frameworks.",
+      "data": ["sspGenerator", "sspRenderer", "inputProcessor"]
+    },
+    {
+      "name": "Security Controls & Tool Mapping",
+      "system_prompt": "You are focusing on the definitions of security control frameworks and the mapping of security tools to specific controls. Understand the structure of security controls data and how tools are associated with them. Your goal is to help ensure the mappings are correct and efficiently handled.",
+      "data": ["securityFrameworks", "toolMappings", "securityTypes"]
+    },
+    {
+      "name": "User Interface (Frontend Components)",
+      "system_prompt": "You are focusing on the React frontend components of the application. Understand how user inputs are captured, how the SSP is displayed, and the overall component structure. Your goal is to provide guidance on React best practices, UI/UX improvements, and component-level logic.",
+      "data": [
+        "appComponent",
+        "inputFormComponent",
+        "sspDisplayComponent",
+        "sharedButtonComponent"
+      ]
+    }
+  ],
+  "data": {
+    "sspGenerator": {
+      "type": "file",
+      "path": "src/ssp/generateSSP.tsx",
+      "description": "Core logic for generating the System Security Plan."
+    },
+    "sspRenderer": {
+      "type": "file",
+      "path": "src/ssp/sspRenderer.tsx",
+      "description": "Handles the formatting and rendering of the generated SSP content."
+    },
+    "inputProcessor": {
+      "type": "file",
+      "path": "src/ssp/inputProcessor.tsx",
+      "description": "Processes and validates user inputs for SSP generation."
+    },
+    "securityFrameworks": {
+      "type": "file",
+      "path": "src/security/frameworks.tsx",
+      "description": "Definitions and structures for various security controls frameworks (e.g., NIST, ISO)."
+    },
+    "toolMappings": {
+      "type": "file",
+      "path": "src/security/toolMappings.tsx",
+      "description": "Logic and data for mapping security tools to specific controls within frameworks."
+    },
+    "securityTypes": {
+      "type": "file",
+      "path": "src/security/types.ts",
+      "description": "TypeScript type definitions for security controls, frameworks, and tool mappings."
+    },
+    "appComponent": {
+      "type": "file",
+      "path": "src/App.tsx",
+      "description": "The main application component responsible for overall layout and orchestration."
+    },
+    "inputFormComponent": {
+      "type": "file",
+      "path": "src/components/InputForm.tsx",
+      "description": "React component for capturing user inputs like system details and tool selections."
+    },
+    "sspDisplayComponent": {
+      "type": "file",
+      "path": "src/components/SSPDisplay.tsx",
+      "description": "React component for displaying the generated System Security Plan."
+    },
+    "sharedButtonComponent": {
+      "type": "file",
+      "path": "src/components/shared/Button.tsx",
+      "description": "Example of a generic, shared UI component (e.g., a button)."
+    }
+  }
+}
