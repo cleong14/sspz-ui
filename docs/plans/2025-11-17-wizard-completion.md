@@ -13,6 +13,7 @@
 ## Task 8: Baseline Selection Step
 
 **Files:**
+
 - Create: `src/components/wizard/BaselineSelectionStep.tsx`
 - Create: `src/components/wizard/__tests__/BaselineSelectionStep.test.tsx`
 
@@ -269,6 +270,7 @@ git commit -m "feat: add baseline selection wizard step (Task 8)"
 ## Task 9: Tool Selection Step
 
 **Files:**
+
 - Create: `src/components/wizard/ToolSelectionStep.tsx`
 - Create: `src/components/wizard/__tests__/ToolSelectionStep.test.tsx`
 
@@ -614,6 +616,7 @@ git commit -m "feat: add tool selection wizard step (Task 9)"
 ## Task 10: Control Review Step
 
 **Files:**
+
 - Create: `src/components/wizard/ControlReviewStep.tsx`
 - Create: `src/components/wizard/__tests__/ControlReviewStep.test.tsx`
 
@@ -998,6 +1001,7 @@ git commit -m "feat: add control review wizard step (Task 10)"
 ## Task 11: AI Description Generation Step
 
 **Files:**
+
 - Create: `src/components/wizard/AIDescriptionStep.tsx`
 - Create: `src/components/wizard/__tests__/AIDescriptionStep.test.tsx`
 
@@ -1553,6 +1557,7 @@ git commit -m "feat: add AI description generation wizard step (Task 11)"
 ## Task 12: Wizard Container
 
 **Files:**
+
 - Create: `src/components/wizard/WizardContainer.tsx`
 - Create: `src/components/wizard/__tests__/WizardContainer.test.tsx`
 
@@ -2015,12 +2020,14 @@ git push origin feat/ssp-generator
 ## Next Steps After This Plan
 
 **Priority 2: Enable OSCAL Export (Task 19)**
+
 - Implement `oscal-export.ts` service
 - Map SSPProject to OSCAL SSP schema
 - Add export button to wizard completion
 - Support JSON and XML formats
 
 **Priority 3: Enhancements**
+
 - Replace stub AI with real provider (OpenAI, Anthropic, etc.)
 - Add full NIST 800-53 catalog (all controls)
 - Implement custom tool upload
