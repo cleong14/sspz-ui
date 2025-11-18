@@ -1,0 +1,26 @@
+{
+  "toolId": "gitleaks",
+  "toolName": "Gitleaks",
+  "vendor": "Gitleaks",
+  "category": "secrets",
+  "controlMappings": [
+    {
+      "controlId": "ia-5.1",
+      "coverage": "full",
+      "rationale": "Gitleaks detects hardcoded passwords and credentials in code and git history",
+      "evidence": "Scans for API keys, passwords, tokens across commits"
+    },
+    {
+      "controlId": "ia-5.2",
+      "coverage": "full",
+      "rationale": "Gitleaks enforces public key infrastructure by detecting exposed private keys",
+      "evidence": "Detects exposed RSA keys, SSH keys, TLS certificates"
+    },
+    {
+      "controlId": "sc-12.1",
+      "coverage": "partial",
+      "rationale": "Gitleaks helps manage cryptographic keys by preventing exposure",
+      "evidence": "Detects exposed encryption keys, database credentials"
+    }
+  ]
+}
