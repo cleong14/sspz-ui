@@ -21,21 +21,18 @@ The SSP Generator is a client-side React web application that helps security/com
 ### Core Architecture Layers
 
 1. **Presentation Layer** - React + Material UI
-
    - Quick Start wizard (guided 5-step flow)
    - Advanced mode (dashboard with all configuration)
    - Project management (create, edit, import/export OSCAL)
    - Control browser (search and view NIST 800-53 catalog)
 
 2. **Business Logic Layer** - TypeScript services
-
    - OSCAL file parsing/generation (SSP, catalog, profile)
    - Control mapping engine (match tools to control enhancements)
    - Baseline resolution (Low/Moderate/High control sets)
    - AI orchestration (abstract interface for description generation)
 
 3. **Data Layer** - In-memory state management
-
    - React Context for active SSP project
    - IndexedDB for draft autosave (cleared on export)
    - Static bundled NIST 800-53 Rev 5 OSCAL catalog
@@ -247,13 +244,11 @@ interface GenerationPreferences {
 ### Supported Providers
 
 1. **Anthropic Claude (OAuth)** - Claude Pro/Max subscriptions
-
    - Models: Claude 4.5 Sonnet, Claude 4.5 Haiku, Claude 4.1 Opus
 
 2. **Anthropic Claude (API Key)** - Pay-per-use
 
 3. **OpenAI (API Key)**
-
    - Models: GPT-5, GPT-5-codex
 
 4. **Ollama (Local)** - Air-gapped environments, no auth
@@ -313,35 +308,27 @@ Provide a professional implementation description.
 **Initial tool set with NIST 800-53 mappings (enhancement level):**
 
 1. **Semgrep** (SAST)
-
    - si-10.1, si-11.1, ac-3.1, sc-28.1, etc.
 
 2. **Gitleaks** (Secrets Detection)
-
    - ia-5.1, ia-5.2, sc-12.1
 
 3. **Grype** (SCA)
-
    - si-2.1, si-2.2, ra-5.1
 
 4. **OWASP ZAP** (DAST)
-
    - sa-11.1, ra-5.1, si-11.1
 
 5. **Snyk** (SCA/Container)
-
    - si-2.1, si-2.2, ra-5.1, cm-2.1
 
 6. **KICS** (IaC Security)
-
    - cm-2.1, cm-6.1, sc-7.1
 
 7. **SonarQube** (Code Quality/SAST)
-
    - sa-11.1, si-10.1, si-11.1
 
 8. **Nessus** (Vulnerability Scanning)
-
    - ra-5.1, ra-5.2, si-2.1
 
 9. **Trivy** (Container/IaC)

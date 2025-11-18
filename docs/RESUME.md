@@ -9,7 +9,6 @@
 ## What Was Completed
 
 1. **Full System Design** - Comprehensive design document covering:
-
    - Client-side React architecture with OSCAL integration
    - Data models for SSP projects and tool mappings
    - Dual workflows (Quick Start wizard + Advanced dashboard)
@@ -19,7 +18,6 @@
    - Performance, security, and testing strategies
 
 2. **Design Features Decided:**
-
    - **Users:** Security officers, DevOps teams, auditors
    - **Output formats:** OSCAL (primary), PDF, DOCX, Markdown
    - **Tool integration:** Pre-mapped library + custom upload via JSON schema
