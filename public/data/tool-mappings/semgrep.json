@@ -1,0 +1,32 @@
+{
+  "toolId": "semgrep",
+  "toolName": "Semgrep",
+  "vendor": "Semgrep, Inc.",
+  "category": "SAST",
+  "controlMappings": [
+    {
+      "controlId": "si-10.1",
+      "coverage": "full",
+      "rationale": "Semgrep detects input validation flaws through pattern matching and taint analysis",
+      "evidence": "Detects SQL injection, XSS, command injection, path traversal vulnerabilities"
+    },
+    {
+      "controlId": "si-11.1",
+      "coverage": "full",
+      "rationale": "Semgrep identifies error handling issues and information disclosure through code patterns",
+      "evidence": "Rules for detecting verbose error messages, stack trace exposure"
+    },
+    {
+      "controlId": "ac-3.1",
+      "coverage": "partial",
+      "rationale": "Semgrep can detect broken access control patterns in application code",
+      "evidence": "Detects missing authorization checks, insecure direct object references"
+    },
+    {
+      "controlId": "sc-28.1",
+      "coverage": "partial",
+      "rationale": "Semgrep identifies hardcoded credentials and weak cryptography usage",
+      "evidence": "Detects weak encryption algorithms, hardcoded passwords"
+    }
+  ]
+}
