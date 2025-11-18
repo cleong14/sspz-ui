@@ -42,7 +42,7 @@ export function AIDescriptionStep({
       .then((catalog) => {
         const baselineControls = getBaselineControls(catalog, selectedBaseline)
         const controlsWithDesc = baselineControls.map((control) => {
-          const existing = initialImplementations.find(
+          const existing = initialImplementations?.find(
             (impl) => impl.controlId === control.id
           )
           return {
@@ -58,7 +58,7 @@ export function AIDescriptionStep({
         console.error('Failed to load controls:', err)
         setLoading(false)
       })
-  }, [selectedBaseline, initialImplementations])
+  }, [selectedBaseline])
 
   const generateDescription = (controlId: string) => {
     // Stub AI generation - replace with actual AI provider later
