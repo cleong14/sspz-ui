@@ -13,6 +13,8 @@ import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
+import SSPGenerator from '@/views/SSPGenerator/SSPGenerator'
+import sspGeneratorLoader from '@/views/SSPGenerator/SSPGenerator.loader'
 import RootProvider from '@/Root'
 import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 
@@ -67,6 +69,13 @@ const router = createBrowserRouter([
             element: <Dashboard />,
             errorElement: <ErrorBoundary />,
             loader: dashboardLoader,
+          },
+          {
+            path: RouteIds.SSP_GENERATOR,
+            id: RouteIds.SSP_GENERATOR,
+            element: <SSPGenerator />,
+            errorElement: <ErrorBoundary />,
+            loader: sspGeneratorLoader,
           },
         ],
       },
