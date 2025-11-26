@@ -1,0 +1,151 @@
+# BMM Workflow Status - sspz-ui
+# Generated: 2025-11-25
+# Track: BMad Method (Brownfield)
+
+generated: '2025-11-25'
+project: 'sspz-ui'
+project_type: 'web-application'
+selected_track: 'method'
+field_type: 'brownfield'
+workflow_path: 'method-brownfield.yaml'
+
+# Discovery selections (from workflow-init step 6)
+discovery_selections:
+  brainstorm_requested: false
+  research_requested: false
+  product_brief_requested: false
+
+# Workflow Status Tracking
+# STATUS KEY:
+#   - required/recommended/optional/conditional: Not started
+#   - in_progress: Currently being worked on
+#   - completed: Done (shows output file path)
+#   - skipped: Intentionally skipped
+
+workflow_status:
+  prerequisite:
+    document-project:
+      status: 'completed'
+      agent: 'analyst'
+      command: '/bmad:bmm:workflows:document-project'
+      purpose: 'Analyze and document existing codebase before planning'
+      output: 'docs/index.md'
+      completed_date: '2025-11-25'
+      note: 'COMPLETED - comprehensive documentation generated'
+
+  phase_0_discovery:
+    brainstorm-project:
+      status: 'skipped'
+      agent: 'analyst'
+      note: 'User chose to skip discovery workflows'
+
+    research:
+      status: 'skipped'
+      agent: 'analyst'
+      note: 'User chose to skip discovery workflows'
+
+    product-brief:
+      status: 'skipped'
+      agent: 'analyst'
+      note: 'Optional for brownfield, skipped'
+
+  phase_1_planning:
+    prd:
+      status: 'completed'
+      agent: 'pm'
+      command: '/bmad:bmm:workflows:prd'
+      purpose: 'Create PRD focused on new features/changes'
+      output: 'docs/prd.md'
+      completed_date: '2025-11-25'
+      note: 'COMPLETED - PRD with 7 features, MVP scope defined'
+
+    validate-prd:
+      status: 'optional'
+      agent: 'pm'
+      command: '/bmad:bmm:workflows:validate-prd'
+      output: null
+
+    create-design:
+      status: 'conditional'
+      condition: 'if_has_ui'
+      condition_met: true
+      agent: 'ux-designer'
+      command: '/bmad:bmm:workflows:create-design'
+      output: null
+      note: 'Project has UI components - design workflow applicable'
+
+  phase_2_solutioning:
+    create-architecture:
+      status: 'completed'
+      agent: 'architect'
+      command: '/bmad:bmm:workflows:create-architecture'
+      purpose: 'Integration architecture - solution design for THIS project'
+      output: 'docs/architecture.md'
+      completed_date: '2025-11-25'
+      note: 'COMPLETED - Decision architecture for SSP Generator'
+
+    create-epics-and-stories:
+      status: 'completed'
+      agent: 'pm'
+      command: '/bmad:bmm:workflows:create-epics-and-stories'
+      purpose: 'Break down PRD into implementable epics and stories'
+      output: 'docs/epics.md'
+      completed_date: '2025-11-26'
+      note: 'COMPLETED - 8 epics, 41 stories, all FRs covered'
+
+    test-design:
+      status: 'recommended'
+      agent: 'tea'
+      command: '/bmad:bmm:workflows:test-design'
+      purpose: 'System-level testability review'
+      output: null
+      note: 'Project has existing tests - review recommended'
+
+    validate-architecture:
+      status: 'optional'
+      agent: 'architect'
+      command: '/bmad:bmm:workflows:validate-architecture'
+      output: null
+
+    implementation-readiness:
+      status: 'required'
+      agent: 'architect'
+      command: '/bmad:bmm:workflows:implementation-readiness'
+      purpose: 'Gate check - validates PRD + UX + Architecture + Epics cohesion'
+      output: null
+      note: 'Must pass before implementation phase'
+
+  phase_3_implementation:
+    sprint-planning:
+      status: 'required'
+      agent: 'sm'
+      command: '/bmad:bmm:workflows:sprint-planning'
+      purpose: 'Create sprint plan with prioritized stories'
+      output: null
+      note: 'Begins implementation phase'
+
+# Navigation
+next_workflow:
+  id: 'implementation-readiness'
+  name: 'Implementation Readiness'
+  agent: 'architect'
+  command: '/bmad:bmm:workflows:implementation-readiness'
+  reason: 'Gate check before implementation - validates PRD + Architecture + Epics cohesion'
+
+# Artifacts detected (updated 2025-11-26)
+artifacts_found:
+  bmm_docs:
+    - 'docs/prd.md'
+    - 'docs/architecture.md'
+    - 'docs/epics.md'
+    - 'docs/index.md'
+  codebase:
+    framework: 'React/TypeScript'
+    build_tool: 'Vite'
+    structure: 'src/ with components, hooks, auth, layouts'
+  tests: '*.test.tsx files throughout'
+  tooling:
+    - 'ESLint'
+    - 'Prettier'
+    - 'Husky'
+    - 'Storybook'
