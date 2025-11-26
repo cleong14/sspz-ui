@@ -71,10 +71,11 @@ workflow_status:
         command: "*validate-prd"
 
       - id: "create-design"
-        status: "conditional"
+        status: "docs/ux-design-specification.md"
         condition: "if_has_ui"
         agent: "ux-designer"
         command: "*create-design"
+        note: "Complete - includes color themes HTML and design directions HTML"
 
   # Phase 2: Solutioning (Required)
   phase_2:

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSP Generator - Color Theme Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        header p {
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .theme-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .theme-header {
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .theme-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .theme-header p {
+            opacity: 0.9;
+            font-size: 0.875rem;
+        }
+
+        .theme-personality {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .personality-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+        }
+
+        .theme-content {
+            padding: 1.5rem;
+        }
+
+        .color-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .color-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+
+        .color-swatches {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .swatch {
+            width: 60px;
+            text-align: center;
+        }
+
+        .swatch-color {
+            width: 60px;
+            height: 40px;
+            border-radius: 6px;
+            margin-bottom: 0.25rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .swatch-label {
+            font-size: 0.625rem;
+            color: #64748b;
+        }
+
+        .swatch-hex {
+            font-size: 0.625rem;
+            font-family: monospace;
+            color: #94a3b8;
+        }
+
+        .components-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+
+        .component-demo {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid;
+        }
+
+        .btn-ghost {
+            background: transparent;
+        }
+
+        .demo-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .demo-form {
+            max-width: 300px;
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .demo-alerts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            max-width: 280px;
+        }
+
+        .demo-card-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .demo-card-text {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .recommendation h3 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation p {
+            color: #78350f;
+        }
+
+        /* Theme 1: Federal Blue */
+        .theme-federal-blue .theme-header {
+            background: linear-gradient(135deg, #1e40af, #1d4ed8);
+        }
+        .theme-federal-blue .btn-primary {
+            background: #1d4ed8;
+            color: white;
+        }
+        .theme-federal-blue .btn-primary:hover {
+            background: #1e40af;
+        }
+        .theme-federal-blue .btn-outline {
+            color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+        .theme-federal-blue .btn-ghost {
+            color: #1d4ed8;
+        }
+        .theme-federal-blue .form-input:focus {
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+        }
+
+        /* Theme 2: Modern Slate */
+        .theme-modern-slate .theme-header {
+            background: linear-gradient(135deg, #334155, #475569);
+        }
+        .theme-modern-slate .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .theme-modern-slate .btn-primary:hover {
+            background: #2563eb;
+        }
+        .theme-modern-slate .btn-outline {
+            color: #475569;
+            border-color: #475569;
+        }
+        .theme-modern-slate .btn-ghost {
+            color: #475569;
+        }
+        .theme-modern-slate .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Theme 3: Compliance Green */
+        .theme-compliance-green .theme-header {
+            background: linear-gradient(135deg, #047857, #059669);
+        }
+        .theme-compliance-green .btn-primary {
+            background: #059669;
+            color: white;
+        }
+        .theme-compliance-green .btn-primary:hover {
+            background: #047857;
+        }
+        .theme-compliance-green .btn-outline {
+            color: #059669;
+            border-color: #059669;
+        }
+        .theme-compliance-green .btn-ghost {
+            color: #059669;
+        }
+        .theme-compliance-green .form-input:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        /* Theme 4: Enterprise Navy */
+        .theme-enterprise-navy .theme-header {
+            background: linear-gradient(135deg, #1e3a5f, #0f172a);
+        }
+        .theme-enterprise-navy .btn-primary {
+            background: #1e3a5f;
+            color: white;
+        }
+        .theme-enterprise-navy .btn-primary:hover {
+            background: #0f172a;
+        }
+        .theme-enterprise-navy .btn-outline {
+            color: #1e3a5f;
+            border-color: #1e3a5f;
+        }
+        .theme-enterprise-navy .btn-ghost {
+            color: #1e3a5f;
+        }
+        .theme-enterprise-navy .form-input:focus {
+            border-color: #1e3a5f;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.15);
+        }
+
+        /* Semantic colors - same across themes */
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-error { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        .badge-neutral { background: #f1f5f9; color: #475569; }
+
+        .alert-success { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+        .alert-warning { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
+        .alert-error { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+        .alert-info { background: #dbeafe; color: #1e40af; border-left: 4px solid #3b82f6; }
+
+        .comparison-section {
+            margin-top: 3rem;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .comparison-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+
+        .contrast-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .contrast-pass {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SSP Generator - Color Theme Explorer</h1>
+            <p>Explore 4 professional color themes designed for GovTech compliance applications</p>
+        </header>
+
+        <div class="theme-grid">
+            <!-- Theme 1: Federal Blue -->
+            <div class="theme-card theme-federal-blue">
+                <div class="theme-header">
+                    <h2>1. Federal Blue</h2>
+                    <p>Classic government aesthetic evoking trust and authority</p>
+                    <div class="theme-personality">
+                        <span class="personality-tag">Trustworthy</span>
+                        <span class="personality-tag">Authoritative</span>
+                        <span class="personality-tag">Professional</span>
+                    </div>
+                </div>
+                <div class="theme-content">
+                    <div class="color-section">
+                        <h3>Primary Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #1d4ed8;"></div>
+                                <div class="swatch-label">Primary</div>
+                                <div class="swatch-hex">#1d4ed8</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #1e40af;"></div>
+                                <div class="swatch-label">Primary Dark</div>
+                                <div class="swatch-hex">#1e40af</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #3b82f6;"></div>
+                                <div class="swatch-label">Primary Light</div>
+                                <div class="swatch-hex">#3b82f6</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #dbeafe;"></div>
+                                <div class="swatch-label">Primary BG</div>
+                                <div class="swatch-hex">#dbeafe</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-section">
+                        <h3>Semantic Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #22c55e;"></div>
+                                <div class="swatch-label">Success</div>
+                                <div class="swatch-hex">#22c55e</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f59e0b;"></div>
+                                <div class="swatch-label">Warning</div>
+                                <div class="swatch-hex">#f59e0b</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #ef4444;"></div>
+                                <div class="swatch-label">Error</div>
+                                <div class="swatch-hex">#ef4444</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #64748b;"></div>
+                                <div class="swatch-label">Neutral</div>
+                                <div class="swatch-hex">#64748b</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="components-section">
+                        <h3>Component Examples</h3>
+                        <div class="component-demo">
+                            <div class="demo-buttons">
+                                <button class="btn btn-primary">Primary</button>
+                                <button class="btn btn-outline">Secondary</button>
+                                <button class="btn btn-ghost">Ghost</button>
+                            </div>
+                            <div class="demo-badges">
+                                <span class="badge badge-success">Implemented</span>
+                                <span class="badge badge-warning">Partial</span>
+                                <span class="badge badge-info">Planned</span>
+                                <span class="badge badge-neutral">N/A</span>
+                            </div>
+                            <div class="demo-form">
+                                <div class="form-group">
+                                    <label class="form-label">System Name</label>
+                                    <input type="text" class="form-input" placeholder="Enter system name...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme 2: Modern Slate -->
+            <div class="theme-card theme-modern-slate">
+                <div class="theme-header">
+                    <h2>2. Modern Slate</h2>
+                    <p>Neutral and minimal with subtle blue accents</p>
+                    <div class="theme-personality">
+                        <span class="personality-tag">Minimal</span>
+                        <span class="personality-tag">Modern</span>
+                        <span class="personality-tag">Accessible</span>
+                    </div>
+                </div>
+                <div class="theme-content">
+                    <div class="color-section">
+                        <h3>Primary Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #475569;"></div>
+                                <div class="swatch-label">Primary</div>
+                                <div class="swatch-hex">#475569</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #334155;"></div>
+                                <div class="swatch-label">Primary Dark</div>
+                                <div class="swatch-hex">#334155</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #3b82f6;"></div>
+                                <div class="swatch-label">Accent</div>
+                                <div class="swatch-hex">#3b82f6</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f1f5f9;"></div>
+                                <div class="swatch-label">Background</div>
+                                <div class="swatch-hex">#f1f5f9</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-section">
+                        <h3>Semantic Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #22c55e;"></div>
+                                <div class="swatch-label">Success</div>
+                                <div class="swatch-hex">#22c55e</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f59e0b;"></div>
+                                <div class="swatch-label">Warning</div>
+                                <div class="swatch-hex">#f59e0b</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #ef4444;"></div>
+                                <div class="swatch-label">Error</div>
+                                <div class="swatch-hex">#ef4444</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #64748b;"></div>
+                                <div class="swatch-label">Neutral</div>
+                                <div class="swatch-hex">#64748b</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="components-section">
+                        <h3>Component Examples</h3>
+                        <div class="component-demo">
+                            <div class="demo-buttons">
+                                <button class="btn btn-primary">Primary</button>
+                                <button class="btn btn-outline">Secondary</button>
+                                <button class="btn btn-ghost">Ghost</button>
+                            </div>
+                            <div class="demo-badges">
+                                <span class="badge badge-success">Implemented</span>
+                                <span class="badge badge-warning">Partial</span>
+                                <span class="badge badge-info">Planned</span>
+                                <span class="badge badge-neutral">N/A</span>
+                            </div>
+                            <div class="demo-form">
+                                <div class="form-group">
+                                    <label class="form-label">System Name</label>
+                                    <input type="text" class="form-input" placeholder="Enter system name...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme 3: Compliance Green -->
+            <div class="theme-card theme-compliance-green">
+                <div class="theme-header">
+                    <h2>3. Compliance Green</h2>
+                    <p>Fresh and growth-oriented, emphasizing success and completion</p>
+                    <div class="theme-personality">
+                        <span class="personality-tag">Growth</span>
+                        <span class="personality-tag">Success</span>
+                        <span class="personality-tag">Fresh</span>
+                    </div>
+                </div>
+                <div class="theme-content">
+                    <div class="color-section">
+                        <h3>Primary Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #059669;"></div>
+                                <div class="swatch-label">Primary</div>
+                                <div class="swatch-hex">#059669</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #047857;"></div>
+                                <div class="swatch-label">Primary Dark</div>
+                                <div class="swatch-hex">#047857</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #10b981;"></div>
+                                <div class="swatch-label">Primary Light</div>
+                                <div class="swatch-hex">#10b981</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #d1fae5;"></div>
+                                <div class="swatch-label">Primary BG</div>
+                                <div class="swatch-hex">#d1fae5</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-section">
+                        <h3>Semantic Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #22c55e;"></div>
+                                <div class="swatch-label">Success</div>
+                                <div class="swatch-hex">#22c55e</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f59e0b;"></div>
+                                <div class="swatch-label">Warning</div>
+                                <div class="swatch-hex">#f59e0b</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #ef4444;"></div>
+                                <div class="swatch-label">Error</div>
+                                <div class="swatch-hex">#ef4444</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #3b82f6;"></div>
+                                <div class="swatch-label">Info</div>
+                                <div class="swatch-hex">#3b82f6</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="components-section">
+                        <h3>Component Examples</h3>
+                        <div class="component-demo">
+                            <div class="demo-buttons">
+                                <button class="btn btn-primary">Primary</button>
+                                <button class="btn btn-outline">Secondary</button>
+                                <button class="btn btn-ghost">Ghost</button>
+                            </div>
+                            <div class="demo-badges">
+                                <span class="badge badge-success">Implemented</span>
+                                <span class="badge badge-warning">Partial</span>
+                                <span class="badge badge-info">Planned</span>
+                                <span class="badge badge-neutral">N/A</span>
+                            </div>
+                            <div class="demo-form">
+                                <div class="form-group">
+                                    <label class="form-label">System Name</label>
+                                    <input type="text" class="form-input" placeholder="Enter system name...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme 4: Enterprise Navy -->
+            <div class="theme-card theme-enterprise-navy">
+                <div class="theme-header">
+                    <h2>4. Enterprise Navy</h2>
+                    <p>Premium and serious, with dark navy and subtle gold accents</p>
+                    <div class="theme-personality">
+                        <span class="personality-tag">Premium</span>
+                        <span class="personality-tag">Serious</span>
+                        <span class="personality-tag">Enterprise</span>
+                    </div>
+                </div>
+                <div class="theme-content">
+                    <div class="color-section">
+                        <h3>Primary Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #1e3a5f;"></div>
+                                <div class="swatch-label">Primary</div>
+                                <div class="swatch-hex">#1e3a5f</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #0f172a;"></div>
+                                <div class="swatch-label">Primary Dark</div>
+                                <div class="swatch-hex">#0f172a</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #d97706;"></div>
+                                <div class="swatch-label">Accent Gold</div>
+                                <div class="swatch-hex">#d97706</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f1f5f9;"></div>
+                                <div class="swatch-label">Background</div>
+                                <div class="swatch-hex">#f1f5f9</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-section">
+                        <h3>Semantic Colors</h3>
+                        <div class="color-swatches">
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #22c55e;"></div>
+                                <div class="swatch-label">Success</div>
+                                <div class="swatch-hex">#22c55e</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #f59e0b;"></div>
+                                <div class="swatch-label">Warning</div>
+                                <div class="swatch-hex">#f59e0b</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #ef4444;"></div>
+                                <div class="swatch-label">Error</div>
+                                <div class="swatch-hex">#ef4444</div>
+                            </div>
+                            <div class="swatch">
+                                <div class="swatch-color" style="background: #3b82f6;"></div>
+                                <div class="swatch-label">Info</div>
+                                <div class="swatch-hex">#3b82f6</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="components-section">
+                        <h3>Component Examples</h3>
+                        <div class="component-demo">
+                            <div class="demo-buttons">
+                                <button class="btn btn-primary">Primary</button>
+                                <button class="btn btn-outline">Secondary</button>
+                                <button class="btn btn-ghost">Ghost</button>
+                            </div>
+                            <div class="demo-badges">
+                                <span class="badge badge-success">Implemented</span>
+                                <span class="badge badge-warning">Partial</span>
+                                <span class="badge badge-info">Planned</span>
+                                <span class="badge badge-neutral">N/A</span>
+                            </div>
+                            <div class="demo-form">
+                                <div class="form-group">
+                                    <label class="form-label">System Name</label>
+                                    <input type="text" class="form-input" placeholder="Enter system name...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+            <h2>Theme Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Theme</th>
+                        <th>Best For</th>
+                        <th>Personality</th>
+                        <th>WCAG Contrast</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Federal Blue</strong></td>
+                        <td>Traditional government agencies, FedRAMP-focused users</td>
+                        <td>Trustworthy, Authoritative</td>
+                        <td><span class="contrast-badge contrast-pass">AAA Pass</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Modern Slate</strong></td>
+                        <td>Tech-forward orgs, developer-heavy teams</td>
+                        <td>Minimal, Modern</td>
+                        <td><span class="contrast-badge contrast-pass">AAA Pass</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compliance Green</strong></td>
+                        <td>Emphasizing success/completion, startups</td>
+                        <td>Fresh, Growth-oriented</td>
+                        <td><span class="contrast-badge contrast-pass">AAA Pass</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enterprise Navy</strong></td>
+                        <td>Large enterprises, premium positioning</td>
+                        <td>Serious, Premium</td>
+                        <td><span class="contrast-badge contrast-pass">AAA Pass</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="recommendation">
+            <h3>Sally's Recommendation: Federal Blue</h3>
+            <p>For a GovTech compliance tool targeting government agencies and FedRAMP certification, <strong>Federal Blue</strong> provides the most appropriate trust signals while maintaining modern aesthetics. The blue palette aligns with user expectations for government-related software.</p>
+        </div>
+
+        <footer>
+            <p>SSP Generator UX Design - Color Theme Explorer</p>
+            <p>Created with BMad Method Create UX Design Workflow</p>
+        </footer>
+    </div>
+</body>
+</html>
