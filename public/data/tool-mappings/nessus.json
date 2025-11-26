@@ -1,0 +1,38 @@
+{
+  "toolId": "nessus",
+  "toolName": "Nessus",
+  "vendor": "Tenable",
+  "category": "container",
+  "controlMappings": [
+    {
+      "controlId": "ra-5.1",
+      "coverage": "full",
+      "rationale": "Nessus provides comprehensive vulnerability scanning across network infrastructure",
+      "evidence": "Network, web application, and configuration vulnerability assessment"
+    },
+    {
+      "controlId": "ra-5.2",
+      "coverage": "full",
+      "rationale": "Nessus updates vulnerability signatures and performs authenticated scans",
+      "evidence": "Plugin updates, credentialed scanning, and compliance auditing"
+    },
+    {
+      "controlId": "si-2.1",
+      "coverage": "full",
+      "rationale": "Nessus identifies missing patches and provides remediation priorities",
+      "evidence": "CVE mapping, risk scoring, and patch verification"
+    },
+    {
+      "controlId": "cm-6.1",
+      "coverage": "partial",
+      "rationale": "Nessus audits system configurations against security benchmarks",
+      "evidence": "CIS benchmark compliance and custom policy auditing"
+    },
+    {
+      "controlId": "si-4.1",
+      "coverage": "partial",
+      "rationale": "Nessus monitors systems for security events and anomalies",
+      "evidence": "Scheduled scans and alerting for new vulnerabilities"
+    }
+  ]
+}

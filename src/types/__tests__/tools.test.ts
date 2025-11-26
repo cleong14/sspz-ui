@@ -1,4 +1,4 @@
-import { ToolControlMapping, ToolCategory } from '../tools'
+import { ToolControlMapping } from '../tools'
 
 describe('Tool Types', () => {
   it('should create valid tool control mapping', () => {

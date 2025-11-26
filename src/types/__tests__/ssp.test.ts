@@ -1,4 +1,4 @@
-import { SSPProject, SecurityImpactLevel } from '../ssp'
+import { SSPProject } from '../ssp'
 
 describe('SSP Types', () => {
   it('should create valid SSP project structure', () => {

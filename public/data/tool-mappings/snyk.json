@@ -1,0 +1,38 @@
+{
+  "toolId": "snyk",
+  "toolName": "Snyk",
+  "vendor": "Snyk Ltd.",
+  "category": "SCA",
+  "controlMappings": [
+    {
+      "controlId": "si-2.1",
+      "coverage": "full",
+      "rationale": "Snyk identifies vulnerabilities in open source dependencies and provides remediation guidance",
+      "evidence": "Real-time vulnerability database with fix recommendations and PR automation"
+    },
+    {
+      "controlId": "si-2.2",
+      "coverage": "full",
+      "rationale": "Snyk provides automated remediation through dependency upgrades and patches",
+      "evidence": "Automatic fix PRs and upgrade paths for vulnerable packages"
+    },
+    {
+      "controlId": "ra-5.1",
+      "coverage": "full",
+      "rationale": "Snyk performs continuous vulnerability monitoring of dependencies",
+      "evidence": "CI/CD integration with ongoing monitoring and alerting"
+    },
+    {
+      "controlId": "cm-2.1",
+      "coverage": "partial",
+      "rationale": "Snyk helps maintain baseline configurations by tracking dependency changes",
+      "evidence": "License compliance and dependency tree analysis"
+    },
+    {
+      "controlId": "cm-8.1",
+      "coverage": "partial",
+      "rationale": "Snyk provides software bill of materials (SBOM) for component inventory",
+      "evidence": "Generates dependency graphs and component manifests"
+    }
+  ]
+}
