@@ -26,14 +26,13 @@ workflow_status:
   # Prerequisite: Documentation (for brownfield projects)
   prerequisite:
     name: "Documentation"
-    note: "Required for brownfield projects without existing docs"
+    note: "Skipped - codebase is template scaffold with no SSP-related code"
     workflows:
       - id: "document-project"
-        status: "required"
+        status: "skipped"
         agent: "analyst"
         command: "*document-project"
-        output: "Comprehensive project documentation"
-        purpose: "Understand existing codebase before planning"
+        note: "Not needed - template codebase has no relevant SSP generator code"
 
   # Phase 0: Discovery (Optional)
   phase_0:
