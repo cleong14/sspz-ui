@@ -15,9 +15,9 @@
   "type": "module",
   "packageManager": "yarn@4.5.0",
   "engines": {
-    "node": "20",
+    "node": ">=20",
     "npm": "please-use-yarn",
-    "yarn": "4.5.0"
+    "yarn": ">=4.5.0"
   },
   "scripts": {
     "start": "yarn run dev",

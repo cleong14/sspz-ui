@@ -3,7 +3,7 @@
  * @module router/router
  * @see {@link dashboard/main} for usage.
  */
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import authLoader from '@/router/authLoader'
 import { RouteIds, Routes } from '@/router/constants'
@@ -13,8 +13,30 @@ import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
+import SSPGenerator from '@/views/SSPGenerator/SSPGenerator'
 import RootProvider from '@/Root'
 import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
+import CONFIG from '@/utils/config'
+
+/**
+ * Component that redirects to SSP Generator in bypass mode, otherwise to login
+ */
+const HomeRedirect = () => {
+  if (CONFIG.AUTH_BYPASS) {
+    return <Navigate to={Routes.SSP_GENERATOR} replace />
+  }
+  return <NavigateToLogin />
+}
+
+/**
+ * Conditional loader that skips auth in bypass mode
+ */
+const conditionalAuthLoader = async () => {
+  if (CONFIG.AUTH_BYPASS) {
+    return { jwtToken: 'bypass-mode' }
+  }
+  return authLoader()
+}
 
 /**
  * The hash router for the application that defines routes
@@ -26,15 +48,22 @@ import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 const router = createBrowserRouter([
   {
     index: true,
-    element: <NavigateToLogin />,
+    element: <HomeRedirect />,
   },
   {
     id: RouteIds.ROOT,
     path: '/',
     element: <RootProvider />,
     errorElement: <ErrorBoundary />,
-    loader: configureCognito,
+    loader: CONFIG.AUTH_BYPASS ? undefined : configureCognito,
     children: [
+      // SSP Generator - accessible without auth
+      {
+        id: RouteIds.SSP_GENERATOR,
+        path: Routes.SSP_GENERATOR,
+        element: <SSPGenerator />,
+        errorElement: <ErrorBoundary />,
+      },
       {
         id: RouteIds.AUTH,
         path: Routes.AUTH,
@@ -59,7 +88,7 @@ const router = createBrowserRouter([
         id: RouteIds.PROTECTED,
         element: <AppLayout />,
         errorElement: <ErrorBoundary />,
-        loader: authLoader,
+        loader: conditionalAuthLoader,
         children: [
           {
             index: true,
@@ -74,7 +103,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <NavigateToLogin />,
+    element: <HomeRedirect />,
   },
 ])
 

@@ -2,27 +2,27 @@
 # Generated: 2025-11-25
 # Resume with: "Load Analyst agent, continue workflow-init from step 7"
 
-project: "sspz-ui"
-field_type: "brownfield"
-state: "LEGACY"
+project: 'sspz-ui'
+field_type: 'brownfield'
+state: 'LEGACY'
 continuing_existing: true
 
 # Current position in workflow-init
 workflow_init_progress:
   completed_steps:
-    - step_1_scan: "completed"
+    - step_1_scan: 'completed'
     - step_2_choose_path: "completed - chose 'a' (continue)"
   current_step: 7
-  current_prompt: "Select track: 1=Quick Flow, 2=BMad Method, 3=Enterprise"
+  current_prompt: 'Select track: 1=Quick Flow, 2=BMad Method, 3=Enterprise'
   pending_selections:
-    - selected_track: null  # awaiting user choice 1/2/3
+    - selected_track: null # awaiting user choice 1/2/3
 
 # Detected artifacts
 artifacts_found:
   bmm_docs: none
-  codebase: "React/TypeScript - src/ with components, hooks, auth, layouts"
-  tests: "*.test.tsx files throughout"
-  tooling: "Vite, ESLint, Prettier, Husky, Storybook"
+  codebase: 'React/TypeScript - src/ with components, hooks, auth, layouts'
+  tests: '*.test.tsx files throughout'
+  tooling: 'Vite, ESLint, Prettier, Husky, Storybook'
 
 # Recommendation
-recommendation: "BMad Method (2) with document-project workflow first"
+recommendation: 'BMad Method (2) with document-project workflow first'

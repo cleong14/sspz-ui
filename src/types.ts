@@ -21,6 +21,7 @@ export type AppConfig = {
 
 export type AppFeatureFlags = {
   IDP_ENABLED: boolean
+  AUTH_BYPASS: boolean
 }
 
 export type CognitoUserInfo = {

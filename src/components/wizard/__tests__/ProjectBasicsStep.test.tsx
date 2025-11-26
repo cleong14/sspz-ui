@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ProjectBasicsStep } from '../ProjectBasicsStep'
+import type { SystemCharacteristics } from '@/types/ssp'
 
 describe('ProjectBasicsStep', () => {
   it('should render all input fields', () => {
@@ -64,7 +65,7 @@ describe('ProjectBasicsStep', () => {
 
   it('should support initialData prop for editing existing projects', async () => {
     const onNext = jest.fn()
-    const initialData = {
+    const initialData: SystemCharacteristics = {
       systemName: 'Existing System',
       systemId: 'existing-001',
       description: 'Existing description',

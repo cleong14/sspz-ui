@@ -18,6 +18,7 @@ const CONFIG = {
 
   //* Feature flags
   IDP_ENABLED: Boolean(process.env.VITE_IDP_ENABLED),
+  AUTH_BYPASS: process.env.VITE_AUTH_BYPASS === 'true',
 } satisfies AppConfig
 
 export default CONFIG
