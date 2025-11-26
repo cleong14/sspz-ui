@@ -1,0 +1,38 @@
+{
+  "toolId": "sonarqube",
+  "toolName": "SonarQube",
+  "vendor": "SonarSource",
+  "category": "SAST",
+  "controlMappings": [
+    {
+      "controlId": "sa-11.1",
+      "coverage": "full",
+      "rationale": "SonarQube performs comprehensive static code analysis for security vulnerabilities",
+      "evidence": "Security hotspots, vulnerability detection, and OWASP Top 10 coverage"
+    },
+    {
+      "controlId": "si-10.1",
+      "coverage": "full",
+      "rationale": "SonarQube detects input validation vulnerabilities through taint analysis",
+      "evidence": "SQL injection, XSS, command injection, and path traversal detection"
+    },
+    {
+      "controlId": "si-11.1",
+      "coverage": "partial",
+      "rationale": "SonarQube identifies error handling issues and information exposure",
+      "evidence": "Detects improper exception handling and sensitive data in logs"
+    },
+    {
+      "controlId": "sa-15.1",
+      "coverage": "partial",
+      "rationale": "SonarQube integrates with development processes for secure coding practices",
+      "evidence": "Quality gates, code review integration, and developer feedback"
+    },
+    {
+      "controlId": "cm-3.1",
+      "coverage": "partial",
+      "rationale": "SonarQube tracks code changes and their security impact over time",
+      "evidence": "Historical analysis and new code period tracking"
+    }
+  ]
+}

@@ -1,6 +1,16 @@
 import { ToolControlMapping, ToolCategory } from '../types/tools'
 
-const TOOL_IDS = ['semgrep', 'gitleaks', 'grype']
+const TOOL_IDS = [
+  'semgrep',
+  'gitleaks',
+  'grype',
+  'owasp-zap',
+  'snyk',
+  'kics',
+  'sonarqube',
+  'nessus',
+  'trivy',
+]
 
 let cachedTools: ToolControlMapping[] | null = null
 

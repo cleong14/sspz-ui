@@ -1,0 +1,32 @@
+{
+  "toolId": "owasp-zap",
+  "toolName": "OWASP ZAP",
+  "vendor": "OWASP Foundation",
+  "category": "DAST",
+  "controlMappings": [
+    {
+      "controlId": "sa-11.1",
+      "coverage": "full",
+      "rationale": "OWASP ZAP performs dynamic application security testing to identify runtime vulnerabilities",
+      "evidence": "Active and passive scanning for security flaws in running applications"
+    },
+    {
+      "controlId": "ra-5.1",
+      "coverage": "full",
+      "rationale": "OWASP ZAP provides comprehensive vulnerability scanning of web applications",
+      "evidence": "Automated scanning with detailed vulnerability reports and risk ratings"
+    },
+    {
+      "controlId": "si-11.1",
+      "coverage": "partial",
+      "rationale": "OWASP ZAP detects error handling issues through fuzzing and payload injection",
+      "evidence": "Identifies verbose error messages and stack trace disclosure"
+    },
+    {
+      "controlId": "sc-8.1",
+      "coverage": "partial",
+      "rationale": "OWASP ZAP checks for transmission security issues like SSL/TLS misconfigurations",
+      "evidence": "Detects weak ciphers, certificate issues, and insecure protocols"
+    }
+  ]
+}

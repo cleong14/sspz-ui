@@ -1,44 +1,153 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BaselineSelectionStep } from '../BaselineSelectionStep'
+import * as oscalCatalog from '../../../services/oscal-catalog'
+
+// Mock the oscal-catalog service
+jest.mock('../../../services/oscal-catalog', () => ({
+  loadCatalog: jest.fn(),
+  getBaselineControls: jest.fn(),
+}))
+
+const mockCatalog = {
+  uuid: 'test-uuid',
+  metadata: {
+    title: 'Test Catalog',
+    lastModified: '2024-01-01',
+    version: '1.0.0',
+    oscalVersion: '1.0.4',
+  },
+  groups: [],
+}
 
 describe('BaselineSelectionStep', () => {
-  it('renders step title', () => {
-    const mockOnNext = jest.fn()
-    render(<BaselineSelectionStep onNext={mockOnNext} />)
-
-    expect(screen.getByText(/Step 2: Baseline Selection/i)).toBeInTheDocument()
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(oscalCatalog.loadCatalog as jest.Mock).mockResolvedValue(mockCatalog)
+    ;(oscalCatalog.getBaselineControls as jest.Mock).mockImplementation(
+      (_catalog, baseline) => {
+        const counts: Record<string, number> = {
+          low: 127,
+          moderate: 325,
+          high: 421,
+        }
+        return Array(counts[baseline]).fill({
+          id: 'test-control',
+          title: 'Test Control',
+        })
+      }
+    )
   })
 
-  it('renders all three baseline options', () => {
-    const mockOnNext = jest.fn()
-    render(<BaselineSelectionStep onNext={mockOnNext} />)
+  it('should render all three baseline options', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
 
-    expect(screen.getByText(/Low Baseline/i)).toBeInTheDocument()
-    expect(screen.getByText(/Moderate Baseline/i)).toBeInTheDocument()
-    expect(screen.getByText(/High Baseline/i)).toBeInTheDocument()
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Low Impact')).toBeInTheDocument()
+      expect(screen.getByText('Moderate Impact')).toBeInTheDocument()
+      expect(screen.getByText('High Impact')).toBeInTheDocument()
+    })
   })
 
-  it('calls onNext with selected baseline when clicked', async () => {
-    const mockOnNext = jest.fn()
-    const user = userEvent.setup()
+  it('should show control counts for each baseline', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
 
-    render(<BaselineSelectionStep onNext={mockOnNext} />)
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
 
-    const moderateOption = screen.getByText(/Moderate Baseline/i)
-    await user.click(moderateOption)
-
-    const nextButton = screen.getByRole('button', { name: /Next/i })
-    await user.click(nextButton)
-
-    expect(mockOnNext).toHaveBeenCalledWith('moderate')
+    await waitFor(() => {
+      expect(screen.getByText('127 Controls')).toBeInTheDocument()
+      expect(screen.getByText('325 Controls')).toBeInTheDocument()
+      expect(screen.getByText('421 Controls')).toBeInTheDocument()
+    })
   })
 
-  it('pre-selects baseline from initialBaseline prop', () => {
-    const mockOnNext = jest.fn()
-    render(<BaselineSelectionStep onNext={mockOnNext} initialBaseline="high" />)
+  it('should select moderate baseline by default', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
 
-    const highCard = screen.getByText(/High Baseline/i).closest('.MuiCard-root')
-    expect(highCard).toHaveStyle({ borderWidth: '2px' })
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /view control list \(325 controls\)/i })
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('should call onNext with selected baseline', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
+
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Low Impact')).toBeInTheDocument()
+    })
+
+    // Click on Low baseline
+    fireEvent.click(screen.getByText('Low Impact'))
+
+    // Click Next
+    fireEvent.click(screen.getByRole('button', { name: /next/i }))
+
+    expect(onNext).toHaveBeenCalledWith('low')
+  })
+
+  it('should call onBack when Back button is clicked', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
+
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Low Impact')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /back/i }))
+
+    expect(onBack).toHaveBeenCalled()
+  })
+
+  it('should open control list dialog when View Control List is clicked', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
+
+    render(<BaselineSelectionStep onNext={onNext} onBack={onBack} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Moderate Impact')).toBeInTheDocument()
+    })
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /view control list/i })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog')
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('should use initial baseline if provided', async () => {
+    const onNext = jest.fn()
+    const onBack = jest.fn()
+
+    render(
+      <BaselineSelectionStep
+        onNext={onNext}
+        onBack={onBack}
+        initialBaseline="high"
+      />
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /view control list \(421 controls\)/i })
+      ).toBeInTheDocument()
+    })
   })
 })

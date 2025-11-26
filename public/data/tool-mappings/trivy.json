@@ -1,0 +1,38 @@
+{
+  "toolId": "trivy",
+  "toolName": "Trivy",
+  "vendor": "Aqua Security",
+  "category": "container",
+  "controlMappings": [
+    {
+      "controlId": "si-2.1",
+      "coverage": "full",
+      "rationale": "Trivy scans container images for known vulnerabilities in OS packages and dependencies",
+      "evidence": "CVE database scanning for Docker images, OCI artifacts, and filesystems"
+    },
+    {
+      "controlId": "cm-2.1",
+      "coverage": "full",
+      "rationale": "Trivy validates container configurations against security best practices",
+      "evidence": "Dockerfile and Kubernetes manifest misconfiguration detection"
+    },
+    {
+      "controlId": "ra-5.1",
+      "coverage": "full",
+      "rationale": "Trivy provides comprehensive vulnerability scanning for cloud-native environments",
+      "evidence": "Multi-target scanning: containers, IaC, SBOM, and secrets"
+    },
+    {
+      "controlId": "cm-8.1",
+      "coverage": "partial",
+      "rationale": "Trivy generates software bill of materials for container components",
+      "evidence": "SBOM generation in CycloneDX and SPDX formats"
+    },
+    {
+      "controlId": "ia-5.1",
+      "coverage": "partial",
+      "rationale": "Trivy detects embedded secrets and credentials in container images",
+      "evidence": "Secret scanning for API keys, passwords, and certificates"
+    }
+  ]
+}

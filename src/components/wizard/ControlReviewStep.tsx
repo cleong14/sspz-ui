@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   Box,
   Typography,
+  Button,
+  Chip,
+  CircularProgress,
+  TextField,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -9,117 +18,238 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  Tooltip,
+  TablePagination,
 } from '@mui/material'
-import { SelectedTool, Baseline } from '../../types/ssp'
+import {
+  Search as SearchIcon,
+  CheckCircle as CheckCircleIcon,
+  Warning as WarningIcon,
+  Cancel as CancelIcon,
+} from '@mui/icons-material'
+import { Baseline, SelectedTool } from '../../types/ssp'
+import { OSCALControl } from '../../types/oscal'
 import { loadCatalog, getBaselineControls } from '../../services/oscal-catalog'
 import { loadToolMappings } from '../../services/tool-mappings'
 import {
   calculateControlCoverage,
-  ControlCoverage,
   CoverageStatus,
+  ControlCoverage,
 } from '../../services/coverage-calculator'
-import { OSCALControl } from '../../types/oscal'
+
+interface ControlWithCoverage extends OSCALControl {
+  coverage: ControlCoverage
+}
+
+type FilterStatus = 'all' | CoverageStatus
 
 interface ControlReviewStepProps {
   onNext: () => void
-  selectedBaseline: Baseline
+  onBack: () => void
+  baseline: Baseline
   selectedTools: SelectedTool[]
-}
-
-const statusColors: Record<CoverageStatus, 'success' | 'warning' | 'error'> = {
-  covered: 'success',
-  partial: 'warning',
-  uncovered: 'error',
 }
 
 export function ControlReviewStep({
   onNext,
-  selectedBaseline,
+  onBack,
+  baseline,
   selectedTools,
 }: ControlReviewStepProps) {
-  const [controls, setControls] = useState<OSCALControl[]>([])
-  const [coverage, setCoverage] = useState<ControlCoverage[]>([])
-  const [filterStatus, setFilterStatus] = useState<CoverageStatus | 'all'>(
-    'all'
-  )
   const [loading, setLoading] = useState(true)
+  const [controls, setControls] = useState<ControlWithCoverage[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(25)
 
   useEffect(() => {
-    Promise.all([loadCatalog(), loadToolMappings()])
-      .then(([catalog, tools]) => {
-        const baselineControls = getBaselineControls(catalog, selectedBaseline)
-        setControls(baselineControls)
+    async function loadData() {
+      try {
+        const [catalog, allTools] = await Promise.all([
+          loadCatalog(),
+          loadToolMappings(),
+        ])
 
-        const selectedToolMappings = tools.filter((t) =>
+        // Get selected tool mappings
+        const toolMappings = allTools.filter((t) =>
           selectedTools.some((st) => st.toolId === t.toolId)
         )
 
+        // Get baseline controls
+        const baselineControls = getBaselineControls(catalog, baseline)
+
+        // Calculate coverage
         const coverageReport = calculateControlCoverage(
-          selectedBaseline,
-          selectedToolMappings,
+          baseline,
+          toolMappings,
           catalog
         )
-        setCoverage(coverageReport.coverage)
+
+        // Combine controls with coverage info
+        const controlsWithCoverage: ControlWithCoverage[] = baselineControls.map(
+          (control) => {
+            const coverage = coverageReport.coverage.find(
+              (c) => c.controlId === control.id
+            ) || {
+              controlId: control.id,
+              status: 'uncovered' as CoverageStatus,
+              tools: [],
+            }
+            return { ...control, coverage }
+          }
+        )
+
+        setControls(controlsWithCoverage)
+      } catch (error) {
+        console.error('Error loading controls:', error)
+      } finally {
         setLoading(false)
-      })
-      .catch((err) => {
-        console.error('Failed to load controls:', err)
-        setLoading(false)
-      })
-  }, [selectedBaseline, selectedTools])
+      }
+    }
 
-  const filteredCoverage =
-    filterStatus === 'all'
-      ? coverage
-      : coverage.filter((c) => c.status === filterStatus)
+    loadData()
+  }, [baseline, selectedTools])
 
-  const getControlById = (controlId: string) =>
-    controls.find((c) => c.id === controlId)
+  const filteredControls = useMemo(() => {
+    return controls.filter((control) => {
+      // Apply status filter
+      if (filterStatus !== 'all' && control.coverage.status !== filterStatus) {
+        return false
+      }
 
-  if (loading) {
+      // Apply search filter
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase()
+        return (
+          control.id.toLowerCase().includes(term) ||
+          control.title.toLowerCase().includes(term) ||
+          control.coverage.tools.some((t) => t.toLowerCase().includes(term))
+        )
+      }
+
+      return true
+    })
+  }, [controls, filterStatus, searchTerm])
+
+  const stats = useMemo(() => {
+    const total = controls.length
+    const covered = controls.filter(
+      (c) => c.coverage.status === 'covered'
+    ).length
+    const partial = controls.filter(
+      (c) => c.coverage.status === 'partial'
+    ).length
+    const uncovered = controls.filter(
+      (c) => c.coverage.status === 'uncovered'
+    ).length
+
+    return { total, covered, partial, uncovered }
+  }, [controls])
+
+  const getStatusChip = (status: CoverageStatus) => {
+    const config = {
+      covered: { label: 'Covered', color: 'success' as const },
+      partial: { label: 'Partial', color: 'warning' as const },
+      uncovered: { label: 'Uncovered', color: 'error' as const },
+    }
     return (
-      <Box sx={{ mt: 2 }}>
-        <Typography>Loading controls...</Typography>
-      </Box>
+      <Chip
+        label={config[status].label}
+        color={config[status].color}
+        size="small"
+      />
     )
   }
 
-  const stats = {
-    total: coverage.length,
-    covered: coverage.filter((c) => c.status === 'covered').length,
-    partial: coverage.filter((c) => c.status === 'partial').length,
-    uncovered: coverage.filter((c) => c.status === 'uncovered').length,
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: 300,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
   }
 
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="h6" gutterBottom>
-        Step 4: Control Review
+        Step 4: Review Control Coverage
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Review security control coverage for {selectedBaseline} baseline
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+        Review which controls are covered by your selected tools. Uncovered
+        controls will need manual implementation descriptions.
       </Typography>
 
-      <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
-        <Typography variant="body2">
-          Total: {stats.total} | Covered: {stats.covered} | Partial:{' '}
-          {stats.partial} | Uncovered: {stats.uncovered}
-        </Typography>
+      {/* Stats Summary */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <Chip
+          icon={<CheckCircleIcon />}
+          label={`${stats.covered} Covered`}
+          color="success"
+          variant="outlined"
+          onClick={() => setFilterStatus('covered')}
+        />
+        <Chip
+          icon={<WarningIcon />}
+          label={`${stats.partial} Partial`}
+          color="warning"
+          variant="outlined"
+          onClick={() => setFilterStatus('partial')}
+        />
+        <Chip
+          icon={<CancelIcon />}
+          label={`${stats.uncovered} Uncovered`}
+          color="error"
+          variant="outlined"
+          onClick={() => setFilterStatus('uncovered')}
+        />
+        <Chip
+          label={`${stats.total} Total`}
+          variant="outlined"
+          onClick={() => setFilterStatus('all')}
+        />
+      </Box>
 
+      {/* Filters */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <TextField
+          size="small"
+          placeholder="Search controls..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ minWidth: 250 }}
+        />
         <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel>Filter by Status</InputLabel>
+          <InputLabel>Status Filter</InputLabel>
           <Select
             value={filterStatus}
-            label="Filter by Status"
-            onChange={(e) =>
-              setFilterStatus(e.target.value as CoverageStatus | 'all')
-            }
+            label="Status Filter"
+            onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
           >
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="covered">Covered</MenuItem>
@@ -129,41 +259,78 @@ export function ControlReviewStep({
         </FormControl>
       </Box>
 
-      <TableContainer component={Paper} variant="outlined">
-        <Table size="small">
+      {/* Control Table */}
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+        <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Control ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Tools</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: 100 }}>
+                Control ID
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: 100 }}>
+                Status
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Providing Tools</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredCoverage.map((cov) => {
-              const control = getControlById(cov.controlId)
-              return (
-                <TableRow key={cov.controlId}>
-                  <TableCell>{cov.controlId}</TableCell>
-                  <TableCell>{control?.title || 'Unknown'}</TableCell>
+            {filteredControls
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((control) => (
+                <TableRow key={control.id} hover>
                   <TableCell>
-                    <Chip
-                      label={cov.status}
-                      color={statusColors[cov.status]}
-                      size="small"
-                    />
+                    <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                      {control.id.toUpperCase()}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    {cov.tools.length > 0 ? cov.tools.join(', ') : '-'}
+                    <Tooltip
+                      title={control.parts?.[0]?.prose || 'No description'}
+                      placement="top"
+                    >
+                      <Typography variant="body2" noWrap sx={{ maxWidth: 300 }}>
+                        {control.title}
+                      </Typography>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell>{getStatusChip(control.coverage.status)}</TableCell>
+                  <TableCell>
+                    {control.coverage.tools.length > 0 ? (
+                      <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                        {control.coverage.tools.map((tool) => (
+                          <Chip
+                            key={tool}
+                            label={tool}
+                            size="small"
+                            variant="outlined"
+                          />
+                        ))}
+                      </Box>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        None
+                      </Typography>
+                    )}
                   </TableCell>
                 </TableRow>
-              )
-            })}
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50, 100]}
+        component="div"
+        count={filteredControls.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
+      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+        <Button onClick={onBack}>Back</Button>
         <Button variant="contained" color="primary" onClick={onNext}>
           Next
         </Button>

@@ -1,0 +1,38 @@
+{
+  "toolId": "kics",
+  "toolName": "KICS",
+  "vendor": "Checkmarx",
+  "category": "IaC",
+  "controlMappings": [
+    {
+      "controlId": "cm-2.1",
+      "coverage": "full",
+      "rationale": "KICS scans infrastructure-as-code for security misconfigurations and baseline deviations",
+      "evidence": "Analyzes Terraform, CloudFormation, Kubernetes, Docker, and Ansible files"
+    },
+    {
+      "controlId": "cm-6.1",
+      "coverage": "full",
+      "rationale": "KICS enforces secure configuration standards in IaC templates",
+      "evidence": "2000+ queries for security best practices across IaC platforms"
+    },
+    {
+      "controlId": "sc-7.1",
+      "coverage": "partial",
+      "rationale": "KICS identifies network security misconfigurations in infrastructure definitions",
+      "evidence": "Detects open security groups, missing firewall rules, exposed ports"
+    },
+    {
+      "controlId": "ac-3.1",
+      "coverage": "partial",
+      "rationale": "KICS checks for overly permissive IAM policies and access controls",
+      "evidence": "Identifies wildcard permissions and missing least privilege configurations"
+    },
+    {
+      "controlId": "sc-28.1",
+      "coverage": "partial",
+      "rationale": "KICS detects encryption-at-rest misconfigurations in storage definitions",
+      "evidence": "Checks for unencrypted S3 buckets, EBS volumes, and databases"
+    }
+  ]
+}

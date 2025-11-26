@@ -1,4 +1,4 @@
-import { OSCALCatalog, OSCALControl, Baseline } from '../oscal'
+import { OSCALControl, Baseline } from '../oscal'
 
 describe('OSCAL Types', () => {
   it('should allow valid baseline values', () => {

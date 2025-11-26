@@ -1,6 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
 import { SSPProjectProvider, useSSPProject } from '../SSPProjectContext'
-import { Baseline } from '../../types/ssp'
 
 describe('SSPProjectContext', () => {
   it('should provide default SSP project state', () => {
