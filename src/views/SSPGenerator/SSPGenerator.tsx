@@ -2,7 +2,7 @@
  * SSP Generator - Main wizard view for creating System Security Plans
  * @module views/SSPGenerator/SSPGenerator
  */
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Container,
@@ -18,8 +18,12 @@ import { BaselineSelectionStep } from '@/components/wizard/BaselineSelectionStep
 import { ToolSelectionStep } from '@/components/wizard/ToolSelectionStep'
 import { ControlReviewStep } from '@/components/wizard/ControlReviewStep'
 import { AIDescriptionStep } from '@/components/wizard/AIDescriptionStep'
-import { SystemCharacteristics, Baseline } from '@/types/ssp'
-import { ToolMapping } from '@/types/tools'
+import {
+  SystemCharacteristics,
+  Baseline,
+  SelectedTool,
+  ControlImplementation,
+} from '@/types/ssp'
 
 const steps = [
   'Project Basics',
@@ -31,25 +35,39 @@ const steps = [
 
 function SSPWizard() {
   const [activeStep, setActiveStep] = useState(0)
-  const { state, dispatch } = useSSPProject()
+  const {
+    project,
+    updateSystemCharacteristics,
+    setControlBaseline,
+    addSelectedTool,
+    removeSelectedTool,
+    updateControlImplementation,
+  } = useSSPProject()
 
   const handleProjectBasics = (data: SystemCharacteristics) => {
-    dispatch({ type: 'UPDATE_SYSTEM_CHARACTERISTICS', payload: data })
+    updateSystemCharacteristics(data)
     setActiveStep(1)
   }
 
   const handleBaselineSelection = (baseline: Baseline) => {
-    dispatch({ type: 'UPDATE_BASELINE', payload: baseline })
+    setControlBaseline(baseline)
     setActiveStep(2)
   }
 
-  const handleToolSelection = (tools: ToolMapping[]) => {
-    dispatch({ type: 'UPDATE_SELECTED_TOOLS', payload: tools })
+  const handleToolSelection = (tools: SelectedTool[]) => {
+    // Clear existing tools and add new ones
+    project.selectedTools.forEach((t) => removeSelectedTool(t.toolId))
+    tools.forEach((t) => addSelectedTool(t))
     setActiveStep(3)
   }
 
   const handleControlReview = () => {
     setActiveStep(4)
+  }
+
+  const handleAIDescriptions = (implementations: ControlImplementation[]) => {
+    implementations.forEach((impl) => updateControlImplementation(impl))
+    // Could navigate to a summary/export step here in the future
   }
 
   const handleBack = () => {
@@ -62,7 +80,7 @@ function SSPWizard() {
         return (
           <ProjectBasicsStep
             onNext={handleProjectBasics}
-            initialData={state.project?.systemCharacteristics}
+            initialData={project.systemCharacteristics}
           />
         )
       case 1:
@@ -70,7 +88,7 @@ function SSPWizard() {
           <BaselineSelectionStep
             onNext={handleBaselineSelection}
             onBack={handleBack}
-            selectedBaseline={state.project?.baseline}
+            initialBaseline={project.controlBaseline}
           />
         )
       case 2:
@@ -78,7 +96,8 @@ function SSPWizard() {
           <ToolSelectionStep
             onNext={handleToolSelection}
             onBack={handleBack}
-            selectedTools={state.project?.selectedTools || []}
+            baseline={project.controlBaseline}
+            initialTools={project.selectedTools}
           />
         )
       case 3:
@@ -86,16 +105,17 @@ function SSPWizard() {
           <ControlReviewStep
             onNext={handleControlReview}
             onBack={handleBack}
-            baseline={state.project?.baseline || 'moderate'}
-            selectedTools={state.project?.selectedTools || []}
+            baseline={project.controlBaseline}
+            selectedTools={project.selectedTools}
           />
         )
       case 4:
         return (
           <AIDescriptionStep
-            onBack={handleBack}
-            baseline={state.project?.baseline || 'moderate'}
-            selectedTools={state.project?.selectedTools || []}
+            onNext={handleAIDescriptions}
+            selectedBaseline={project.controlBaseline}
+            selectedTools={project.selectedTools}
+            initialImplementations={project.controlImplementations}
           />
         )
       default:

@@ -1,5 +1,5 @@
 import { defineConfig, transformWithEsbuild, type PluginOption } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { visualizer } from 'rollup-plugin-visualizer'
 import sass from 'sass'
