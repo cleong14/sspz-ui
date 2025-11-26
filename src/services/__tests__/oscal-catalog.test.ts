@@ -1,0 +1,122 @@
+import {
+  loadCatalog,
+  getControlById,
+  getBaselineControls,
+  resetCatalogCache,
+} from '../oscal-catalog'
+import { Baseline } from '../../types/ssp'
+
+// Mock fetch
+const mockCatalogData = {
+  catalog: {
+    uuid: '8f08878d-7d5c-4d1b-b8ff-8c7d63e5c9a5',
+    metadata: {
+      title:
+        'NIST Special Publication 800-53 Revision 5 MODERATE IMPACT BASELINE',
+      lastModified: '2024-01-01T00:00:00Z',
+      version: '5.0.0',
+      oscalVersion: '1.0.4',
+    },
+    groups: [
+      {
+        id: 'ac',
+        class: 'family',
+        title: 'Access Control',
+        controls: [
+          {
+            id: 'ac-1',
+            class: 'AC',
+            title: 'Access Control Policy and Procedures',
+            parts: [
+              {
+                id: 'ac-1_smt',
+                name: 'statement',
+                prose:
+                  'The organization develops, documents, and disseminates to [Assignment: organization-defined personnel or roles]: a. An access control policy...',
+              },
+            ],
+            props: [
+              { name: 'baseline-impact', value: 'low' },
+              { name: 'baseline-impact', value: 'moderate' },
+              { name: 'baseline-impact', value: 'high' },
+            ],
+          },
+          {
+            id: 'ac-2',
+            class: 'AC',
+            title: 'Account Management',
+            parts: [
+              {
+                id: 'ac-2_smt',
+                name: 'statement',
+                prose:
+                  'The organization manages information system accounts...',
+              },
+            ],
+            controls: [
+              {
+                id: 'ac-2.1',
+                class: 'AC',
+                title: 'Automated System Account Management',
+                parts: [
+                  {
+                    id: 'ac-2.1_smt',
+                    name: 'statement',
+                    prose:
+                      'The organization employs automated mechanisms to support the management of information system accounts.',
+                  },
+                ],
+                props: [
+                  { name: 'baseline-impact', value: 'moderate' },
+                  { name: 'baseline-impact', value: 'high' },
+                ],
+              },
+            ],
+            props: [
+              { name: 'baseline-impact', value: 'low' },
+              { name: 'baseline-impact', value: 'moderate' },
+              { name: 'baseline-impact', value: 'high' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+}
+
+describe('OSCAL Catalog Service', () => {
+  beforeEach(() => {
+    // Reset the cached catalog before each test
+    resetCatalogCache()
+    // Mock fetch globally
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockCatalogData),
+      })
+    ) as jest.Mock
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should load bundled NIST 800-53 catalog', async () => {
+    const catalog = await loadCatalog()
+    expect(catalog).toBeDefined()
+    expect(catalog.metadata.title).toContain('NIST')
+  })
+
+  it('should retrieve control by ID', async () => {
+    const catalog = await loadCatalog()
+    const control = getControlById(catalog, 'ac-1')
+    expect(control).toBeDefined()
+    expect(control?.id).toBe('ac-1')
+  })
+
+  it('should get baseline controls for moderate baseline', async () => {
+    const catalog = await loadCatalog()
+    const baseline: Baseline = 'moderate'
+    const controls = getBaselineControls(catalog, baseline)
+    expect(controls.length).toBeGreaterThan(0)
+  })
+})

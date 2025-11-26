@@ -1,0 +1,26 @@
+{
+  "toolId": "grype",
+  "toolName": "Grype",
+  "vendor": "Anchore",
+  "category": "SCA",
+  "controlMappings": [
+    {
+      "controlId": "si-2.1",
+      "coverage": "full",
+      "rationale": "Grype identifies known vulnerabilities in software dependencies",
+      "evidence": "Scans package manifests against CVE databases"
+    },
+    {
+      "controlId": "si-2.2",
+      "coverage": "full",
+      "rationale": "Grype provides automated flaw remediation recommendations",
+      "evidence": "Suggests version upgrades to patch vulnerabilities"
+    },
+    {
+      "controlId": "ra-5.1",
+      "coverage": "partial",
+      "rationale": "Grype performs continuous vulnerability scanning of software composition",
+      "evidence": "CI/CD integration for ongoing dependency scanning"
+    }
+  ]
+}

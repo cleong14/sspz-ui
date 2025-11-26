@@ -34,3 +34,11 @@ Object.defineProperty(URL, 'createObjectURL', {
   writable: true,
   value: jest.fn(),
 })
+
+// Mock IndexedDB for testing using fake-indexeddb
+import 'fake-indexeddb/auto'
+
+// Polyfill structuredClone for Node.js environment
+if (typeof global.structuredClone === 'undefined') {
+  global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj))
+}
