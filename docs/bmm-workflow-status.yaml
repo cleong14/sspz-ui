@@ -45,10 +45,9 @@ workflow_status:
         command: "*brainstorm-project"
 
       - id: "research"
-        status: "optional"
+        status: "docs/research-ssp-generator-2025-11-26.md"
         agent: "analyst"
         command: "*research"
-        note: "User selected - NIST frameworks, compliance requirements, SSP tooling"
 
       - id: "product-brief"
         status: "skipped"
