@@ -60,11 +60,10 @@ workflow_status:
     required: true
     workflows:
       - id: "prd"
-        status: "required"
+        status: "docs/prd.md"
         agent: "pm"
         command: "*prd"
-        output: "PRD focused on SSP generator features"
-        note: "Must consider existing system constraints"
+        note: "Completed with Party Mode review - FedRAMP + AI-assist in MVP"
 
       - id: "validate-prd"
         status: "optional"

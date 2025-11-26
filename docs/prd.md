@@ -2,7 +2,7 @@
 
 **Author:** USER
 **Date:** 2025-11-26
-**Version:** 1.0
+**Version:** 1.1 (Updated after Party Mode review)
 
 ---
 
@@ -29,13 +29,15 @@ This approach democratizes SSP creation, making compliance accessible to organiz
 **Technical Type:** Web Application + CLI Tool
 **Domain:** GovTech (Government Technology)
 **Complexity:** High
-**Framework:** NIST 800-53 Rev 5
+**Framework:** NIST 800-53 Rev 5 + FedRAMP Baselines
+**Architecture:** API-First (shared backend for Web UI and CLI)
 
 This is a govtech/compliance domain project requiring attention to:
-- Security framework standards (NIST 800-53)
+- Security framework standards (NIST 800-53, FedRAMP)
 - OSCAL format compliance for interoperability
 - Accessibility for government users
 - Data handling for sensitive control information
+- AI-assisted content generation with transparency
 
 ---
 
@@ -70,52 +72,69 @@ This is a govtech/compliance domain project requiring attention to:
 ### MVP - Minimum Viable Product
 
 **Core Capabilities:**
-1. **NIST 800-53 Control Catalog**
-   - Complete Rev 5 control catalog (Low, Moderate, High baselines)
+1. **NIST 800-53 + FedRAMP Control Catalog**
+   - Complete NIST 800-53 Rev 5 control catalog
+   - FedRAMP baselines (Low, Moderate, High, LI-SaaS)
    - Control family browsing and search
    - Control details with implementation guidance
+   - FedRAMP-specific parameters and extensions
 
 2. **SSP Document Generation**
    - Create new SSP projects
-   - Select appropriate baseline (Low/Moderate/High)
+   - Select appropriate baseline (NIST or FedRAMP)
    - Input system information (name, boundary, description)
    - Generate control implementation statements
-   - Export to OSCAL format (JSON/YAML)
+   - Export to OSCAL format (JSON/YAML/XML)
    - Export to Word/PDF for human review
 
-3. **Web Interface**
+3. **AI-Assisted Control Implementation**
+   - Suggest implementation statements based on system description
+   - Show confidence levels and reasoning for transparency
+   - Accept, modify, or reject AI suggestions
+   - Learn from user modifications to improve suggestions
+
+4. **Web Interface**
    - Intuitive dashboard for compliance officers
    - Guided workflow for SSP creation
    - Progress tracking across control families
    - Save/resume capability for in-progress SSPs
 
-4. **CLI Tool**
+5. **CLI Tool**
    - Initialize SSP projects from command line
    - Import/export OSCAL files
    - Validate SSP against schema
    - Scriptable for automation
 
+6. **API-First Architecture**
+   - RESTful API consumed by both Web UI and CLI
+   - Shared business logic and validation
+   - Extensible for future integrations
+
 ### Growth Features (Post-MVP)
 
-1. **Multiple Framework Support**
-   - FedRAMP baselines and extensions
+1. **Additional Framework Support**
    - CMMC (Cybersecurity Maturity Model Certification)
    - SOC 2 mapping
+   - ISO 27001 controls
+   - StateRAMP baselines
 
 2. **Collaboration Features**
    - Multi-user editing
    - Review/approval workflows
    - Comment threads on controls
+   - Audit trail and change history
 
-3. **AI-Assisted Generation**
-   - Auto-generate control implementation statements from system descriptions
-   - Suggest relevant controls based on system type
+3. **Advanced AI Capabilities**
    - Gap analysis and recommendations
+   - Control inheritance suggestions
+   - Automated evidence linking
+   - Natural language queries
 
 4. **Integration Capabilities**
-   - Import from existing SSP documents
+   - Import from existing SSP documents (Word, PDF)
    - Integrate with vulnerability scanners (evidence collection)
-   - Export to GRC platforms
+   - Export to GRC platforms (ServiceNow, Archer)
+   - SSO/SAML integration
 
 ### Vision (Future)
 
@@ -261,6 +280,20 @@ This is a govtech/compliance domain project requiring attention to:
 - FR40: System validates imported files and reports issues
 - FR41: Users can update imported SSPs and re-export
 
+### FedRAMP Support
+
+- FR42: System displays FedRAMP control baselines (Low, Moderate, High, LI-SaaS)
+- FR43: Users can select FedRAMP baseline and inherit NIST 800-53 controls
+- FR44: System includes FedRAMP-specific parameters and extensions
+- FR45: Users can export FedRAMP-formatted OSCAL SSP
+
+### AI-Assisted Generation
+
+- FR46: System suggests control implementation statements based on system description
+- FR47: Users can accept, modify, or reject AI-generated suggestions
+- FR48: System displays confidence levels and reasoning for AI suggestions
+- FR49: System improves suggestions based on user modifications over time
+
 ---
 
 ## Non-Functional Requirements
@@ -328,6 +361,55 @@ This is a govtech/compliance domain project requiring attention to:
 
 ---
 
-_This PRD captures the essence of SSP Generator - making NIST 800-53 compliance accessible to both compliance officers and developers through an intuitive dual-interface design._
+## Proposed Architecture
 
-_Created through collaborative discovery between USER and AI facilitator._
+```
+┌─────────────────┐     ┌─────────────────┐
+│     Web UI      │     │      CLI        │
+│  (React/Vite)   │     │   (Node.js)     │
+└────────┬────────┘     └────────┬────────┘
+         │                       │
+         └───────────┬───────────┘
+                     │
+              ┌──────▼──────┐
+              │  REST API   │
+              │  (Backend)  │
+              └──────┬──────┘
+                     │
+     ┌───────────────┼───────────────┐
+     │               │               │
+┌────▼────┐   ┌──────▼──────┐   ┌────▼────┐
+│  OSCAL  │   │   Control   │   │   AI    │
+│ Engine  │   │   Catalog   │   │ Service │
+└─────────┘   └─────────────┘   └─────────┘
+```
+
+**Key Architectural Decisions:**
+- API-first design enables both interfaces to share business logic
+- OSCAL Engine handles all format conversions and validation
+- AI Service is modular - core product works without it
+- Control Catalog supports both NIST 800-53 and FedRAMP baselines
+
+---
+
+## Proposed Epic Structure
+
+Based on Party Mode review, implementation can be sequenced as:
+
+| Epic | Name | Dependencies | Key Deliverables |
+|------|------|--------------|------------------|
+| 1 | Core Infrastructure | None | API, Auth, Project Management |
+| 2 | Control Catalog | Epic 1 | NIST 800-53 + FedRAMP data, search |
+| 3 | SSP Creation Workflow | Epic 1, 2 | Web UI wizard, system info, control impl |
+| 4 | Export Engine | Epic 2 | OSCAL, Word, PDF generation |
+| 5 | CLI Tool | Epic 1, 2 | Init, import, export, validate commands |
+| 6 | AI-Assisted Generation | Epic 2, 3 | Suggestions, confidence, learning |
+| 7 | Import & Interoperability | Epic 4 | OSCAL import, validation |
+
+This sequencing enables incremental value delivery.
+
+---
+
+_This PRD captures the essence of SSP Generator - making NIST 800-53 and FedRAMP compliance accessible to both compliance officers and developers through an intuitive dual-interface design with AI-assisted content generation._
+
+_Created through collaborative discovery between USER and AI facilitator, refined through Party Mode multi-agent review._
