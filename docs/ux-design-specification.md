@@ -7,14 +7,15 @@ _Generated using BMad Method - Create UX Design Workflow v1.0_
 
 ## Executive Summary
 
-The SSP Generator democratizes NIST 800-53 and FedRAMP compliance by making System Security Plan (SSP) creation accessible to both **compliance officers** (intuitive web UI) and **software engineers** (CLI for automation).
+The SSP Generator democratizes NIST 800-53 and FedRAMP compliance by making System Security Plan (SSP) creation accessible to both **compliance officers** (intuitive web UI) and **software engineers** (Go CLI for automation).
 
 **Core UX Philosophy:** Users should feel like the tool **speeds up authorization**, not slows them down. They should **approve pre-filled suggestions** rather than write from scratch, and **never input the same data twice**.
 
-**Design System:** shadcn/ui (built on Radix UI primitives + Tailwind CSS)
+**Design System:** Material-UI (MUI) - from existing template infrastructure
+- 40+ pre-themed components (Federal Blue theme configured)
 - Accessibility-first (WCAG 2.1 AA compliant)
 - Professional, government-appropriate aesthetic
-- Full source code ownership for compliance customization
+- Comprehensive design system with responsive layouts
 
 ---
 
@@ -22,28 +23,31 @@ The SSP Generator democratizes NIST 800-53 and FedRAMP compliance by making Syst
 
 ### 1.1 Design System Choice
 
-**Selected:** shadcn/ui
+**Selected:** Material-UI (MUI) - from existing template infrastructure
 
 **Rationale:**
-- Built on Radix UI primitives providing WCAG-compliant accessibility out of the box
-- Tailwind CSS enables fast iteration and consistent spacing
-- Source code ownership allows deep customization for compliance domain
-- Professional, minimal aesthetic fits GovTech expectations
-- Complete component coverage: wizards, forms, tables, cards, modals, toasts
+- **Already configured** in template with 40+ themed components
+- **Federal Blue theme** already applied (Primary: #051094)
+- Built-in WCAG-compliant accessibility
+- Comprehensive component library covering all UI needs
+- Well-documented, mature library with strong community support
+- Responsive design patterns built-in
+- Consistent with enterprise and government applications
 
-**Components from shadcn/ui:**
-- Navigation (sidebar, breadcrumbs, tabs)
-- Forms (inputs, selects, checkboxes, radio groups)
-- Data display (tables, cards, badges, progress)
-- Feedback (alerts, toasts, dialogs)
-- Layout (accordion, collapsible, separator)
+**Components from MUI (already available in template):**
+- **Navigation:** AppBar, Drawer, Tabs, Breadcrumbs, BottomNavigation
+- **Forms:** TextField, Select, Checkbox, Radio, Switch, Autocomplete
+- **Data Display:** Table, DataGrid, Card, Chip, Badge, Avatar, List
+- **Feedback:** Alert, Snackbar, Dialog, Backdrop, Progress, Skeleton
+- **Layout:** Grid, Box, Container, Stack, Accordion, Divider
+- **Inputs:** Button, IconButton, Fab, ToggleButton
 
-**Custom Components Needed:**
-- Control Status Badge (Implemented/Partial/Planned/Not Applicable)
-- Tool Library Card (with control mapping preview)
-- Implementation Statement Card (with AI confidence indicator)
-- Approval Action Bar (Approve/Modify/Reject)
-- SSP Progress Ring (control family completion)
+**Custom Components Needed (build on MUI primitives):**
+- Control Status Badge (using MUI Chip with semantic colors)
+- Tool Library Card (using MUI Card with structured content)
+- Implementation Statement Card (using MUI Card with AI confidence indicator)
+- Approval Action Bar (using MUI ButtonGroup with actions)
+- SSP Progress Ring (using MUI CircularProgress with label)
 
 ---
 
@@ -145,29 +149,29 @@ This is the signature UX pattern that differentiates SSP Generator.
 
 ### 3.1 Color System
 
-**Selected Theme: Federal Blue**
+**Theme: Federal Blue (from template theme.ts)**
 
-The Federal Blue theme provides the most appropriate trust signals for GovTech compliance software while maintaining modern aesthetics. Blue is universally associated with trust, authority, and reliability - essential attributes for government-focused software.
+The template already provides a Federal Blue theme optimized for GovTech compliance software. Blue is universally associated with trust, authority, and reliability - essential attributes for government-focused software.
 
-**Primary Palette:**
+**Primary Palette (from template):**
 | Color | Hex | Usage |
 |-------|-----|-------|
-| Primary | #1d4ed8 | Main actions, navigation highlights, links |
-| Primary Dark | #1e40af | Hover states, active elements |
-| Primary Light | #3b82f6 | Secondary emphasis |
-| Primary BG | #dbeafe | Highlighted sections, selected states |
+| Primary | #051094 | Main actions, navigation highlights, links |
+| Primary Dark | #040c6e | Hover states, active elements |
+| Primary Light | #3742fa | Secondary emphasis |
+| Secondary | #6D788D | Secondary text, icons |
 
-**Semantic Colors:**
+**Semantic Colors (from template):**
 | Purpose | Hex | Usage |
 |---------|-----|-------|
-| Success | #22c55e | Implemented controls, approved items, completion |
-| Success BG | #dcfce7 | Success badges, notifications |
-| Warning | #f59e0b | Partial implementation, needs attention |
-| Warning BG | #fef3c7 | Warning badges, alerts |
-| Error | #ef4444 | Not applicable, rejected, validation errors |
-| Error BG | #fee2e2 | Error badges, alerts |
-| Info | #3b82f6 | Planned controls, informational badges |
-| Info BG | #dbeafe | Info badges, highlights |
+| Success | #72E128 | Implemented controls, approved items, completion |
+| Success BG | #e8f9d9 | Success badges, notifications |
+| Warning | #FDB528 | Partial implementation, needs attention |
+| Warning BG | #fff5e0 | Warning badges, alerts |
+| Error | #FF4D49 | Not applicable, rejected, validation errors |
+| Error BG | #ffe8e8 | Error badges, alerts |
+| Info | #26C6F9 | Planned controls, informational badges |
+| Info BG | #e0f7fe | Info badges, highlights |
 
 **Neutral Scale (Slate):**
 | Token | Hex | Usage |
@@ -189,38 +193,55 @@ The Federal Blue theme provides the most appropriate trust signals for GovTech c
 
 ### 3.2 Typography
 
-**Font Strategy:** System fonts for performance and government network compatibility
+**Font Strategy (from template):** Open Sans with system fallbacks
 
 ```css
---font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
---font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+font-family: 'Open Sans', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
 ```
 
-**Scale:**
-- Display: 2.25rem (36px) - Dashboard titles
-- H1: 1.875rem (30px) - Page titles
-- H2: 1.5rem (24px) - Section headers
-- H3: 1.25rem (20px) - Subsection headers
-- Body: 1rem (16px) - Standard text
-- Small: 0.875rem (14px) - Labels, captions
-- Tiny: 0.75rem (12px) - Badges, metadata
+**Scale (MUI Typography variants):**
+- h1: 2.25rem (36px) - Dashboard titles
+- h2: 1.875rem (30px) - Page titles
+- h3: 1.5rem (24px) - Section headers
+- h4: 1.25rem (20px) - Subsection headers
+- h5: 1rem (16px) - Card titles
+- h6: 0.875rem (14px) - Small headings
+- body1: 1rem (16px) - Standard text
+- body2: 0.875rem (14px) - Secondary text
+- caption: 0.75rem (12px) - Labels, metadata
+- overline: 0.75rem (12px) - Badges, tags
+
+**Font Weights (from template):**
+- Light: 300
+- Regular: 400
+- SemiBold: 600
+- Bold: 700
 
 ### 3.3 Spacing & Layout
 
-**Base Unit:** 4px (Tailwind default)
+**Base Unit:** 4px (MUI theme.spacing(1) = 4px)
 
-**Spacing Scale:**
-- xs: 4px (gap between inline elements)
-- sm: 8px (tight padding)
-- md: 16px (standard padding)
-- lg: 24px (section spacing)
-- xl: 32px (page margins)
-- 2xl: 48px (major section breaks)
+**Spacing Scale (MUI sx prop):**
+- spacing(0.5): 2px
+- spacing(1): 4px (gap between inline elements)
+- spacing(2): 8px (tight padding)
+- spacing(3): 12px
+- spacing(4): 16px (standard padding)
+- spacing(6): 24px (section spacing)
+- spacing(8): 32px (page margins)
+- spacing(12): 48px (major section breaks)
 
-**Layout Grid:**
-- Desktop: 12-column grid, max-width 1280px
-- Tablet: 8-column grid
-- Mobile: 4-column grid
+**Layout Grid (MUI Grid component):**
+- Desktop: 12-column grid, max-width 1280px (lg breakpoint)
+- Tablet: 12-column grid, responsive at md breakpoint
+- Mobile: Stack layout, single column at xs/sm breakpoints
+
+**MUI Breakpoints:**
+- xs: 0px (mobile)
+- sm: 600px (small tablet)
+- md: 900px (tablet)
+- lg: 1200px (desktop)
+- xl: 1536px (large desktop)
 
 **Interactive Visualizations:**
 - Color Theme Explorer: [ux-color-themes.html](./ux-color-themes.html)
@@ -338,16 +359,19 @@ graph TD
 
 ### 6.1 Component Strategy
 
-**From shadcn/ui (use as-is):**
-- Button (primary, secondary, ghost, destructive)
-- Input, Textarea, Select, Checkbox, Radio
-- Card, Badge, Alert, Toast
-- Dialog, Sheet, Popover, Tooltip
-- Table, Tabs, Accordion
-- Progress, Skeleton
-- Command (command palette for quick navigation)
+**From MUI (template already provides):**
+- **Button:** variants (contained, outlined, text), colors (primary, secondary, error)
+- **TextField:** Input, multiline Textarea, with InputAdornment
+- **Select, Checkbox, Radio, Switch:** Form controls with FormControlLabel
+- **Card, Chip, Badge, Avatar:** Data display components
+- **Alert, Snackbar:** Feedback and notifications
+- **Dialog, Drawer, Popover, Tooltip:** Overlays and popovers
+- **Table, DataGrid:** Data tables (DataGrid for advanced features)
+- **Tabs, Accordion:** Navigation and disclosure
+- **CircularProgress, LinearProgress, Skeleton:** Loading states
+- **Autocomplete:** Search with suggestions (use for command palette-like features)
 
-**Custom Components:**
+**Custom Components (build on MUI primitives):**
 
 #### Control Status Badge
 Shows implementation status with semantic color.
@@ -488,28 +512,29 @@ Sticky bar at bottom when reviewing multiple items.
 
 ### 9.1 Development Priorities
 
-**Phase 1: Core Infrastructure**
-- Set up shadcn/ui with custom theme
-- Implement layout (sidebar, header, main content)
-- Build wizard component framework
+**Phase 1: Core Infrastructure (Template provides foundation)**
+- Extend existing MUI theme with SSP-specific customizations
+- Add SSP routes to existing router configuration
+- Create SSP context and hooks for state management
+- Build wizard component framework using MUI Stepper
 
 **Phase 2: SSP Creation Flow**
-- System info form
-- Baseline selection
-- Control catalog browsing
-- Export functionality
+- System info form (using MUI TextField, Select)
+- Baseline selection (using MUI RadioGroup, Card)
+- Control catalog browsing (using MUI DataGrid or Table)
+- Export functionality (using MUI Dialog for format selection)
 
 **Phase 3: Tool Library & Auto-Mapping (Differentiator)**
-- Tool library UI
-- Auto-mapping engine integration
-- Approval workflow components
-- Implementation statement editor
+- Tool library UI (using MUI Card grid)
+- Auto-mapping display (using MUI List with expandable items)
+- Approval workflow components (using MUI ButtonGroup, Snackbar)
+- Implementation statement editor (using MUI Drawer with TextField)
 
 **Phase 4: Polish & Accessibility**
 - WCAG 2.1 AA audit and fixes
-- Responsive refinements
-- Animation and micro-interactions
-- Performance optimization
+- Responsive refinements using MUI breakpoints
+- Animation using MUI transitions (Fade, Slide, Collapse)
+- Performance optimization (React.memo, useMemo)
 
 ### 9.2 Completion Summary
 
@@ -519,11 +544,11 @@ This document establishes the complete UX foundation for SSP Generator:
 
 | Component | Decision | Rationale |
 |-----------|----------|-----------|
-| **Design System** | shadcn/ui | Accessibility-first, Tailwind-based, source ownership |
-| **Color Theme** | Federal Blue | Trust signals for GovTech, WCAG AAA compliant |
-| **Typography** | System fonts | Performance, government network compatibility |
+| **Design System** | Material-UI (MUI) | Template configured, 40+ themed components, enterprise-ready |
+| **Color Theme** | Federal Blue (#051094) | Template theme, trust signals for GovTech |
+| **Typography** | Open Sans | Template configured, professional, readable |
 | **Layout** | Hybrid approach | Dense dashboard + spacious wizard + split panel approval |
-| **Accessibility** | WCAG 2.1 AA | Required for government users |
+| **Accessibility** | WCAG 2.1 AA | MUI built-in support, required for government users |
 
 **Core Deliverables Created:**
 - UX Design Specification: `docs/ux-design-specification.md` (this document)
@@ -577,6 +602,7 @@ This UX Design Specification can serve as input to:
 
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
+| 2025-11-26 | 1.1 | Updated for Material-UI (template infrastructure) | USER |
 | 2025-11-26 | 1.0 | Complete UX Design Specification - All sections finalized | USER |
 | 2025-11-26 | 0.1 | Initial UX Design Specification - Core sections | USER |
 

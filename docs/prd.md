@@ -2,7 +2,7 @@
 
 **Author:** USER
 **Date:** 2025-11-26
-**Version:** 1.1 (Updated after Party Mode review)
+**Version:** 1.2 (Updated for template infrastructure + Go CLI architecture)
 
 ---
 
@@ -203,8 +203,8 @@ This is a govtech/compliance domain project requiring attention to:
    - Step 3: Control Implementation (by family)
    - Step 4: Review & Export
 
-2. **CLI Workflow**
-   ```
+2. **CLI Workflow** (Go CLI - separate repository)
+   ```bash
    ssp init --baseline moderate --name "My System"
    ssp control implement AC-1 --status implemented
    ssp validate
@@ -364,31 +364,50 @@ This is a govtech/compliance domain project requiring attention to:
 ## Proposed Architecture
 
 ```
-┌─────────────────┐     ┌─────────────────┐
-│     Web UI      │     │      CLI        │
-│  (React/Vite)   │     │   (Node.js)     │
-└────────┬────────┘     └────────┬────────┘
-         │                       │
-         └───────────┬───────────┘
-                     │
-              ┌──────▼──────┐
-              │  REST API   │
-              │  (Backend)  │
-              └──────┬──────┘
-                     │
-     ┌───────────────┼───────────────┐
-     │               │               │
-┌────▼────┐   ┌──────▼──────┐   ┌────▼────┐
-│  OSCAL  │   │   Control   │   │   AI    │
-│ Engine  │   │   Catalog   │   │ Service │
-└─────────┘   └─────────────┘   └─────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                         User Machine                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌─────────────────┐               ┌─────────────────┐         │
+│  │     Web UI      │               │     Go CLI      │         │
+│  │  (Vite+React)   │               │   (ssp binary)  │         │
+│  │  + MUI + Cognito│               │                 │         │
+│  └────────┬────────┘               └────────┬────────┘         │
+│           │                                 │                   │
+│           │  Read/Write                     │  Read/Write       │
+│           │                                 │                   │
+│           └─────────────┬───────────────────┘                   │
+│                         │                                       │
+│                  ┌──────▼──────┐                               │
+│                  │  JSON Files │                               │
+│                  │  (~/.ssp-gen)│                               │
+│                  └──────┬──────┘                               │
+│                         │                                       │
+│    ┌────────────────────┼────────────────────┐                 │
+│    │                    │                    │                 │
+│ ┌──▼───┐          ┌─────▼─────┐        ┌────▼────┐            │
+│ │ SSP  │          │  Control  │        │  Tools  │            │
+│ │ Data │          │  Catalog  │        │  Data   │            │
+│ └──────┘          └───────────┘        └─────────┘            │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+                         │
+                         │ Optional (AI Suggestions)
+                         ▼
+              ┌─────────────────┐
+              │   OpenAI API    │
+              │  (cloud service)│
+              └─────────────────┘
 ```
 
 **Key Architectural Decisions:**
-- API-first design enables both interfaces to share business logic
-- OSCAL Engine handles all format conversions and validation
-- AI Service is modular - core product works without it
-- Control Catalog supports both NIST 800-53 and FedRAMP baselines
+- **Local-first design:** Both Web UI and CLI access the same local JSON files
+- **No backend server:** All data stored locally, portable and Git-friendly
+- **Existing template infrastructure:** Vite + React + MUI + AWS Cognito
+- **Go CLI (separate repo):** Cross-platform binary with direct file access
+- **OSCAL Engine:** Handles all format conversions and validation locally
+- **AI Service is optional:** Core product works without it
+- **Control Catalog:** Static JSON data for NIST 800-53 and FedRAMP baselines
 
 ---
 

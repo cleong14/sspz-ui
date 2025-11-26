@@ -105,154 +105,161 @@ Epic 8 (AI):             FR46, FR47, FR48, FR49
 
 ## Epic 1: Foundation & Infrastructure
 
-**Goal:** Establish the technical foundation using T3 Stack (Next.js 15 + tRPC + Prisma + NextAuth) with shadcn/ui components and monorepo structure for CLI.
+**Goal:** Extend the existing template infrastructure (Vite + React + MUI + AWS Cognito) with SSP-specific features and set up the separate Go CLI repository.
 
-**User Value:** Enables all subsequent development - users get a fast, accessible, well-architected application.
+**User Value:** Enables all subsequent development - users get a fast, accessible, well-architected application built on proven template infrastructure.
 
 **FRs Covered:** Infrastructure foundation for all FRs
 
 ---
 
-### Story 1.1: Initialize T3 Stack Project
+### Story 1.1: Extend Template with SSP Dependencies
 
 As a **developer**,
-I want **the project initialized with T3 Stack**,
-So that **I have a type-safe full-stack foundation**.
+I want **the template extended with SSP-specific dependencies**,
+So that **I have all libraries needed for SSP features**.
 
 **Acceptance Criteria:**
 
-**Given** no existing project
-**When** running the T3 initialization commands
-**Then** a new Next.js 15 project is created with:
-- TypeScript strict mode enabled
-- tRPC v11 configured with React Query
-- Prisma ORM initialized
-- NextAuth.js v5 scaffolded
-- Tailwind CSS v4 configured
-- ESLint + Prettier configured
+**Given** existing template-vite-react infrastructure
+**When** installing additional dependencies
+**Then** the following are added:
+- uuid, date-fns for data utilities
+- file-saver, jszip for export features
+- ajv, ajv-formats for OSCAL schema validation
+- docx, pdfmake for document generation
+- react-hook-form, zod for form handling (if not present)
 
-**And** the project structure matches Architecture spec section "Project Structure"
+**And** TypeScript types are properly configured
+**And** all existing template tests still pass
 
 **Prerequisites:** None (first story)
 
 **Technical Notes:**
-- Use `npm create t3-app@latest` with all features enabled
-- Configure for App Router (not Pages Router)
-- Set up environment validation with t3-env
-- Reference: Architecture doc lines 20-36
+- Run `yarn add uuid date-fns file-saver jszip ajv ajv-formats docx pdfmake`
+- Template already provides: Vite, React, MUI, AWS Cognito, React Router
+- Reference: Architecture doc "Project Initialization" section
 
 ---
 
-### Story 1.2: Initialize shadcn/ui Component Library
+### Story 1.2: Create SSP Type Definitions
 
 As a **developer**,
-I want **shadcn/ui initialized with Federal Blue theme**,
-So that **I have accessible, government-appropriate UI components**.
+I want **TypeScript type definitions for SSP data structures**,
+So that **I have type safety across the application**.
 
 **Acceptance Criteria:**
 
-**Given** T3 Stack project is initialized
-**When** running shadcn initialization
-**Then** shadcn/ui is configured with:
-- Radix UI primitives installed
-- Federal Blue color theme from UX spec (Primary: #1d4ed8)
-- Core components added: button, card, input, form, table, tabs, dialog, sheet, toast, badge, progress, command, accordion
-- WCAG 2.1 AA color contrast verified
+**Given** template TypeScript configuration
+**When** creating type definitions
+**Then** types are defined for:
+- SspProject (id, name, baseline, status, systemInfo, implementations)
+- ControlImplementation (controlId, status, statement, aiGenerated)
+- Control, ControlFamily, ControlCatalog
+- Tool, ToolControlMapping
+- All enums (Baseline, SspStatus, ImplementationStatus, ImpactLevel)
 
-**And** custom CSS variables match UX Design spec section 3.1
+**And** types match Architecture doc "JSON File Schema" section
+**And** types are exported from src/types/ directory
 
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
-- Run `npx shadcn@latest init` then add components
-- Configure globals.css with Federal Blue palette
-- Reference: UX Design spec lines 148-186
+- Create src/types/ssp.ts, src/types/control.ts, src/types/tool.ts
+- Use TypeScript strict mode
+- Reference: Architecture doc "Data Architecture" section
 
 ---
 
-### Story 1.3: Configure PostgreSQL Database Schema
+### Story 1.3: Implement JSON File Storage Service
 
 As a **developer**,
-I want **the database schema configured with Prisma**,
-So that **data persistence is ready for all features**.
+I want **a service for reading/writing SSP JSON files**,
+So that **data persists locally and is portable**.
 
 **Acceptance Criteria:**
 
-**Given** T3 Stack project with Prisma initialized
-**When** defining the database schema
-**Then** Prisma schema includes models for:
-- User (id, email, name, password, role, createdAt, updatedAt)
-- Ssp (id, name, description, baseline, systemInfo JSON, status, userId)
-- Control (id, controlId, family, title, description, guidance, baselines)
-- ControlImplementation (id, sspId, controlId, status, statement, aiGenerated, aiConfidence, parameters)
-- Tool and ToolControlMapping for auto-mapping feature
+**Given** type definitions are created
+**When** implementing storage service
+**Then** sspStorage service provides:
+- list(): Load all SSP projects from ~/.ssp-gen/projects/
+- get(id): Load specific project
+- save(project): Write project to JSON file
+- delete(id): Remove project file
+- Automatic updatedAt timestamp on save
 
-**And** all relations and indexes are properly defined
-**And** enums for Role, Baseline, SspStatus, ImplementationStatus created
-
-**Prerequisites:** Story 1.1
-
-**Technical Notes:**
-- Schema matches Architecture doc section "Data Architecture" lines 449-541
-- Use JSON fields for flexible OSCAL data storage
-- Add @@index on foreign keys for performance
-
----
-
-### Story 1.4: Set Up Monorepo Structure for CLI
-
-As a **developer**,
-I want **a monorepo structure with CLI package**,
-So that **CLI and web app share types and API contracts**.
-
-**Acceptance Criteria:**
-
-**Given** T3 Stack project initialized
-**When** setting up monorepo structure
-**Then** packages/cli directory is created with:
-- package.json with Commander.js dependency
-- TypeScript configuration extending root tsconfig
-- src/index.ts entry point
-- src/commands/ directory for CLI commands
-- src/lib/api-client.ts for tRPC client
-
-**And** CLI can import types from main app
-**And** npm workspaces or turborepo configured
-
-**Prerequisites:** Story 1.1
-
-**Technical Notes:**
-- Reference: Architecture doc lines 78-92
-- CLI uses same tRPC client as web UI
-- Version CLI independently for npm publishing
-
----
-
-### Story 1.5: Configure Dashboard Layout Shell
-
-As a **developer**,
-I want **the dashboard layout shell implemented**,
-So that **all authenticated pages have consistent navigation**.
-
-**Acceptance Criteria:**
-
-**Given** shadcn/ui is configured
-**When** building the layout components
-**Then** dashboard layout includes:
-- Fixed sidebar navigation (collapsible on tablet/mobile)
-- Header with user menu and breadcrumbs
-- Main content area with proper spacing
-- Mobile hamburger menu for <640px screens
-
-**And** layout matches UX Design spec section 4.1 "Hybrid Approach"
-**And** keyboard navigation works for all interactive elements
+**And** service handles file system errors gracefully
+**And** works in browser using File System Access API or download/upload fallback
 
 **Prerequisites:** Story 1.2
 
 **Technical Notes:**
-- Use shadcn Sidebar component as base
-- Implement responsive breakpoints: mobile <640px, tablet 640-1024px, desktop >1024px
-- Reference: UX Design spec lines 250-278
+- Create src/lib/storage/ssp-storage.ts
+- Use browser File System Access API where supported
+- Fallback to download/upload for unsupported browsers
+- Reference: Architecture doc "File Operations Pattern"
+
+---
+
+### Story 1.4: Initialize Go CLI Repository
+
+As a **developer**,
+I want **a separate Go CLI repository initialized**,
+So that **CLI development can proceed independently**.
+
+**Acceptance Criteria:**
+
+**Given** decision to use Go for CLI
+**When** initializing CLI repository
+**Then** ssp-cli repository is created with:
+- Go module initialized (go.mod)
+- cmd/ssp/main.go entry point with cobra or flag package
+- internal/commands/ directory structure
+- internal/storage/ for JSON file operations
+- internal/types/ matching Web UI types
+- Makefile for cross-platform builds
+
+**And** `go build ./cmd/ssp` produces working binary
+**And** `ssp --help` displays usage information
+
+**Prerequisites:** None (can be parallel with Story 1.1)
+
+**Technical Notes:**
+- Separate repository from Web UI
+- Use cobra or standard flag package for CLI framework
+- Match JSON file format with Web UI exactly
+- Reference: Architecture doc "Go CLI Repository" structure
+
+---
+
+### Story 1.5: Extend Dashboard Layout for SSP Navigation
+
+As a **developer**,
+I want **the template dashboard layout extended with SSP navigation**,
+So that **users can navigate to all SSP features**.
+
+**Acceptance Criteria:**
+
+**Given** template AppLayout exists
+**When** extending navigation
+**Then** sidebar includes:
+- Dashboard (home)
+- Projects (SSP list)
+- Control Catalog
+- Tool Library
+- Settings
+
+**And** AppDrawerButtonList is updated with new routes
+**And** breadcrumbs work for nested routes
+**And** mobile navigation works correctly
+
+**Prerequisites:** Story 1.1
+
+**Technical Notes:**
+- Extend existing src/layouts/AppLayout/
+- Update src/router/router.tsx with new routes
+- Use template's existing MUI Drawer component
+- Reference: UX Design spec section 4.1
 
 ---
 
@@ -268,141 +275,148 @@ So that **code quality is enforced and deployments are automated**.
 **When** configuring CI/CD
 **Then** GitHub Actions workflows include:
 - ci.yml: Lint, type-check, unit tests on PR
-- deploy.yml: Deploy to Vercel on main branch merge
-- Database migrations run automatically
-- Environment secrets configured
+- deploy.yml: Deploy to static hosting (Vercel/Netlify) on main branch
+- Environment secrets for AWS Cognito configured
 
 **And** PR checks block merge on failure
-**And** Vercel preview deployments work for PRs
+**And** Preview deployments work for PRs
 
-**Prerequisites:** Story 1.3
+**Prerequisites:** Story 1.1
 
 **Technical Notes:**
-- Reference: Architecture doc section "Deployment Architecture" lines 665-688
-- Use Vercel for web app, Railway for PostgreSQL
-- Configure DATABASE_URL, NEXTAUTH_SECRET in secrets
+- Template may already have CI/CD partially configured
+- Static hosting deployment (no database)
+- Configure VITE_COGNITO_* secrets
+- Reference: Architecture doc "Deployment Architecture"
 
 ---
 
 ## Epic 2: User Authentication & Access
 
-**Goal:** Enable secure user registration, login, and role-based access control.
+**Goal:** Leverage existing AWS Cognito authentication from template and extend for SSP-specific needs.
 
-**User Value:** Users can create accounts and securely access their SSP projects.
+**User Value:** Users can securely access their SSP projects using enterprise-grade authentication.
 
 **FRs Covered:** FR1, FR2, FR3
 
 ---
 
-### Story 2.1: Implement User Registration
+### Story 2.1: Verify AWS Cognito Integration
 
-As a **compliance officer**,
-I want **to create an account with email and password**,
-So that **I can access the SSP Generator**.
+As a **developer**,
+I want **to verify AWS Cognito authentication works**,
+So that **users can register and login securely**.
 
 **Acceptance Criteria:**
 
-**Given** I am on the registration page
-**When** I enter valid email, password (8+ chars, 1 uppercase, 1 number), and name
-**Then** my account is created with EDITOR role by default
-**And** password is hashed with bcrypt (cost factor 12)
-**And** I am redirected to the dashboard
-**And** a welcome toast notification appears
+**Given** template AWS Cognito configuration
+**When** testing authentication flow
+**Then** the following work correctly:
+- User registration (sign up with email/password)
+- Email verification
+- User login (sign in)
+- Password reset flow
+- JWT token retrieval
 
-**Given** I enter an email that already exists
-**When** I submit the form
-**Then** I see error "An account with this email already exists"
+**And** environment variables are documented
+**And** Cognito User Pool requirements are specified
 
-**Prerequisites:** Story 1.3
+**Prerequisites:** Story 1.1
 
 **Technical Notes:**
-- Use NextAuth.js Credentials provider
-- Form validation with Zod schema (shared client/server)
-- Reference: Architecture doc section "Security Architecture" lines 603-634
+- Template already provides: configureCognito(), getJWT(), AuthProvider
+- Verify existing SignIn and SignOut views work
+- Document required Cognito User Pool settings
+- Reference: Architecture doc "Security Architecture"
 
 ---
 
-### Story 2.2: Implement User Login
+### Story 2.2: Extend Login Page with SSP Branding
 
-As a **user**,
-I want **to log in with my email and password**,
-So that **I can access my SSP projects**.
+As a **compliance officer**,
+I want **a branded login experience**,
+So that **I know I'm using the SSP Generator**.
 
 **Acceptance Criteria:**
 
-**Given** I am on the login page
-**When** I enter valid credentials
-**Then** I am authenticated and redirected to dashboard
-**And** session is stored in database via Prisma adapter
-**And** secure httpOnly cookie is set
+**Given** template SignIn view exists
+**When** extending with SSP branding
+**Then** login page includes:
+- SSP Generator logo/title
+- Welcome message for compliance users
+- Clear sign-up link for new users
+- Password visibility toggle (template component)
 
-**Given** I enter invalid credentials
-**When** I submit the form
-**Then** I see error "Invalid email or password" (generic for security)
-**And** failed attempt is logged to security_events
+**And** error messages are user-friendly
+**And** loading states show during authentication
 
 **Prerequisites:** Story 2.1
 
 **Technical Notes:**
-- Implement rate limiting (5 attempts/hour/IP)
-- Use NextAuth.js session strategy: "database"
-- Reference: Architecture doc lines 607-612
+- Extend existing src/views/SignIn/
+- Use template's MUI components
+- Add SSP-specific welcome messaging
+- Reference: UX Design spec for branding
 
 ---
 
 ### Story 2.3: Implement User Profile Management
 
 As a **user**,
-I want **to update my profile and preferences**,
-So that **my account information stays current**.
+I want **to view my profile information**,
+So that **I can see my account details**.
 
 **Acceptance Criteria:**
 
 **Given** I am logged in
 **When** I navigate to Settings > Profile
-**Then** I can view and edit:
-- Display name
-- Email (with re-verification required)
-- Password (requires current password)
+**Then** I can view:
+- Display name (from Cognito attributes)
+- Email address
+- Account creation date
 
-**And** changes are saved with success toast
-**And** audit log entry created for profile changes
+**And** I can change password via Cognito flow
+**And** changes show success toast notification
 
-**Prerequisites:** Story 2.2
+**Prerequisites:** Story 2.1
 
 **Technical Notes:**
-- Use tRPC mutation `user.update`
-- Email change requires re-verification flow
+- Use AWS Amplify Auth.currentUserInfo()
+- Password change via Auth.changePassword()
+- Store user preferences in localStorage
 - Reference: FR2
 
 ---
 
-### Story 2.4: Implement Role-Based Access Control
+### Story 2.4: Implement Local Role-Based Access
 
-As an **admin**,
-I want **to manage user roles**,
-So that **I can control who can edit vs view SSPs**.
+As a **developer**,
+I want **role-based UI controls**,
+So that **different users see appropriate options**.
 
 **Acceptance Criteria:**
 
-**Given** I am an ADMIN user
-**When** I navigate to Settings > Users
-**Then** I can view all users and change their roles (VIEWER, EDITOR, ADMIN)
+**Given** user is authenticated
+**When** determining access level
+**Then** role is determined from:
+- Cognito user groups (if configured)
+- Local preference setting (for single-user/demo mode)
 
-**Given** I am a VIEWER
-**When** I try to create or edit an SSP
-**Then** I see "Read-only access" message and edit buttons are disabled
+**Given** user has VIEWER role
+**When** accessing SSP features
+**Then** edit buttons are disabled with tooltip "Read-only access"
 
-**Given** I am an EDITOR
-**When** I access SSP features
-**Then** I can create, edit, and delete my own SSPs
+**Given** user has EDITOR role
+**When** accessing SSP features
+**Then** full CRUD operations are available
 
 **Prerequisites:** Story 2.2
 
 **Technical Notes:**
-- Implement tRPC middleware for role checking
-- VIEWER: read-only, EDITOR: own resources, ADMIN: all resources
-- Reference: Architecture doc lines 618-625, FR3
+- Role stored in Cognito groups or local setting
+- UI-level enforcement (data is local anyway)
+- Consider single-user vs multi-user scenarios
+- Reference: FR3
 
 ---
 
@@ -416,7 +430,7 @@ So that **I don't have to log in repeatedly**.
 
 **Given** I log in successfully
 **When** I close and reopen the browser
-**Then** I remain logged in for 7 days (session duration)
+**Then** I remain logged in (Cognito session management)
 
 **Given** my session expires
 **When** I try to access a protected page
@@ -424,15 +438,16 @@ So that **I don't have to log in repeatedly**.
 
 **Given** I click "Log out"
 **When** the action completes
-**Then** my session is invalidated server-side
-**And** I am redirected to the landing page
+**Then** my Cognito session is invalidated
+**And** I am redirected to the landing/login page
 
-**Prerequisites:** Story 2.2
+**Prerequisites:** Story 2.1
 
 **Technical Notes:**
-- Session stored in database, not JWT
-- Implement session refresh on activity
-- Clear all sessions on password change
+- Template already handles session via AWS Amplify
+- authLoader in router checks JWT validity
+- Use existing SignOut view for logout
+- Reference: Template router/authLoader.ts
 
 ---
 
@@ -446,57 +461,60 @@ So that **I don't have to log in repeatedly**.
 
 ---
 
-### Story 3.1: Seed NIST 800-53 Rev 5 Control Data
+### Story 3.1: Create NIST 800-53 Rev 5 Control Data File
 
 As a **developer**,
-I want **NIST 800-53 Rev 5 controls seeded in the database**,
+I want **NIST 800-53 Rev 5 controls as a static JSON file**,
 So that **users can browse the complete control catalog**.
 
 **Acceptance Criteria:**
 
-**Given** database schema is configured
-**When** running prisma db seed
-**Then** all 1000+ NIST 800-53 Rev 5 controls are inserted including:
+**Given** project structure is set up
+**When** creating control catalog data
+**Then** public/data/nist-800-53-rev5.json contains:
 - All 20 control families (AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR)
-- Control enhancements (e.g., AC-2(1), AC-2(2))
+- All 1000+ controls with enhancements (e.g., AC-2(1), AC-2(2))
 - Baseline applicability (Low: 150, Moderate: 304, High: 392)
 - Guidance text and supplemental info
 
+**And** JSON structure matches ControlCatalog TypeScript interface
 **And** data sourced from official NIST OSCAL catalog
 
-**Prerequisites:** Story 1.3
+**Prerequisites:** Story 1.2
 
 **Technical Notes:**
 - Download from https://github.com/usnistgov/oscal-content
-- Store in data/controls/nist-800-53-rev5.json
-- Seed script parses OSCAL and inserts to Control table
+- Transform OSCAL to simplified JSON format
+- Store in public/data/ for static serving
+- Reference: Architecture doc "Control Catalog" schema
 
 ---
 
-### Story 3.2: Seed FedRAMP Baseline Data
+### Story 3.2: Create FedRAMP Baseline Data File
 
 As a **developer**,
-I want **FedRAMP baselines seeded in the database**,
+I want **FedRAMP baselines as static JSON data**,
 So that **users can select FedRAMP-specific controls**.
 
 **Acceptance Criteria:**
 
-**Given** NIST controls are seeded
-**When** running FedRAMP seed
-**Then** FedRAMP baselines are configured:
+**Given** NIST control data exists
+**When** creating FedRAMP data
+**Then** public/data/fedramp-baselines.json contains:
 - FedRAMP Low (125 controls)
 - FedRAMP Moderate (325 controls)
 - FedRAMP High (421 controls)
 - FedRAMP LI-SaaS (Low Impact SaaS)
+- FedRAMP-specific parameters per control
+- Mapping to NIST base controls
 
-**And** FedRAMP-specific parameters stored
-**And** FedRAMP extensions linked to base NIST controls
+**And** JSON structure matches FedRAMP interfaces
 
 **Prerequisites:** Story 3.1
 
 **Technical Notes:**
 - Source from FedRAMP automation repository
-- Store baseline mappings in separate table
+- Include parameter substitutions
 - Reference: FR42, FR43, FR44
 
 ---
@@ -1210,39 +1228,42 @@ So that **I can fix issues with my file**.
 
 ---
 
-## Epic 7: CLI Tool
+## Epic 7: Go CLI Tool
 
-**Goal:** Provide command-line interface for DevSecOps automation.
+**Goal:** Provide Go-based command-line interface for DevSecOps automation with direct file access.
 
-**User Value:** Developers can automate SSP operations in CI/CD pipelines.
+**User Value:** Developers can automate SSP operations in CI/CD pipelines using a single binary with no runtime dependencies.
 
 **FRs Covered:** FR32, FR33, FR34, FR35, FR36, FR37, FR38
 
 ---
 
-### Story 7.1: Build CLI Entry Point and Auth
+### Story 7.1: Build Go CLI Entry Point and Configuration
 
 As a **developer**,
-I want **CLI authentication working**,
-So that **CLI can access the API securely**.
+I want **Go CLI with configuration support**,
+So that **CLI can be customized per user**.
 
 **Acceptance Criteria:**
 
-**Given** CLI is installed (`npm install -g @ssp-gen/cli`)
-**When** I run `ssp login`
-**Then** browser opens for authentication
-**And** API token is stored in ~/.ssp-gen/config.json
-**And** subsequent commands use stored token
+**Given** Go CLI binary is built
+**When** I run `ssp config init`
+**Then** ~/.ssp-gen/config.json is created with defaults
+**And** config includes: defaultBaseline, projectsDir, openaiApiKey (optional)
 
-**Given** token expires
+**Given** config exists
 **When** I run any command
-**Then** I see "Session expired, please run ssp login"
+**Then** config values are loaded and applied
 
-**Prerequisites:** Story 1.4, Story 2.2
+**And** `ssp config get <key>` shows current value
+**And** `ssp config set <key> <value>` updates config
+
+**Prerequisites:** Story 1.4
 
 **Technical Notes:**
-- Use device authorization flow or API key
-- Store config in user home directory
+- No authentication needed for local file access
+- Config file at ~/.ssp-gen/config.json
+- Optional OpenAI API key for AI suggestions
 - Reference: FR37
 
 ---
@@ -1255,20 +1276,22 @@ So that **I can script SSP creation**.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated
+**Given** Go CLI is installed
 **When** I run `ssp init --name "My System" --baseline moderate`
-**Then** new SSP is created via API
-**And** SSP ID is output for subsequent commands
-**And** local .ssp-project.json created with SSP reference
+**Then** new SSP JSON file is created in ~/.ssp-gen/projects/
+**And** SSP ID (UUID) is output
+**And** file path is displayed
 
 **And** command supports flags: --name, --baseline, --description
 **And** interactive mode prompts for missing required fields
+**And** `ssp init --help` shows usage
 
 **Prerequisites:** Story 7.1
 
 **Technical Notes:**
-- Use Commander.js for CLI framework
-- Call tRPC `ssp.create` procedure
+- Create JSON file matching Web UI format exactly
+- Generate UUID for project ID
+- Use cobra package for CLI framework
 - Reference: FR32
 
 ---
@@ -1281,20 +1304,21 @@ So that **I can automate compliance documentation**.
 
 **Acceptance Criteria:**
 
-**Given** I have an SSP project
+**Given** I have an SSP project (by ID or in current directory)
 **When** I run `ssp control implement AC-1 --status implemented --statement "..."`
-**Then** control implementation is updated via API
+**Then** control implementation is added/updated in SSP JSON
 **And** confirmation message shows updated status
 
-**And** I can run `ssp control list` to see all controls with status
-**And** I can run `ssp control get AC-1` to see implementation details
-**And** bulk operations supported: `ssp control implement AC-1 AC-2 AC-3 --status planned`
+**And** `ssp control list [--project <id>]` shows all controls with status
+**And** `ssp control get AC-1` shows implementation details
+**And** bulk: `ssp control implement AC-1 AC-2 --status planned`
 
 **Prerequisites:** Story 7.2
 
 **Technical Notes:**
-- Call tRPC `control.implement` procedure
-- Support piping statement from file: `--statement-file ./ac-1.md`
+- Direct JSON file manipulation
+- Support --statement-file ./ac-1.md for long statements
+- Validate control ID against embedded catalog
 - Reference: FR34
 
 ---
@@ -1310,16 +1334,17 @@ So that **I can generate documents in CI/CD**.
 **Given** I have an SSP project
 **When** I run `ssp export --format oscal-json --output ./ssp.json`
 **Then** SSP is exported to specified file
-**And** supports formats: oscal-json, oscal-yaml, oscal-xml, word, pdf
+**And** supports formats: oscal-json, oscal-yaml, oscal-xml
 
 **And** `--stdout` flag outputs to stdout for piping
 **And** exit code 0 on success, 1 on error
+**And** progress indicator for large exports
 
-**Prerequisites:** Story 7.2, Story 6.1
+**Prerequisites:** Story 7.2
 
 **Technical Notes:**
-- Call tRPC `export.*` procedures
-- Handle large files with streaming
+- Implement OSCAL generation in Go
+- Word/PDF export may require external tools or be Web UI only
 - Reference: FR35
 
 ---
@@ -1333,7 +1358,7 @@ So that **I can check compliance in CI/CD**.
 **Acceptance Criteria:**
 
 **Given** I have an SSP project or OSCAL file
-**When** I run `ssp validate` (for current project) or `ssp validate ./ssp.json`
+**When** I run `ssp validate [--project <id>]` or `ssp validate ./ssp.json`
 **Then** validation runs and outputs:
 - "Valid" with exit code 0, or
 - Error list with exit code 1
@@ -1341,11 +1366,11 @@ So that **I can check compliance in CI/CD**.
 **And** `--json` flag outputs machine-readable results
 **And** `--strict` flag treats warnings as errors
 
-**Prerequisites:** Story 7.2, Story 6.5
+**Prerequisites:** Story 7.2
 
 **Technical Notes:**
-- Call tRPC `export.validate` or run local validation
-- JSON output for CI/CD integration
+- Embed OSCAL JSON Schema in binary
+- Use gojsonschema for validation
 - Reference: FR36
 
 ---
@@ -1360,18 +1385,18 @@ So that **I can migrate existing SSPs**.
 
 **Given** I have an OSCAL SSP file
 **When** I run `ssp import ./existing-ssp.json --name "Imported System"`
-**Then** SSP is created from imported data
-**And** SSP ID output for subsequent commands
-**And** warnings displayed if any
+**Then** SSP JSON is created from imported data
+**And** new project ID output
+**And** warnings displayed if any mapping issues
 
 **And** `--dry-run` flag validates without creating
 **And** `--json` flag outputs import results as JSON
 
-**Prerequisites:** Story 7.1, Story 6.6
+**Prerequisites:** Story 7.1
 
 **Technical Notes:**
-- Call tRPC `ssp.import` procedure
-- Support all OSCAL formats
+- Parse OSCAL JSON/YAML formats
+- Map to internal SSP structure
 - Reference: FR33, FR38
 
 ---
@@ -1597,15 +1622,27 @@ So that **suggestions improve over time**.
 - **49 FRs** fully covered with traceability
 - **Context Integrated:** PRD + UX Design + Architecture
 
+**Architecture Summary:**
+- **Web UI:** Vite + React + MUI + AWS Cognito (template infrastructure)
+- **Data Storage:** Local JSON files (~/.ssp-gen/projects/)
+- **CLI:** Go binary (separate repository) with direct file access
+- **No Backend Server:** Local-first architecture
+
 **Recommended Implementation Sequence:**
 
-1. **Epic 1** (Foundation) - Must complete first
-2. **Epic 2** (Auth) + **Epic 3** (Catalog) - Can parallelize
-3. **Epic 4** (Projects) - Depends on Epic 2
+1. **Epic 1** (Foundation) - Extend template, create types, set up Go CLI repo
+2. **Epic 2** (Auth) + **Epic 3** (Catalog) - Can parallelize, verify Cognito, create JSON data
+3. **Epic 4** (Projects) - Depends on Epic 1.3 (storage service)
 4. **Epic 5** (SSP Creation) - Core workflow, depends on 3, 4
 5. **Epic 6** (Export/Import) - Depends on Epic 5
-6. **Epic 7** (CLI) - Can start after Epic 2+3, parallelize with 5
+6. **Epic 7** (Go CLI) - Can develop in parallel in separate repo
 7. **Epic 8** (AI) - Enhancement, depends on Epic 5
+
+**Key Technical Notes:**
+- Story 1.4 (Go CLI repo) can be developed independently in parallel
+- Stories reference MUI components instead of shadcn/ui
+- Stories reference JSON file storage instead of PostgreSQL/Prisma
+- Stories reference AWS Cognito instead of NextAuth
 
 **Next Steps:**
 - Run `sprint-planning` workflow to generate sprint status file
@@ -1617,3 +1654,5 @@ So that **suggestions improve over time**.
 _For implementation: Use the `create-story` workflow to generate individual story implementation plans from this epic breakdown._
 
 _This document incorporates context from PRD, UX Design Specification, and Architecture Decision Document._
+
+_Updated: 2025-11-26 - Adapted for Vite + MUI + JSON + Go CLI architecture_
