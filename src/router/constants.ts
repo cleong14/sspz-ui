@@ -5,12 +5,14 @@ export enum RouteIds {
   AUTH = 'auth',
   LOGIN = 'login',
   LOGOUT = 'logout',
+  SSP_GENERATOR = 'ssp-generator',
 }
 
 export enum RouteNames {
   DASHBOARD = 'Dashboard',
   LOGIN = 'Login',
   LOGOUT = 'Logout',
+  SSP_GENERATOR = 'SSP Generator',
 }
 
 export enum Routes {
@@ -19,4 +21,5 @@ export enum Routes {
   AUTH = `/${RouteIds.AUTH}/*`,
   AUTH_LOGIN = `/${RouteIds.AUTH}/${RouteIds.LOGIN}`,
   AUTH_LOGOUT = `/${RouteIds.AUTH}/${RouteIds.LOGOUT}`,
+  SSP_GENERATOR = `/${RouteIds.SSP_GENERATOR}`,
 }

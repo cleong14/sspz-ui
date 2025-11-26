@@ -18,10 +18,10 @@ Traditional integration testing requires running both consumer and provider simu
 
 ```typescript
 // tests/contract/user-api.pact.spec.ts
-import { PactV3, MatchersV3 } from '@pact-foundation/pact';
-import { getUserById, createUser, User } from '@/api/user-service';
+import { PactV3, MatchersV3 } from '@pact-foundation/pact'
+import { getUserById, createUser, User } from '@/api/user-service'
 
-const { like, eachLike, string, integer } = MatchersV3;
+const { like, eachLike, string, integer } = MatchersV3
 
 /**
  * Consumer-Driven Contract Test
@@ -35,7 +35,7 @@ const provider = new PactV3({
   provider: 'user-api-service',
   dir: './pacts', // Output directory for pact files
   logLevel: 'warn',
-});
+})
 
 describe('User API Contract', () => {
   describe('GET /users/:id', () => {
@@ -70,7 +70,7 @@ describe('User API Contract', () => {
           const user = await getUserById(1, {
             baseURL: mockServer.url,
             headers: { Authorization: 'Bearer token123' },
-          });
+          })
 
           // Assert: Validate consumer behavior
           expect(user).toEqual(
@@ -79,10 +79,10 @@ describe('User API Contract', () => {
               name: 'John Doe',
               email: 'john@example.com',
               role: 'user',
-            }),
-          );
-        });
-    });
+            })
+          )
+        })
+    })
 
     it('should handle 404 when user does not exist', async () => {
       await provider
@@ -103,10 +103,12 @@ describe('User API Contract', () => {
         })
         .executeTest(async (mockServer) => {
           // Act & Assert: Consumer handles 404 gracefully
-          await expect(getUserById(999, { baseURL: mockServer.url })).rejects.toThrow('User not found');
-        });
-    });
-  });
+          await expect(
+            getUserById(999, { baseURL: mockServer.url })
+          ).rejects.toThrow('User not found')
+        })
+    })
+  })
 
   describe('POST /users', () => {
     it('should create user and return 201', async () => {
@@ -114,7 +116,7 @@ describe('User API Contract', () => {
         name: 'Jane Smith',
         email: 'jane@example.com',
         role: 'admin',
-      };
+      }
 
       await provider
         .given('no users exist')
@@ -142,7 +144,7 @@ describe('User API Contract', () => {
         .executeTest(async (mockServer) => {
           const createdUser = await createUser(newUser, {
             baseURL: mockServer.url,
-          });
+          })
 
           expect(createdUser).toEqual(
             expect.objectContaining({
@@ -150,12 +152,12 @@ describe('User API Contract', () => {
               name: 'Jane Smith',
               email: 'jane@example.com',
               role: 'admin',
-            }),
-          );
-        });
-    });
-  });
-});
+            })
+          )
+        })
+    })
+  })
+})
 ```
 
 **package.json scripts**:
@@ -187,9 +189,9 @@ describe('User API Contract', () => {
 
 ```typescript
 // tests/contract/user-api.provider.spec.ts
-import { Verifier, VerifierOptions } from '@pact-foundation/pact';
-import { server } from '../../src/server'; // Your Express/Fastify app
-import { seedDatabase, resetDatabase } from '../support/db-helpers';
+import { Verifier, VerifierOptions } from '@pact-foundation/pact'
+import { server } from '../../src/server' // Your Express/Fastify app
+import { seedDatabase, resetDatabase } from '../support/db-helpers'
 
 /**
  * Provider Verification Test
@@ -199,19 +201,19 @@ import { seedDatabase, resetDatabase } from '../support/db-helpers';
  */
 
 describe('Pact Provider Verification', () => {
-  let serverInstance;
-  const PORT = 3001;
+  let serverInstance
+  const PORT = 3001
 
   beforeAll(async () => {
     // Start provider server
-    serverInstance = server.listen(PORT);
-    console.log(`Provider server running on port ${PORT}`);
-  });
+    serverInstance = server.listen(PORT)
+    console.log(`Provider server running on port ${PORT}`)
+  })
 
   afterAll(async () => {
     // Cleanup
-    await serverInstance.close();
-  });
+    await serverInstance.close()
+  })
 
   it('should verify pacts from all consumers', async () => {
     const opts: VerifierOptions = {
@@ -238,38 +240,38 @@ describe('Pact Provider Verification', () => {
                 createdAt: '2025-01-15T10:00:00Z',
               },
             ],
-          });
-          return 'User seeded successfully';
+          })
+          return 'User seeded successfully'
         },
 
         'user with id 999 does not exist': async () => {
           // Ensure user doesn't exist
-          await resetDatabase();
-          return 'Database reset';
+          await resetDatabase()
+          return 'Database reset'
         },
 
         'no users exist': async () => {
-          await resetDatabase();
-          return 'Database empty';
+          await resetDatabase()
+          return 'Database empty'
         },
       },
 
       // Request filters: Add auth headers to all requests
       requestFilter: (req, res, next) => {
         // Mock authentication for verification
-        req.headers['x-user-id'] = 'test-user';
-        req.headers['authorization'] = 'Bearer valid-test-token';
-        next();
+        req.headers['x-user-id'] = 'test-user'
+        req.headers['authorization'] = 'Bearer valid-test-token'
+        next()
       },
 
       // Timeout for verification
       timeout: 30000,
-    };
+    }
 
     // Run verification
-    await new Verifier(opts).verifyProvider();
-  });
-});
+    await new Verifier(opts).verifyProvider()
+  })
+})
 ```
 
 **CI integration**:
@@ -491,16 +493,16 @@ jobs:
 
 ```typescript
 // tests/contract/user-api-resilience.pact.spec.ts
-import { PactV3, MatchersV3 } from '@pact-foundation/pact';
-import { getUserById, ApiError } from '@/api/user-service';
+import { PactV3, MatchersV3 } from '@pact-foundation/pact'
+import { getUserById, ApiError } from '@/api/user-service'
 
-const { like, string } = MatchersV3;
+const { like, string } = MatchersV3
 
 const provider = new PactV3({
   consumer: 'user-management-web',
   provider: 'user-api-service',
   dir: './pacts',
-});
+})
 
 describe('User API Resilience Contract', () => {
   /**
@@ -532,15 +534,15 @@ describe('User API Resilience Contract', () => {
             baseURL: mockServer.url,
             retries: 3,
             retryDelay: 100,
-          });
-          fail('Should have thrown error after retries');
+          })
+          fail('Should have thrown error after retries')
         } catch (error) {
-          expect(error).toBeInstanceOf(ApiError);
-          expect((error as ApiError).code).toBe('INTERNAL_ERROR');
-          expect((error as ApiError).retryable).toBe(true);
+          expect(error).toBeInstanceOf(ApiError)
+          expect((error as ApiError).code).toBe('INTERNAL_ERROR')
+          expect((error as ApiError).retryable).toBe(true)
         }
-      });
-  });
+      })
+  })
 
   /**
    * Test 429 rate limiting
@@ -570,15 +572,15 @@ describe('User API Resilience Contract', () => {
           await getUserById(1, {
             baseURL: mockServer.url,
             respectRateLimit: true,
-          });
-          fail('Should have thrown rate limit error');
+          })
+          fail('Should have thrown rate limit error')
         } catch (error) {
-          expect(error).toBeInstanceOf(ApiError);
-          expect((error as ApiError).code).toBe('RATE_LIMIT_EXCEEDED');
-          expect((error as ApiError).retryAfter).toBe(60);
+          expect(error).toBeInstanceOf(ApiError)
+          expect((error as ApiError).code).toBe('RATE_LIMIT_EXCEEDED')
+          expect((error as ApiError).retryAfter).toBe(60)
         }
-      });
-  });
+      })
+  })
 
   /**
    * Test timeout handling
@@ -603,14 +605,14 @@ describe('User API Resilience Contract', () => {
           await getUserById(1, {
             baseURL: mockServer.url,
             timeout: 10000, // 10 second timeout
-          });
-          fail('Should have timed out');
+          })
+          fail('Should have timed out')
         } catch (error) {
-          expect(error).toBeInstanceOf(ApiError);
-          expect((error as ApiError).code).toBe('TIMEOUT');
+          expect(error).toBeInstanceOf(ApiError)
+          expect((error as ApiError).code).toBe('TIMEOUT')
         }
-      });
-  });
+      })
+  })
 
   /**
    * Test partial response (optional fields)
@@ -635,32 +637,32 @@ describe('User API Resilience Contract', () => {
         },
       })
       .executeTest(async (mockServer) => {
-        const user = await getUserById(1, { baseURL: mockServer.url });
+        const user = await getUserById(1, { baseURL: mockServer.url })
 
         // Consumer handles missing optional fields gracefully
-        expect(user.id).toBe(1);
-        expect(user.name).toBe('John Doe');
-        expect(user.role).toBeUndefined(); // Optional field
-        expect(user.createdAt).toBeUndefined(); // Optional field
-      });
-  });
-});
+        expect(user.id).toBe(1)
+        expect(user.name).toBe('John Doe')
+        expect(user.role).toBeUndefined() // Optional field
+        expect(user.createdAt).toBeUndefined() // Optional field
+      })
+  })
+})
 ```
 
 **API client with retry logic**:
 
 ```typescript
 // src/api/user-service.ts
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 export class ApiError extends Error {
   constructor(
     message: string,
     public code: string,
     public retryable: boolean = false,
-    public retryAfter?: number,
+    public retryAfter?: number
   ) {
-    super(message);
+    super(message)
   }
 }
 
@@ -669,46 +671,64 @@ export class ApiError extends Error {
  */
 export async function getUserById(
   id: number,
-  config?: AxiosRequestConfig & { retries?: number; retryDelay?: number; respectRateLimit?: boolean },
+  config?: AxiosRequestConfig & {
+    retries?: number
+    retryDelay?: number
+    respectRateLimit?: boolean
+  }
 ): Promise<User> {
-  const { retries = 3, retryDelay = 1000, respectRateLimit = true, ...axiosConfig } = config || {};
+  const {
+    retries = 3,
+    retryDelay = 1000,
+    respectRateLimit = true,
+    ...axiosConfig
+  } = config || {}
 
-  let lastError: Error;
+  let lastError: Error
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const response = await axios.get(`/users/${id}`, axiosConfig);
-      return response.data;
+      const response = await axios.get(`/users/${id}`, axiosConfig)
+      return response.data
     } catch (error: any) {
-      lastError = error;
+      lastError = error
 
       // Handle rate limiting
       if (error.response?.status === 429) {
-        const retryAfter = parseInt(error.response.headers['retry-after'] || '60');
-        throw new ApiError('Too many requests', 'RATE_LIMIT_EXCEEDED', false, retryAfter);
+        const retryAfter = parseInt(
+          error.response.headers['retry-after'] || '60'
+        )
+        throw new ApiError(
+          'Too many requests',
+          'RATE_LIMIT_EXCEEDED',
+          false,
+          retryAfter
+        )
       }
 
       // Retry on 500 errors
       if (error.response?.status === 500 && attempt < retries) {
-        await new Promise((resolve) => setTimeout(resolve, retryDelay * attempt));
-        continue;
+        await new Promise((resolve) =>
+          setTimeout(resolve, retryDelay * attempt)
+        )
+        continue
       }
 
       // Handle 404
       if (error.response?.status === 404) {
-        throw new ApiError('User not found', 'USER_NOT_FOUND', false);
+        throw new ApiError('User not found', 'USER_NOT_FOUND', false)
       }
 
       // Handle timeout
       if (error.code === 'ECONNABORTED') {
-        throw new ApiError('Request timeout', 'TIMEOUT', true);
+        throw new ApiError('Request timeout', 'TIMEOUT', true)
       }
 
-      break;
+      break
     }
   }
 
-  throw new ApiError('Request failed after retries', 'INTERNAL_ERROR', true);
+  throw new ApiError('Request failed after retries', 'INTERNAL_ERROR', true)
 }
 ```
 
@@ -737,17 +757,17 @@ export async function getUserById(
  * - Tag releases for environment tracking
  */
 
-import { execSync } from 'child_process';
+import { execSync } from 'child_process'
 
-const PACT_BROKER_URL = process.env.PACT_BROKER_URL!;
-const PACT_BROKER_TOKEN = process.env.PACT_BROKER_TOKEN!;
-const PACTICIPANT = 'user-api-service';
+const PACT_BROKER_URL = process.env.PACT_BROKER_URL!
+const PACT_BROKER_TOKEN = process.env.PACT_BROKER_TOKEN!
+const PACTICIPANT = 'user-api-service'
 
 /**
  * Tag release with environment
  */
 function tagRelease(version: string, environment: 'staging' | 'production') {
-  console.log(`🏷️  Tagging ${PACTICIPANT} v${version} as ${environment}`);
+  console.log(`🏷️  Tagging ${PACTICIPANT} v${version} as ${environment}`)
 
   execSync(
     `npx pact-broker create-version-tag \
@@ -756,15 +776,20 @@ function tagRelease(version: string, environment: 'staging' | 'production') {
       --tag ${environment} \
       --broker-base-url ${PACT_BROKER_URL} \
       --broker-token ${PACT_BROKER_TOKEN}`,
-    { stdio: 'inherit' },
-  );
+    { stdio: 'inherit' }
+  )
 }
 
 /**
  * Record deployment to environment
  */
-function recordDeployment(version: string, environment: 'staging' | 'production') {
-  console.log(`📝 Recording deployment of ${PACTICIPANT} v${version} to ${environment}`);
+function recordDeployment(
+  version: string,
+  environment: 'staging' | 'production'
+) {
+  console.log(
+    `📝 Recording deployment of ${PACTICIPANT} v${version} to ${environment}`
+  )
 
   execSync(
     `npx pact-broker record-deployment \
@@ -773,8 +798,8 @@ function recordDeployment(version: string, environment: 'staging' | 'production'
       --environment ${environment} \
       --broker-base-url ${PACT_BROKER_URL} \
       --broker-token ${PACT_BROKER_TOKEN}`,
-    { stdio: 'inherit' },
-  );
+    { stdio: 'inherit' }
+  )
 }
 
 /**
@@ -782,7 +807,7 @@ function recordDeployment(version: string, environment: 'staging' | 'production'
  * Keep: last 30 days, all production tags, latest from each branch
  */
 function cleanupOldPacts() {
-  console.log(`🧹 Cleaning up old pacts for ${PACTICIPANT}`);
+  console.log(`🧹 Cleaning up old pacts for ${PACTICIPANT}`)
 
   execSync(
     `npx pact-broker clean \
@@ -791,15 +816,17 @@ function cleanupOldPacts() {
       --broker-token ${PACT_BROKER_TOKEN} \
       --keep-latest-for-branch 1 \
       --keep-min-age 30`,
-    { stdio: 'inherit' },
-  );
+    { stdio: 'inherit' }
+  )
 }
 
 /**
  * Check deployment compatibility
  */
 function canIDeploy(version: string, toEnvironment: string): boolean {
-  console.log(`🔍 Checking if ${PACTICIPANT} v${version} can deploy to ${toEnvironment}`);
+  console.log(
+    `🔍 Checking if ${PACTICIPANT} v${version} can deploy to ${toEnvironment}`
+  )
 
   try {
     execSync(
@@ -811,12 +838,12 @@ function canIDeploy(version: string, toEnvironment: string): boolean {
         --broker-token ${PACT_BROKER_TOKEN} \
         --retry-while-unknown 6 \
         --retry-interval 10`,
-      { stdio: 'inherit' },
-    );
-    return true;
+      { stdio: 'inherit' }
+    )
+    return true
   } catch (error) {
-    console.error(`❌ Cannot deploy to ${toEnvironment}`);
-    return false;
+    console.error(`❌ Cannot deploy to ${toEnvironment}`)
+    return false
   }
 }
 
@@ -824,34 +851,36 @@ function canIDeploy(version: string, toEnvironment: string): boolean {
  * Main housekeeping workflow
  */
 async function main() {
-  const command = process.argv[2];
-  const version = process.argv[3];
-  const environment = process.argv[4] as 'staging' | 'production';
+  const command = process.argv[2]
+  const version = process.argv[3]
+  const environment = process.argv[4] as 'staging' | 'production'
 
   switch (command) {
     case 'tag-release':
-      tagRelease(version, environment);
-      break;
+      tagRelease(version, environment)
+      break
 
     case 'record-deployment':
-      recordDeployment(version, environment);
-      break;
+      recordDeployment(version, environment)
+      break
 
     case 'can-i-deploy':
-      const canDeploy = canIDeploy(version, environment);
-      process.exit(canDeploy ? 0 : 1);
+      const canDeploy = canIDeploy(version, environment)
+      process.exit(canDeploy ? 0 : 1)
 
     case 'cleanup':
-      cleanupOldPacts();
-      break;
+      cleanupOldPacts()
+      break
 
     default:
-      console.error('Unknown command. Use: tag-release | record-deployment | can-i-deploy | cleanup');
-      process.exit(1);
+      console.error(
+        'Unknown command. Use: tag-release | record-deployment | can-i-deploy | cleanup'
+      )
+      process.exit(1)
   }
 }
 
-main();
+main()
 ```
 
 **package.json scripts**:

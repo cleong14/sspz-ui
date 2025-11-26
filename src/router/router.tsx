@@ -3,7 +3,7 @@
  * @module router/router
  * @see {@link dashboard/main} for usage.
  */
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import authLoader from '@/router/authLoader'
 import { RouteIds, Routes } from '@/router/constants'
@@ -13,8 +13,8 @@ import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
+import SSPGenerator from '@/views/SSPGenerator/SSPGenerator'
 import RootProvider from '@/Root'
-import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 
 /**
  * The hash router for the application that defines routes
@@ -25,8 +25,9 @@ import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
  */
 const router = createBrowserRouter([
   {
+    // Default route redirects to SSP Generator for easy preview
     index: true,
-    element: <NavigateToLogin />,
+    element: <Navigate to={Routes.SSP_GENERATOR} replace />,
   },
   {
     id: RouteIds.ROOT,
@@ -35,6 +36,13 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     loader: configureCognito,
     children: [
+      {
+        // SSP Generator - PUBLIC route (no auth required for preview)
+        id: RouteIds.SSP_GENERATOR,
+        path: Routes.SSP_GENERATOR,
+        element: <SSPGenerator />,
+        errorElement: <ErrorBoundary />,
+      },
       {
         id: RouteIds.AUTH,
         path: Routes.AUTH,
@@ -73,8 +81,9 @@ const router = createBrowserRouter([
     ],
   },
   {
+    // Catch-all redirects to SSP Generator
     path: '*',
-    element: <NavigateToLogin />,
+    element: <Navigate to={Routes.SSP_GENERATOR} replace />,
   },
 ])
 
