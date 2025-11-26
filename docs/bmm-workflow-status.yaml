@@ -83,11 +83,11 @@ workflow_status:
     required: true
     workflows:
       - id: "create-architecture"
-        status: "recommended"
+        status: "docs/architecture.md"
         agent: "architect"
         command: "*create-architecture"
         output: "Integration architecture - solution design for SSP generator"
-        note: "HIGHLY RECOMMENDED: Distills brownfield context into focused solution design"
+        note: "Complete - T3 Stack + CLI monorepo architecture"
 
       - id: "create-epics-and-stories"
         status: "required"
