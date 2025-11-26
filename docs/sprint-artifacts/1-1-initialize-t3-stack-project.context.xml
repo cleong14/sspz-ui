@@ -1,0 +1,216 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1</storyId>
+    <title>Initialize T3 Stack Project</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-26</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-1-initialize-t3-stack-project.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>developer</asA>
+    <iWant>the project initialized with T3 Stack</iWant>
+    <soThat>I have a type-safe full-stack foundation</soThat>
+    <tasks>
+      <task id="1" title="Create T3 App" ac="1">
+        <subtask>1.1: Run `npm create t3-app@latest ssp-generator -- --typescript --tailwind --trpc --prisma --nextAuth --appRouter`</subtask>
+        <subtask>1.2: Navigate to project directory</subtask>
+        <subtask>1.3: Verify all selected features are enabled in generated config</subtask>
+      </task>
+      <task id="2" title="Verify Project Structure" ac="2">
+        <subtask>2.1: Confirm `src/app/` directory structure exists (App Router)</subtask>
+        <subtask>2.2: Confirm `src/server/api/` directory contains tRPC routers</subtask>
+        <subtask>2.3: Confirm `prisma/schema.prisma` file exists</subtask>
+        <subtask>2.4: Confirm `src/env.js` for t3-env validation exists</subtask>
+      </task>
+      <task id="3" title="Validate TypeScript Configuration" ac="3">
+        <subtask>3.1: Verify `tsconfig.json` has `strict: true`</subtask>
+        <subtask>3.2: Verify TypeScript version is 5.x</subtask>
+        <subtask>3.3: Run `npx tsc --noEmit` to ensure no type errors</subtask>
+      </task>
+      <task id="4" title="Test Development Server" ac="4">
+        <subtask>4.1: Run `npm install` to install all dependencies</subtask>
+        <subtask>4.2: Run `npm run dev`</subtask>
+        <subtask>4.3: Access `http://localhost:3000` and verify default page loads</subtask>
+        <subtask>4.4: Verify no console errors in terminal or browser</subtask>
+      </task>
+      <task id="5" title="Run Code Quality Checks" ac="5">
+        <subtask>5.1: Run `npm run lint` - verify passes</subtask>
+        <subtask>5.2: Run `npm run typecheck` (or equivalent) - verify passes</subtask>
+        <subtask>5.3: Fix any linting or type errors if present</subtask>
+      </task>
+      <task id="6" title="Commit Initial Project" ac="1-5">
+        <subtask>6.1: Initialize git repository if not already done</subtask>
+        <subtask>6.2: Create `.env.example` with placeholder values</subtask>
+        <subtask>6.3: Stage and commit with message "feat: initialize T3 Stack project foundation"</subtask>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="1">
+      <given>no existing project</given>
+      <when>running the T3 initialization commands</when>
+      <then>a new Next.js 15 project is created with: TypeScript strict mode enabled, tRPC v11 configured with React Query, Prisma ORM initialized, NextAuth.js v5 scaffolded, Tailwind CSS v4 configured, ESLint + Prettier configured</then>
+    </criterion>
+    <criterion id="2">
+      <given>the project is initialized</given>
+      <when>reviewing the project structure</when>
+      <then>the directory layout matches the Architecture spec section "Project Structure" (lines 72-186)</then>
+    </criterion>
+    <criterion id="3">
+      <given>the T3 app is created</given>
+      <when>checking configuration</when>
+      <then>the project uses: Next.js App Router (not Pages Router), Environment validation with t3-env, TypeScript 5.x in strict mode</then>
+    </criterion>
+    <criterion id="4">
+      <given>all dependencies are installed</given>
+      <when>running `npm run dev`</when>
+      <then>the development server starts without errors and is accessible at `http://localhost:3000`</then>
+    </criterion>
+    <criterion id="5">
+      <given>the project is initialized</given>
+      <when>running `npm run lint` and `npm run typecheck`</when>
+      <then>both commands pass with zero errors</then>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>SSP Generator Architecture Decision Document</title>
+        <section>Project Initialization (lines 18-45)</section>
+        <snippet>First implementation story should execute: npm create t3-app@latest with all features enabled, then initialize shadcn/ui and create CLI workspace</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>SSP Generator Architecture Decision Document</title>
+        <section>Project Structure (lines 72-186)</section>
+        <snippet>Defines the complete directory structure including src/app/ for Next.js App Router, src/server/api/ for tRPC routers, prisma/ for database schema, packages/cli/ for CLI tool</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>SSP Generator Architecture Decision Document</title>
+        <section>ADR-001: T3 Stack Selection (lines 750-762)</section>
+        <snippet>Decision to use create-t3-app with Next.js, tRPC, Prisma, NextAuth for end-to-end type safety and single API layer for both web and CLI</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>SSP Generator Architecture Decision Document</title>
+        <section>Technology Stack Details (lines 207-259)</section>
+        <snippet>Next.js 15 App Router for Server Components, tRPC v11 for full type inference, Prisma 6.x with PostgreSQL, NextAuth.js v5 for authentication</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>SSP Generator Architecture Decision Document</title>
+        <section>Environment Variables (lines 736-744)</section>
+        <snippet>DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL are required environment variables for the T3 stack</snippet>
+      </doc>
+      <doc>
+        <path>docs/prd.md</path>
+        <title>SSP Generator Product Requirements Document</title>
+        <section>Proposed Architecture (lines 364-391)</section>
+        <snippet>API-first design enables both Web UI and CLI to share business logic. OSCAL Engine handles format conversions, AI Service is modular</snippet>
+      </doc>
+      <doc>
+        <path>docs/ux-design-specification.md</path>
+        <title>SSP Generator UX Design Specification</title>
+        <section>Design System Foundation (lines 14-47)</section>
+        <snippet>shadcn/ui selected for accessibility-first, Tailwind-based components with source ownership for compliance customization</snippet>
+      </doc>
+      <doc>
+        <path>docs/epics.md</path>
+        <title>SSP Generator Epic Breakdown</title>
+        <section>Epic 1: Foundation and Infrastructure (lines 106-144)</section>
+        <snippet>Story 1.1 establishes T3 Stack foundation. Prerequisites: None (first story). Technical notes include using npm create t3-app@latest with all features</snippet>
+      </doc>
+    </docs>
+    <code>
+      <note>This is a greenfield T3 Stack initialization. The existing codebase uses React+Vite+MUI which will be replaced. Key existing files for reference only:</note>
+      <item>
+        <path>package.json</path>
+        <kind>manifest</kind>
+        <symbol>project configuration</symbol>
+        <lines>1-227</lines>
+        <reason>Existing manifest shows current React 18/Vite setup - T3 init will generate new package.json with Next.js dependencies</reason>
+      </item>
+      <item>
+        <path>tsconfig.json</path>
+        <kind>config</kind>
+        <symbol>TypeScript configuration</symbol>
+        <lines>1-58</lines>
+        <reason>Current config has strict:true - new T3 config will also require strict mode per AC#3</reason>
+      </item>
+    </code>
+    <dependencies>
+      <target-stack note="T3 Stack dependencies to be installed by create-t3-app">
+        <framework name="Next.js" version="15.x" purpose="Full-stack React framework with App Router" />
+        <framework name="TypeScript" version="5.x" purpose="Type safety with strict mode" />
+        <framework name="tRPC" version="11.x" purpose="End-to-end type-safe API layer" />
+        <framework name="Prisma" version="6.x" purpose="Type-safe ORM for PostgreSQL" />
+        <framework name="NextAuth.js" version="5.x" purpose="Authentication with database sessions" />
+        <framework name="Tailwind CSS" version="4.x" purpose="Utility-first CSS framework" />
+        <framework name="React Query" version="5.x" purpose="Server state management via tRPC" />
+      </target-stack>
+      <current-stack note="Existing stack will be replaced - for reference only">
+        <framework name="React" version="18.3.1" />
+        <framework name="Vite" version="5.x" />
+        <framework name="MUI" version="5.x" />
+        <framework name="Jest" version="29.x" />
+      </current-stack>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint source="Architecture ADR-001">Must use Next.js App Router, not Pages Router</constraint>
+    <constraint source="Architecture doc">TypeScript must be in strict mode (strict: true in tsconfig.json)</constraint>
+    <constraint source="Architecture doc">Environment validation must use t3-env package</constraint>
+    <constraint source="Architecture doc">API-first design - tRPC provides single API layer for both Web UI and CLI</constraint>
+    <constraint source="PRD">Project is dual-interface: Web UI for compliance officers, CLI for developers</constraint>
+    <constraint source="Architecture ADR-002">PostgreSQL required as database (not MongoDB)</constraint>
+    <constraint source="Dev Notes">This is foundation story - subsequent stories depend on this initialization</constraint>
+    <constraint source="Architecture">Monorepo structure required for CLI package in packages/cli/ (Story 1.4)</constraint>
+  </constraints>
+
+  <interfaces>
+    <note>No existing interfaces - this story initializes the foundation. Future interfaces defined in Architecture doc:</note>
+    <interface>
+      <name>tRPC Root Router</name>
+      <kind>API contract</kind>
+      <signature>src/server/api/root.ts - exports appRouter with ssp, control, tool, export, ai routers</signature>
+      <path>src/server/api/root.ts (to be created)</path>
+    </interface>
+    <interface>
+      <name>Prisma Client</name>
+      <kind>Database client</kind>
+      <signature>src/server/db.ts - exports db (PrismaClient instance)</signature>
+      <path>src/server/db.ts (to be created)</path>
+    </interface>
+    <interface>
+      <name>Environment Schema</name>
+      <kind>Validation schema</kind>
+      <signature>src/env.js - t3-env validation for DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL</signature>
+      <path>src/env.js (to be created)</path>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Testing framework transitions from Jest (current) to Vitest + Playwright (per Architecture doc line 65). For this foundation story, verify: (1) T3 app initializes without errors, (2) development server starts, (3) TypeScript compilation succeeds with no errors, (4) ESLint passes. Full test infrastructure will be established in Story 1.6 (CI/CD Pipeline).
+    </standards>
+    <locations>
+      <location>tests/unit/ - Vitest unit tests (to be created)</location>
+      <location>tests/e2e/ - Playwright E2E tests (to be created)</location>
+    </locations>
+    <ideas>
+      <idea ac="1">Verify T3 app creates all expected directories: src/app/, src/server/api/, prisma/</idea>
+      <idea ac="2">Compare generated structure against Architecture doc Project Structure section</idea>
+      <idea ac="3">Check tsconfig.json for strict:true, verify TypeScript 5.x version</idea>
+      <idea ac="4">Start dev server, verify localhost:3000 responds with 200 status</idea>
+      <idea ac="5">Run npm run lint and npm run typecheck, verify exit code 0</idea>
+    </ideas>
+  </tests>
+</story-context>

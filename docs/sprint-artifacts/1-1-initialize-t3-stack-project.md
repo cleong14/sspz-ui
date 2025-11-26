@@ -1,6 +1,6 @@
 # Story 1.1: Initialize T3 Stack Project
 
-Status: drafted
+Status: ready-for-dev
 
 ## Story
 
@@ -124,7 +124,7 @@ Note: `OPENAI_API_KEY` is needed for AI features (Epic 8) but not required for t
 
 ### Context Reference
 
-<!-- Path(s) to story context XML will be added here by context workflow -->
+- [Story Context XML](docs/sprint-artifacts/1-1-initialize-t3-stack-project.context.xml)
 
 ### Agent Model Used
 
