@@ -1,58 +1,42 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "rootDir": "./",
-    "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
+    /* Base Options: */
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
 
-    /* Linting */
+    /* Strictness */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "checkJs": true,
 
-    /* Paths */
+    /* Bundled projects */
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "plugins": [{ "name": "next" }],
+    "incremental": true,
+
+    /* Path Aliases */
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
-
-    /* Plugins */
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-
-    /* Types */
-    "types": [
-      "vite/client",
-      "jest",
-      "lodash",
-      "node",
-      "react",
-      "uuid",
-      "yup",
-      "@testing-library/jest-dom"
-    ]
+      "~/*": ["./src/*"]
+    }
   },
-  "include": ["src", "./declaration.d.ts"],
-  "exclude": [
-    "**/node_modules",
-    "**/coverage",
-    "**/dist",
-    "**/*.stories.(js|jsx|ts|tsx)",
-    "**/*.mdx",
-    "**/.yarn"
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.js",
+    ".next/types/**/*.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules", "generated"]
 }
