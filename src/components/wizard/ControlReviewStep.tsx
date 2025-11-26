@@ -87,8 +87,8 @@ export function ControlReviewStep({
         )
 
         // Combine controls with coverage info
-        const controlsWithCoverage: ControlWithCoverage[] = baselineControls.map(
-          (control) => {
+        const controlsWithCoverage: ControlWithCoverage[] =
+          baselineControls.map((control) => {
             const coverage = coverageReport.coverage.find(
               (c) => c.controlId === control.id
             ) || {
@@ -97,8 +97,7 @@ export function ControlReviewStep({
               tools: [],
             }
             return { ...control, coverage }
-          }
-        )
+          })
 
         setControls(controlsWithCoverage)
       } catch (error) {
@@ -280,7 +279,10 @@ export function ControlReviewStep({
               .map((control) => (
                 <TableRow key={control.id} hover>
                   <TableCell>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: 'monospace' }}
+                    >
                       {control.id.toUpperCase()}
                     </Typography>
                   </TableCell>
@@ -294,7 +296,9 @@ export function ControlReviewStep({
                       </Typography>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>{getStatusChip(control.coverage.status)}</TableCell>
+                  <TableCell>
+                    {getStatusChip(control.coverage.status)}
+                  </TableCell>
                   <TableCell>
                     {control.coverage.tools.length > 0 ? (
                       <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>

@@ -10,17 +10,36 @@
 import { Amplify } from 'aws-amplify'
 import CONFIG from '@/utils/config'
 
+/**
+ * Check if a config value is properly set (not undefined or the string "undefined")
+ */
+function isConfigured(value: string | undefined): boolean {
+  return Boolean(value && value !== 'undefined')
+}
+
 function configureCognito(): null {
+  // Skip Cognito configuration if required values are not set
+  // This allows the app to run in development without Cognito
+  const hasRequiredConfig =
+    isConfigured(CONFIG.USER_POOL_ID) &&
+    isConfigured(CONFIG.USER_POOL_CLIENT_ID) &&
+    isConfigured(CONFIG.COGNITO_DOMAIN)
+
+  if (!hasRequiredConfig) {
+    console.warn(
+      'Cognito configuration is incomplete. Auth features will be disabled.'
+    )
+    return null
+  }
+
   const options = {
     region: CONFIG.AWS_REGION,
-    userPoolId: CONFIG.USER_POOL_ID || new Error('USER_POOL_ID is not defined'),
-    userPoolWebClientId:
-      CONFIG.USER_POOL_CLIENT_ID ||
-      new Error('USER_POOL_CLIENT_ID is not defined'),
+    userPoolId: CONFIG.USER_POOL_ID,
+    userPoolWebClientId: CONFIG.USER_POOL_CLIENT_ID,
   }
 
   const oauth = {
-    domain: CONFIG.COGNITO_DOMAIN || new Error('COGNITO_DOMAIN is not defined'),
+    domain: CONFIG.COGNITO_DOMAIN,
     scope: ['openid', 'email', 'profile'],
     redirectSignIn: CONFIG.COGNITO_REDIRECT_SIGN_IN,
     redirectSignOut: CONFIG.COGNITO_REDIRECT_SIGN_OUT,

@@ -50,10 +50,12 @@ describe('SSPWizard', () => {
     ;(oscalCatalog.loadCatalog as jest.Mock).mockResolvedValue(mockCatalog)
     ;(oscalCatalog.getBaselineControls as jest.Mock).mockReturnValue([])
     ;(toolMappings.loadToolMappings as jest.Mock).mockResolvedValue(mockTools)
-    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue({
-      coverage: [],
-      stats: { total: 0, covered: 0, partial: 0, uncovered: 0 },
-    })
+    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue(
+      {
+        coverage: [],
+        stats: { total: 0, covered: 0, partial: 0, uncovered: 0 },
+      }
+    )
   })
 
   it('should render wizard with stepper', () => {
@@ -102,7 +104,9 @@ describe('SSPWizard', () => {
     fireEvent.click(screen.getByRole('button', { name: /next/i }))
 
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Select Security Baseline')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Select Security Baseline')
+      ).toBeInTheDocument()
     })
   })
 
@@ -132,7 +136,9 @@ describe('SSPWizard', () => {
     fireEvent.click(screen.getByRole('button', { name: /next/i }))
 
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Select Security Baseline')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Select Security Baseline')
+      ).toBeInTheDocument()
     })
 
     // Click Back

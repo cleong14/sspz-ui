@@ -66,16 +66,20 @@ describe('ControlReviewStep', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ;(oscalCatalog.loadCatalog as jest.Mock).mockResolvedValue(mockCatalog)
-    ;(oscalCatalog.getBaselineControls as jest.Mock).mockReturnValue(mockControls)
+    ;(oscalCatalog.getBaselineControls as jest.Mock).mockReturnValue(
+      mockControls
+    )
     ;(toolMappings.loadToolMappings as jest.Mock).mockResolvedValue(mockTools)
-    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue({
-      coverage: [
-        { controlId: 'ac-1', status: 'uncovered', tools: [] },
-        { controlId: 'ac-2', status: 'uncovered', tools: [] },
-        { controlId: 'si-10', status: 'covered', tools: ['Semgrep'] },
-      ],
-      stats: { total: 3, covered: 1, partial: 0, uncovered: 2 },
-    })
+    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue(
+      {
+        coverage: [
+          { controlId: 'ac-1', status: 'uncovered', tools: [] },
+          { controlId: 'ac-2', status: 'uncovered', tools: [] },
+          { controlId: 'si-10', status: 'covered', tools: ['Semgrep'] },
+        ],
+        stats: { total: 3, covered: 1, partial: 0, uncovered: 2 },
+      }
+    )
   })
 
   it('should render control list', async () => {
@@ -94,7 +98,9 @@ describe('ControlReviewStep', () => {
     await waitFor(() => {
       expect(screen.getByText('Access Control Policy')).toBeInTheDocument()
       expect(screen.getByText('Account Management')).toBeInTheDocument()
-      expect(screen.getByText('Information Input Validation')).toBeInTheDocument()
+      expect(
+        screen.getByText('Information Input Validation')
+      ).toBeInTheDocument()
     })
   })
 
@@ -141,8 +147,12 @@ describe('ControlReviewStep', () => {
     fireEvent.change(searchInput, { target: { value: 'si-10' } })
 
     await waitFor(() => {
-      expect(screen.getByText('Information Input Validation')).toBeInTheDocument()
-      expect(screen.queryByText('Access Control Policy')).not.toBeInTheDocument()
+      expect(
+        screen.getByText('Information Input Validation')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('Access Control Policy')
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -167,8 +177,12 @@ describe('ControlReviewStep', () => {
     fireEvent.click(screen.getByText('1 Covered'))
 
     await waitFor(() => {
-      expect(screen.getByText('Information Input Validation')).toBeInTheDocument()
-      expect(screen.queryByText('Access Control Policy')).not.toBeInTheDocument()
+      expect(
+        screen.getByText('Information Input Validation')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('Access Control Policy')
+      ).not.toBeInTheDocument()
     })
   })
 

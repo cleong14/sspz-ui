@@ -17,6 +17,8 @@ if (process.env.NODE_ENV === 'test') {
   process.env.VITE_CF_DOMAIN = 'https://localhost:3000/'
   process.env.VITE_USER_POOL_ID = 'us-east-1_123456789'
   process.env.VITE_USER_POOL_CLIENT_ID = '1234567890123456789012'
+  process.env.VITE_COGNITO_DOMAIN =
+    'test-domain.auth.us-east-1.amazoncognito.com'
 }
 
 window.matchMedia = (query) => ({

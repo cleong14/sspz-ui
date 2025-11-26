@@ -15,9 +15,9 @@
   "type": "module",
   "packageManager": "yarn@4.5.0",
   "engines": {
-    "node": "20",
+    "node": ">=20",
     "npm": "please-use-yarn",
-    "yarn": "4.5.0"
+    "yarn": ">=4.5.0"
   },
   "scripts": {
     "start": "yarn run dev",
@@ -46,7 +46,6 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@esbuild/android-arm64": "^0.27.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@hookform/resolvers": "^3.10.0",
     "@mui/icons-material": "^5.17.1",
@@ -54,7 +53,6 @@
     "@mui/material": "^5.17.1",
     "@mui/x-data-grid": "^6.20.4",
     "@popperjs/core": "^2.11.8",
-    "@rollup/rollup-android-arm64": "^4.53.3",
     "@vitejs/plugin-react": "^5.1.1",
     "aws-amplify": "^5.3.27",
     "classnames": "^2.5.1",

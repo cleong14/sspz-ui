@@ -63,10 +63,12 @@ describe('ToolSelectionStep', () => {
     jest.clearAllMocks()
     ;(toolMappings.loadToolMappings as jest.Mock).mockResolvedValue(mockTools)
     ;(oscalCatalog.loadCatalog as jest.Mock).mockResolvedValue(mockCatalog)
-    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue({
-      coverage: [],
-      stats: { total: 100, covered: 30, partial: 20, uncovered: 50 },
-    })
+    ;(coverageCalculator.calculateControlCoverage as jest.Mock).mockReturnValue(
+      {
+        coverage: [],
+        stats: { total: 100, covered: 30, partial: 20, uncovered: 50 },
+      }
+    )
   })
 
   it('should render all available tools', async () => {

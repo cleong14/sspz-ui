@@ -72,7 +72,9 @@ describe('BaselineSelectionStep', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /view control list \(325 controls\)/i })
+        screen.getByRole('button', {
+          name: /view control list \(325 controls\)/i,
+        })
       ).toBeInTheDocument()
     })
   })
@@ -121,14 +123,10 @@ describe('BaselineSelectionStep', () => {
       expect(screen.getByText('Moderate Impact')).toBeInTheDocument()
     })
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /view control list/i })
-    )
+    fireEvent.click(screen.getByRole('button', { name: /view control list/i }))
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('dialog')
-      ).toBeInTheDocument()
+      expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
   })
 
@@ -146,7 +144,9 @@ describe('BaselineSelectionStep', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /view control list \(421 controls\)/i })
+        screen.getByRole('button', {
+          name: /view control list \(421 controls\)/i,
+        })
       ).toBeInTheDocument()
     })
   })

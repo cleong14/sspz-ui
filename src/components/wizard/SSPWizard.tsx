@@ -23,8 +23,14 @@ import {
 import { useSSPProject } from '../../contexts/SSPProjectContext'
 
 const STEPS = [
-  { label: 'Project Basics', description: 'System information and categorization' },
-  { label: 'Baseline Selection', description: 'Choose security control baseline' },
+  {
+    label: 'Project Basics',
+    description: 'System information and categorization',
+  },
+  {
+    label: 'Baseline Selection',
+    description: 'Choose security control baseline',
+  },
   { label: 'Security Tools', description: 'Select your security tools' },
   { label: 'Control Review', description: 'Review control coverage' },
   { label: 'Generate SSP', description: 'Generate your SSP document' },
@@ -116,8 +122,7 @@ export function SSPWizard({ onComplete }: SSPWizardProps) {
           <ProjectBasicsStep
             onNext={handleProjectBasicsComplete}
             initialData={
-              wizardData.systemCharacteristics ||
-              project.systemCharacteristics
+              wizardData.systemCharacteristics || project.systemCharacteristics
             }
           />
         )
@@ -161,7 +166,10 @@ export function SSPWizard({ onComplete }: SSPWizardProps) {
               <Typography variant="subtitle1" gutterBottom>
                 SSP Summary
               </Typography>
-              <Box component="dl" sx={{ '& dt': { fontWeight: 'bold', mt: 1 } }}>
+              <Box
+                component="dl"
+                sx={{ '& dt': { fontWeight: 'bold', mt: 1 } }}
+              >
                 <dt>System Name</dt>
                 <dd>{project.systemCharacteristics.systemName || 'Not set'}</dd>
 
@@ -183,8 +191,8 @@ export function SSPWizard({ onComplete }: SSPWizardProps) {
                   {project.systemCharacteristics.securityImpactLevel
                     .confidentiality || 'Not set'}
                   , Integrity:{' '}
-                  {project.systemCharacteristics.securityImpactLevel.integrity ||
-                    'Not set'}
+                  {project.systemCharacteristics.securityImpactLevel
+                    .integrity || 'Not set'}
                   , Availability:{' '}
                   {project.systemCharacteristics.securityImpactLevel
                     .availability || 'Not set'}
@@ -231,7 +239,9 @@ export function SSPWizard({ onComplete }: SSPWizardProps) {
               <StepLabel
                 optional={
                   index === activeStep ? (
-                    <Typography variant="caption">{step.description}</Typography>
+                    <Typography variant="caption">
+                      {step.description}
+                    </Typography>
                   ) : null
                 }
               >

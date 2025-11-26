@@ -218,9 +218,7 @@ export function BaselineSelectionStep({
         fullWidth
       >
         <DialogTitle>
-          {
-            BASELINE_OPTIONS.find((o) => o.value === selectedBaseline)?.label
-          }{' '}
+          {BASELINE_OPTIONS.find((o) => o.value === selectedBaseline)?.label}{' '}
           Controls ({previewControls.length})
         </DialogTitle>
         <DialogContent dividers>
@@ -229,7 +227,9 @@ export function BaselineSelectionStep({
               <ListItem key={control.id}>
                 <ListItemText
                   primary={`${control.id.toUpperCase()} - ${control.title}`}
-                  secondary={control.parts?.[0]?.prose?.substring(0, 150) + '...'}
+                  secondary={
+                    control.parts?.[0]?.prose?.substring(0, 150) + '...'
+                  }
                 />
               </ListItem>
             ))}

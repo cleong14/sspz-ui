@@ -258,9 +258,7 @@ export function ToolSelectionStep({
               }}
             >
               <CardContent>
-                <Box
-                  sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}
-                >
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -272,9 +270,7 @@ export function ToolSelectionStep({
                     sx={{ mr: 0 }}
                   />
                   <Box sx={{ flexGrow: 1 }}>
-                    <Box
-                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                    >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Box sx={{ color: CATEGORY_COLORS[tool.category] }}>
                         {CATEGORY_ICONS[tool.category]}
                       </Box>
@@ -289,7 +285,14 @@ export function ToolSelectionStep({
                     >
                       {tool.vendor}
                     </Typography>
-                    <Box sx={{ mt: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                    <Box
+                      sx={{
+                        mt: 1,
+                        display: 'flex',
+                        gap: 0.5,
+                        flexWrap: 'wrap',
+                      }}
+                    >
                       <Chip
                         label={tool.category}
                         size="small"
