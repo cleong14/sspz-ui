@@ -18,6 +18,7 @@ import AlertMessage from '@/components/AlertMessage'
 import AppBar from '@/components/AppBar'
 import AppDrawer from '@/components/AppDrawer'
 import AuthButton from '@/components/HeaderAuthButton'
+import { TodoBackground } from '@/components/todos'
 import MenuListItems from '@/layouts/AppLayout/AppDrawerButtonList'
 import { DASHBOARD_TITLE } from '@/locales/en'
 import { Routes } from '@/router/constants'
@@ -130,6 +131,9 @@ const AppLayout: React.FC = (): JSX.Element => {
             >
               <Outlet />
             </Container>
+
+            {/* Todo background panel */}
+            <TodoBackground />
           </Box>
         </Await>
       </Suspense>
