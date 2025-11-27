@@ -3,43 +3,206 @@
  * @module views/Controls/ControlCatalog
  *
  * Displays the NIST 800-53 control catalog for browsing and searching.
- * This is a placeholder implementation that will be expanded in Epic 3.
+ * Features family tabs, control grid, and responsive layout.
+ *
+ * Story: 3.3 - Build Control Catalog Browse Page
  */
+
 import * as React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
-import SecurityIcon from '@mui/icons-material/Security'
+import Alert from '@mui/material/Alert'
+import Skeleton from '@mui/material/Skeleton'
+import type {
+  Control,
+  ControlCatalog as ControlCatalogType,
+  ControlFamily,
+} from '@/types/control'
+import {
+  loadControlCatalog,
+  loadControlFamilies,
+  getControlsByFamily,
+} from '@/lib/controls'
+import { FamilyTabs, ControlGrid } from './components'
+
+/**
+ * Hook for loading control catalog data
+ */
+function useControlCatalog() {
+  const [catalog, setCatalog] = React.useState<ControlCatalogType | null>(null)
+  const [families, setFamilies] = React.useState<ControlFamily[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    let mounted = true
+
+    async function loadData() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const [catalogData, familiesData] = await Promise.all([
+          loadControlCatalog(),
+          loadControlFamilies(),
+        ])
+
+        if (mounted) {
+          setCatalog(catalogData)
+          setFamilies(familiesData.families)
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : 'Failed to load control catalog'
+          )
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadData()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  return { catalog, families, loading, error }
+}
 
 /**
  * Component that renders the control catalog view.
- * @returns {JSX.Element} The control catalog placeholder component.
  */
 const ControlCatalog: React.FC = (): JSX.Element => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { catalog, families, loading, error } = useControlCatalog()
+
+  // Get selected family from URL or default to first family
+  const selectedFamily =
+    searchParams.get('family') || (families.length > 0 ? families[0].id : 'AC')
+
+  // Get controls for selected family
+  const familyControls = React.useMemo(() => {
+    if (!catalog) return []
+    return getControlsByFamily(catalog, selectedFamily)
+  }, [catalog, selectedFamily])
+
+  // Get current family info
+  const currentFamily = React.useMemo(() => {
+    return families.find((f) => f.id === selectedFamily)
+  }, [families, selectedFamily])
+
+  // Handle family tab change
+  const handleFamilyChange = React.useCallback(
+    (familyId: string) => {
+      setSearchParams({ family: familyId })
+    },
+    [setSearchParams]
+  )
+
+  // Handle control click - will open detail view in Story 3.5
+  const handleControlClick = React.useCallback((control: Control) => {
+    // TODO: Open control detail sheet (Story 3.5)
+    console.log('Selected control:', control.id)
+  }, [])
+
+  // Loading state
+  if (loading) {
+    return (
+      <Box>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Control Catalog
+        </Typography>
+        <Skeleton variant="rectangular" height={48} sx={{ mb: 3 }} />
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 2,
+          }}
+        >
+          {[...Array(9)].map((_, i) => (
+            <Skeleton key={i} variant="rectangular" height={140} />
+          ))}
+        </Box>
+      </Box>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Box>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Control Catalog
+        </Typography>
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      </Box>
+    )
+  }
+
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Control Catalog
-      </Typography>
-      <Paper
-        sx={{
-          p: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 2,
-        }}
-      >
-        <SecurityIcon sx={{ fontSize: 64, color: 'text.secondary' }} />
-        <Typography variant="h6" color="text.secondary">
-          NIST 800-53 Rev 5 Controls
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Control Catalog
         </Typography>
-        <Typography variant="body2" color="text.secondary" textAlign="center">
-          Browse and search the complete NIST 800-53 control catalog. Filter by
-          baseline (Low, Moderate, High) and FedRAMP requirements. This feature
-          will be available in a future release.
+        <Typography variant="body2" color="text.secondary">
+          NIST 800-53 Rev 5 Security and Privacy Controls •{' '}
+          {catalog?.statistics?.totalControls.toLocaleString() || 0} controls
+          across {families.length} families
         </Typography>
+      </Box>
+
+      <Paper sx={{ mb: 3 }}>
+        <FamilyTabs
+          families={families}
+          selectedFamily={selectedFamily}
+          onFamilyChange={handleFamilyChange}
+        />
       </Paper>
+
+      {currentFamily && (
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            {currentFamily.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            {currentFamily.description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {familyControls.length} controls • {currentFamily.baseControls} base
+            controls •{' '}
+            <Box component="span" sx={{ color: 'success.main' }}>
+              {currentFamily.byBaseline?.low || 0} Low
+            </Box>
+            {' • '}
+            <Box component="span" sx={{ color: 'warning.main' }}>
+              {currentFamily.byBaseline?.moderate || 0} Moderate
+            </Box>
+            {' • '}
+            <Box component="span" sx={{ color: 'error.main' }}>
+              {currentFamily.byBaseline?.high || 0} High
+            </Box>
+          </Typography>
+        </Box>
+      )}
+
+      <ControlGrid
+        controls={familyControls}
+        onControlClick={handleControlClick}
+        emptyMessage={`No controls found in ${selectedFamily} family`}
+      />
     </Box>
   )
 }

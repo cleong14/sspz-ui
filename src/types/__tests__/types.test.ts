@@ -167,7 +167,12 @@ describe('SSP Type Definitions', () => {
         ],
       }
       expect(control.enhancements).toHaveLength(1)
-      expect(control.enhancements![0].id).toBe('AC-2(1)')
+      const enhancement = control.enhancements![0]
+      expect(
+        typeof enhancement === 'object' && 'id' in enhancement
+          ? enhancement.id
+          : enhancement
+      ).toBe('AC-2(1)')
     })
   })
 
