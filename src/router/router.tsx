@@ -13,6 +13,10 @@ import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
+import ProjectList from '@/views/Projects/ProjectList'
+import ControlCatalog from '@/views/Controls/ControlCatalog'
+import ToolLibrary from '@/views/Tools/ToolLibrary'
+import Settings from '@/views/Settings/Settings'
 import RootProvider from '@/Root'
 import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 
@@ -67,6 +71,30 @@ const router = createBrowserRouter([
             element: <Dashboard />,
             errorElement: <ErrorBoundary />,
             loader: dashboardLoader,
+          },
+          {
+            path: RouteIds.PROJECTS,
+            id: RouteIds.PROJECTS,
+            element: <ProjectList />,
+            errorElement: <ErrorBoundary />,
+          },
+          {
+            path: RouteIds.CONTROLS,
+            id: RouteIds.CONTROLS,
+            element: <ControlCatalog />,
+            errorElement: <ErrorBoundary />,
+          },
+          {
+            path: RouteIds.TOOLS,
+            id: RouteIds.TOOLS,
+            element: <ToolLibrary />,
+            errorElement: <ErrorBoundary />,
+          },
+          {
+            path: RouteIds.SETTINGS,
+            id: RouteIds.SETTINGS,
+            element: <Settings />,
+            errorElement: <ErrorBoundary />,
           },
         ],
       },
