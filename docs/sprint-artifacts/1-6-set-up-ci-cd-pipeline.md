@@ -11,6 +11,7 @@ so that **code quality is enforced and deployments are automated**.
 ## Acceptance Criteria
 
 1. **Given** project repository exists **When** configuring CI/CD **Then** GitHub Actions workflows include:
+
    - `ci.yml`: Lint, type-check, unit tests on PR
    - `deploy.yml`: Deploy to static hosting (Vercel/Netlify) on main branch
    - Environment secrets for AWS Cognito configured
@@ -26,6 +27,7 @@ so that **code quality is enforced and deployments are automated**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Create CI workflow (AC: 1, 2)
+
   - [ ] Create `.github/workflows/ci.yml`
   - [ ] Add Node.js setup step
   - [ ] Add yarn install with cache
@@ -35,6 +37,7 @@ so that **code quality is enforced and deployments are automated**.
   - [ ] Configure to run on PR
 
 - [ ] Task 2: Create deployment workflow (AC: 1, 4)
+
   - [ ] Create `.github/workflows/deploy.yml`
   - [ ] Add build step (`yarn build`)
   - [ ] Configure Vercel/Netlify deployment action
@@ -42,6 +45,7 @@ so that **code quality is enforced and deployments are automated**.
   - [ ] Add preview deployment on PR
 
 - [ ] Task 3: Configure environment secrets (AC: 1)
+
   - [ ] Document required secrets in README
   - [ ] Add VITE_AWS_REGION secret
   - [ ] Add VITE_COGNITO_USER_POOL_ID secret
@@ -49,11 +53,13 @@ so that **code quality is enforced and deployments are automated**.
   - [ ] Add deployment platform token (VERCEL_TOKEN or NETLIFY_AUTH_TOKEN)
 
 - [ ] Task 4: Configure branch protection (AC: 2)
+
   - [ ] Document branch protection rules needed
   - [ ] Require CI checks to pass
   - [ ] Require PR reviews (optional)
 
 - [ ] Task 5: Test CI workflow (AC: 1, 5)
+
   - [ ] Create test PR
   - [ ] Verify lint step runs
   - [ ] Verify type-check step runs
@@ -61,6 +67,7 @@ so that **code quality is enforced and deployments are automated**.
   - [ ] Verify completion time
 
 - [ ] Task 6: Test deployment workflow (AC: 3, 4)
+
   - [ ] Verify preview deployment on PR
   - [ ] Verify production deployment on main
   - [ ] Test deployed site functionality
@@ -75,7 +82,7 @@ so that **code quality is enforced and deployments are automated**.
 ### Relevant Architecture Patterns and Constraints
 
 - **Static Hosting:** Vercel or Netlify (no backend server)
-- **Environment Variables:** Build-time via VITE_ prefix
+- **Environment Variables:** Build-time via VITE\_ prefix
 - **Node Version:** 20.x LTS (match local development)
 - **Package Manager:** Yarn 4.x
 
@@ -114,9 +121,9 @@ so that **code quality is enforced and deployments are automated**.
 
 ## Changelog
 
-| Change | Date | Version | Author |
-|--------|------|---------|--------|
-| Story drafted from epics.md | 2025-11-26 | 1.0 | SM Agent |
+| Change                      | Date       | Version | Author   |
+| --------------------------- | ---------- | ------- | -------- |
+| Story drafted from epics.md | 2025-11-26 | 1.0     | SM Agent |
 
 ## Dev Agent Record
 

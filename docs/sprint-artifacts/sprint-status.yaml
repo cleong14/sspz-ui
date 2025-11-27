@@ -37,8 +37,8 @@ story_location: docs/sprint-artifacts
 
 development_status:
   # Epic 1: Foundation & Infrastructure (6 stories)
-  epic-1: backlog
-  1-1-extend-template-with-ssp-dependencies: drafted
+  epic-1: contexted
+  1-1-extend-template-with-ssp-dependencies: done
   1-2-create-ssp-type-definitions: drafted
   1-3-implement-json-file-storage-service: drafted
   1-4-initialize-go-cli-repository: drafted

@@ -15,19 +15,18 @@ This document provides the complete epic and story breakdown for SSP Generator, 
 
 ### Epic Summary
 
-| Epic | Name                         | Stories | FRs Covered                        |
-| ---- | ---------------------------- | ------- | ---------------------------------- |
-| 1    | Foundation & Infrastructure  | 6       | Infrastructure                     |
-| 2    | User Authentication & Access | 5       | FR1-FR3                            |
-| 3    | Control Catalog & Browsing   | 6       | FR9-FR13, FR42-FR44                |
-| 4    | SSP Project Management       | 5       | FR4-FR8                            |
-| 5    | SSP Creation Workflow        | 8       | FR14-FR26                          |
-| 6    | Export & Import Engine       | 7       | FR27-FR31, FR39-FR41, FR45         |
-| 7    | CLI Tool                     | 6       | FR32-FR38                          |
-| 8    | AI-Assisted Generation       | 5       | FR46-FR49                          |
-| 9    | Control Catalog Data         | 4       | Foundation for FR9-FR13, FR42-FR44 |
+| Epic | Name                         | Stories | FRs Covered                |
+| ---- | ---------------------------- | ------- | -------------------------- |
+| 1    | Foundation & Infrastructure  | 6       | Infrastructure             |
+| 2    | User Authentication & Access | 5       | FR1-FR3                    |
+| 3    | Control Catalog & Browsing   | 6       | FR9-FR13, FR42-FR44        |
+| 4    | SSP Project Management       | 5       | FR4-FR8                    |
+| 5    | SSP Creation Workflow        | 8       | FR14-FR26                  |
+| 6    | Export & Import Engine       | 7       | FR27-FR31, FR39-FR41, FR45 |
+| 7    | CLI Tool                     | 6       | FR32-FR38                  |
+| 8    | AI-Assisted Generation       | 5       | FR46-FR49                  |
 
-**Total: 52 Stories across 9 Epics**
+**Total: 48 Stories across 8 Epics**
 
 ---
 
@@ -1703,147 +1702,12 @@ So that **suggestions improve over time**.
 
 ---
 
-## Epic 9: Control Catalog Data
-
-**Goal:** Download, transform, and maintain NIST OSCAL control catalog data as static JSON files for offline-first operation.
-
-**User Value:** Users can browse accurate, up-to-date NIST 800-53 Rev 5 and FedRAMP control catalogs without network dependency.
-
-**FRs Covered:** Foundation for FR9, FR10, FR11, FR12, FR13, FR42, FR43, FR44
-
-**Technical Context:** This epic creates the data layer that Epic 3 (Control Catalog & Browsing) consumes. The data is downloaded from official NIST sources and transformed into optimized JSON structures.
-
----
-
-### Story 9.1: Download NIST OSCAL Catalog
-
-As a **developer**,
-I want **to download the official NIST 800-53 Rev 5 OSCAL catalog**,
-So that **I have authoritative control data**.
-
-**Acceptance Criteria:**
-
-**Given** the NIST OSCAL content repository is accessible
-**When** running the download script
-**Then** the following are downloaded to `data/oscal-raw/`:
-
-- NIST 800-53 Rev 5 catalog (JSON format)
-- NIST 800-53 Rev 5 baselines (Low, Moderate, High)
-- Control enhancement data
-
-**And** downloaded files are validated against OSCAL schema
-**And** download timestamp is recorded for cache invalidation
-
-**Prerequisites:** None (first story)
-
-**Technical Notes:**
-
-- Source: https://github.com/usnistgov/oscal-content
-- Use curl/wget in script or fetch in Node.js
-- Store raw OSCAL in `data/oscal-raw/` (gitignored for size)
-- Reference: Architecture doc "Control Catalog" section
-
----
-
-### Story 9.2: Transform OSCAL to Application Schema
-
-As a **developer**,
-I want **to transform raw OSCAL data into optimized application JSON**,
-So that **the UI can efficiently query and display controls**.
-
-**Acceptance Criteria:**
-
-**Given** raw OSCAL catalog data exists
-**When** running the transform script
-**Then** `public/data/nist-800-53-rev5.json` is generated with:
-
-- All 20 control families (AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR)
-- All controls with enhancements flattened for search
-- Baseline applicability flags (Low: boolean, Moderate: boolean, High: boolean)
-- Optimized structure matching ControlCatalog TypeScript interface
-
-**And** transform is idempotent (same input produces same output)
-**And** output file size is reasonable (<5MB)
-
-**Prerequisites:** Story 9.1
-
-**Technical Notes:**
-
-- Create `scripts/transform-oscal.ts` using TypeScript
-- Map OSCAL structure to simplified app schema
-- Include control parameters and guidance text
-- Reference: Architecture doc "JSON File Schema" section
-
----
-
-### Story 9.3: Generate Control Family Index
-
-As a **developer**,
-I want **a control family index for fast lookup**,
-So that **browsing by family is performant**.
-
-**Acceptance Criteria:**
-
-**Given** transformed control catalog exists
-**When** generating the family index
-**Then** `public/data/control-families.json` contains:
-
-- List of all 20 families with metadata
-- Control count per family per baseline
-- Family descriptions and abbreviations
-
-**And** index enables O(1) family lookup
-**And** index is regenerated when catalog changes
-
-**Prerequisites:** Story 9.2
-
-**Technical Notes:**
-
-- Family IDs: AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR
-- Include total counts and baseline-specific counts
-- Reference: FR10 (browse by family)
-
----
-
-### Story 9.4: Create Build Script for Data Pipeline
-
-As a **developer**,
-I want **a single command to refresh all control data**,
-So that **data updates are automated and reproducible**.
-
-**Acceptance Criteria:**
-
-**Given** the project has source code and scripts
-**When** running `npm run build:data`
-**Then** the following execute in sequence:
-
-1. Download latest OSCAL from NIST (if needed/forced)
-2. Transform to application schema
-3. Generate family index
-4. Validate output files
-5. Report success/failure with summary
-
-**And** script supports `--force` flag to re-download
-**And** script supports `--validate-only` flag for CI
-**And** CI pipeline includes data validation step
-
-**Prerequisites:** Story 9.1, 9.2, 9.3
-
-**Technical Notes:**
-
-- Create `scripts/build-data.ts` as orchestrator
-- Add npm script: `"build:data": "tsx scripts/build-data.ts"`
-- Include in CI to validate data files exist and are valid
-- Reference: Architecture doc "Build Process"
-
----
-
 ## Summary
 
 **Epic Breakdown Complete**
 
-- **9 Epics** delivering incremental user value
-- **52 Stories** with BDD acceptance criteria
+- **8 Epics** delivering incremental user value
+- **48 Stories** with BDD acceptance criteria
 - **49 FRs** fully covered with traceability
 - **Context Integrated:** PRD + UX Design + Architecture
 

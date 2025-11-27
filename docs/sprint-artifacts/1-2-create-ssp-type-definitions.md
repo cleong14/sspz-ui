@@ -11,6 +11,7 @@ so that **I have type safety across the application**.
 ## Acceptance Criteria
 
 1. **Given** template TypeScript configuration **When** creating type definitions **Then** types are defined for:
+
    - `SspProject` (id, name, baseline, status, systemInfo, implementations)
    - `ControlImplementation` (controlId, status, statement, aiGenerated)
    - `Control`, `ControlFamily`, `ControlCatalog`
@@ -28,34 +29,40 @@ so that **I have type safety across the application**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Create SSP project types (AC: 1, 2)
+
   - [ ] Create `src/types/ssp.ts` with `SspProject` interface
   - [ ] Define `SystemInfo`, `SystemComponent`, `Contact` interfaces
   - [ ] Define `Baseline`, `SspStatus`, `ImpactLevel` enums
   - [ ] Match structure from architecture.md JSON File Schema
 
 - [ ] Task 2: Create control implementation types (AC: 1, 2)
+
   - [ ] Create `src/types/control.ts` with `ControlImplementation` interface
   - [ ] Define `ImplementationStatus` enum
   - [ ] Define `Evidence` interface for attachments
   - [ ] Define inherited control structure
 
 - [ ] Task 3: Create control catalog types (AC: 1, 2)
+
   - [ ] Add `Control`, `ControlFamily`, `ControlCatalog` interfaces to `control.ts`
   - [ ] Define `ControlParameter` interface
   - [ ] Support nested control enhancements
 
 - [ ] Task 4: Create tool library types (AC: 1, 2)
+
   - [ ] Create `src/types/tool.ts` with `Tool` interface
   - [ ] Define `ToolControlMapping` interface
   - [ ] Define `ToolCategory` type union
   - [ ] Define confidence levels type
 
 - [ ] Task 5: Create barrel export (AC: 3)
+
   - [ ] Create `src/types/index.ts`
   - [ ] Export all types from ssp.ts, control.ts, tool.ts
   - [ ] Ensure clean public API
 
 - [ ] Task 6: Verify TypeScript compilation (AC: 4)
+
   - [ ] Run `yarn tsc --noEmit`
   - [ ] Fix any type errors
 
@@ -99,9 +106,9 @@ so that **I have type safety across the application**.
 
 ## Changelog
 
-| Change | Date | Version | Author |
-|--------|------|---------|--------|
-| Story drafted from epics.md | 2025-11-26 | 1.0 | SM Agent |
+| Change                      | Date       | Version | Author   |
+| --------------------------- | ---------- | ------- | -------- |
+| Story drafted from epics.md | 2025-11-26 | 1.0     | SM Agent |
 
 ## Dev Agent Record
 

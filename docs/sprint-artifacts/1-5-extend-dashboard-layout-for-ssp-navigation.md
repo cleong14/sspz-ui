@@ -11,6 +11,7 @@ so that **users can navigate to all SSP features**.
 ## Acceptance Criteria
 
 1. **Given** template AppLayout exists **When** extending navigation **Then** sidebar includes:
+
    - Dashboard (home)
    - Projects (SSP list)
    - Control Catalog
@@ -30,11 +31,13 @@ so that **users can navigate to all SSP features**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Add new route constants (AC: 1, 2)
+
   - [ ] Update `src/router/constants.ts` with new routes
   - [ ] Add: `/dashboard`, `/projects`, `/controls`, `/tools`, `/settings`
   - [ ] Add nested routes: `/projects/:id`, `/projects/:id/edit`
 
 - [ ] Task 2: Create placeholder views (AC: 1)
+
   - [ ] Create `src/views/Dashboard/Dashboard.tsx` placeholder
   - [ ] Create `src/views/Projects/ProjectList.tsx` placeholder
   - [ ] Create `src/views/Controls/ControlCatalog.tsx` placeholder
@@ -42,11 +45,13 @@ so that **users can navigate to all SSP features**.
   - [ ] Ensure placeholders render route name
 
 - [ ] Task 3: Update router configuration (AC: 2)
+
   - [ ] Update `src/router/router.tsx` with new routes
   - [ ] Add protected route wrappers where needed
   - [ ] Set up nested route structure for projects
 
 - [ ] Task 4: Update navigation drawer (AC: 1, 2, 5)
+
   - [ ] Update `AppDrawerButtonList` component
   - [ ] Add navigation items with icons:
     - Dashboard: `DashboardIcon`
@@ -57,11 +62,13 @@ so that **users can navigate to all SSP features**.
   - [ ] Ensure active state highlights correctly
 
 - [ ] Task 5: Implement breadcrumbs (AC: 3)
+
   - [ ] Create or extend breadcrumb component
   - [ ] Configure breadcrumbs for nested routes
   - [ ] Show project name in breadcrumb when on project page
 
 - [ ] Task 6: Test mobile navigation (AC: 4)
+
   - [ ] Verify drawer opens/closes on mobile
   - [ ] Verify all items accessible
   - [ ] Test touch interactions
@@ -117,9 +124,9 @@ so that **users can navigate to all SSP features**.
 
 ## Changelog
 
-| Change | Date | Version | Author |
-|--------|------|---------|--------|
-| Story drafted from epics.md | 2025-11-26 | 1.0 | SM Agent |
+| Change                      | Date       | Version | Author   |
+| --------------------------- | ---------- | ------- | -------- |
+| Story drafted from epics.md | 2025-11-26 | 1.0     | SM Agent |
 
 ## Dev Agent Record
 

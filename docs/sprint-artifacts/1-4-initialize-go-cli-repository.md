@@ -11,6 +11,7 @@ so that **CLI development can proceed independently**.
 ## Acceptance Criteria
 
 1. **Given** decision to use Go for CLI **When** initializing CLI repository **Then** `ssp-cli` repository is created with:
+
    - Go module initialized (`go.mod`)
    - `cmd/ssp/main.go` entry point with cobra or flag package
    - `internal/commands/` directory structure
@@ -32,11 +33,13 @@ so that **CLI development can proceed independently**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Initialize Go module (AC: 1)
+
   - [ ] Create `ssp-cli/` directory (separate from web UI)
   - [ ] Run `go mod init github.com/[org]/ssp-cli`
   - [ ] Create `.gitignore` for Go projects
 
 - [ ] Task 2: Create directory structure (AC: 1)
+
   - [ ] Create `cmd/ssp/` for entry point
   - [ ] Create `internal/commands/` for CLI commands
   - [ ] Create `internal/storage/` for file operations
@@ -44,22 +47,26 @@ so that **CLI development can proceed independently**.
   - [ ] Create `pkg/catalog/` for embedded control catalog
 
 - [ ] Task 3: Implement main entry point (AC: 1, 2, 3)
+
   - [ ] Create `cmd/ssp/main.go`
   - [ ] Set up cobra root command
   - [ ] Add --help flag handling
   - [ ] Add basic command structure
 
 - [ ] Task 4: Implement version command (AC: 4)
+
   - [ ] Create `internal/commands/version.go`
   - [ ] Display version, build date, git commit
   - [ ] Use ldflags for build-time injection
 
 - [ ] Task 5: Create type definitions (AC: 1)
+
   - [ ] Create `internal/types/ssp.go` matching Web UI types
   - [ ] Create `internal/types/control.go` for control types
   - [ ] Ensure JSON serialization compatibility
 
 - [ ] Task 6: Create Makefile (AC: 1, 5)
+
   - [ ] Add `build` target for current platform
   - [ ] Add `build-all` target for darwin/linux/windows
   - [ ] Add `test` target
@@ -112,9 +119,9 @@ so that **CLI development can proceed independently**.
 
 ## Changelog
 
-| Change | Date | Version | Author |
-|--------|------|---------|--------|
-| Story drafted from epics.md | 2025-11-26 | 1.0 | SM Agent |
+| Change                      | Date       | Version | Author   |
+| --------------------------- | ---------- | ------- | -------- |
+| Story drafted from epics.md | 2025-11-26 | 1.0     | SM Agent |
 
 ## Dev Agent Record
 
