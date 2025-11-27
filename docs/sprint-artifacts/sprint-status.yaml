@@ -9,6 +9,7 @@
 # Epic Status:
 #   - backlog: Epic exists in epic file but not contexted
 #   - contexted: Epic tech context created (required before drafting stories)
+#   - complete: All stories in epic are done
 #
 # Story Status:
 #   - backlog: Story only exists in epic file
@@ -35,6 +36,46 @@ project_key: sspz-ui
 tracking_system: file-system
 story_location: docs/sprint-artifacts
 
+# Epic Overview
+epics:
+  epic-1:
+    name: 'Foundation & Infrastructure'
+    status: contexted
+    stories: 6
+  epic-2:
+    name: 'User Authentication & Access'
+    status: backlog
+    stories: 5
+  epic-3:
+    name: 'Control Catalog & Browsing'
+    status: backlog
+    stories: 6
+  epic-4:
+    name: 'SSP Project Management'
+    status: backlog
+    stories: 5
+  epic-5:
+    name: 'SSP Creation Workflow'
+    status: backlog
+    stories: 8
+  epic-6:
+    name: 'Export & Import Engine'
+    status: backlog
+    stories: 7
+  epic-7:
+    name: 'CLI Tool'
+    status: backlog
+    stories: 6
+  epic-8:
+    name: 'AI-Assisted Generation'
+    status: backlog
+    stories: 5
+  epic-9:
+    name: 'Control Catalog Data'
+    status: complete
+    stories: 4
+
+# Development Status - Story Tracking
 development_status:
   # Epic 1: Foundation & Infrastructure (6 stories)
   epic-1: contexted
@@ -117,9 +158,9 @@ development_status:
   epic-8-retrospective: optional
 
   # Epic 9: Control Catalog Data (4 stories)
-  epic-9: backlog
-  9-1-download-nist-oscal-catalog: review
-  9-2-transform-oscal-to-application-schema: drafted
-  9-3-generate-control-family-index: drafted
-  9-4-create-build-script-for-data-pipeline: drafted
-  epic-9-retrospective: optional
+  epic-9: complete
+  9-1-download-nist-oscal-catalog: done
+  9-2-transform-oscal-to-application-schema: done
+  9-3-generate-control-family-index: done
+  9-4-create-build-script-for-data-pipeline: done
+  epic-9-retrospective: completed

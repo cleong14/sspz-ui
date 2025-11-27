@@ -1,6 +1,6 @@
 # Story 9.1: Download NIST OSCAL Catalog
 
-Status: review
+Status: done
 
 ## Story
 

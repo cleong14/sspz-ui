@@ -1,6 +1,6 @@
 # Story 9.2: Transform OSCAL to Application Schema
 
-Status: review
+Status: done
 
 ## Story
 

@@ -1,6 +1,6 @@
 # Story 9.4: Create Build Script for Data Pipeline
 
-Status: review
+Status: done
 
 ## Story
 
