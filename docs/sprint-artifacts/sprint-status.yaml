@@ -1,6 +1,6 @@
 # Sprint Status Tracking
 # Generated from epics.md for SSP Generator project
-# Date: 2025-11-26
+# Date: 2025-11-27
 
 # STATUS DEFINITIONS:
 # ==================
@@ -18,7 +18,7 @@
 #   - complete: All stories in epic are done
 
 project: sspz-ui
-generated: "2025-11-26"
+generated: "2025-11-27"
 current_sprint: 1
 
 # Epic Overview
@@ -55,6 +55,10 @@ epics:
     name: "AI-Assisted Generation"
     status: pending
     stories: 5
+  epic-9:
+    name: "Control Catalog Data"
+    status: active
+    stories: 4
 
 # Development Status - Story Tracking
 # Format: epic_num-story_num-slug: status
@@ -122,3 +126,9 @@ development_status:
   8-3-build-approval-workflow-ui: backlog
   8-4-implement-ai-suggestion-service: backlog
   8-5-implement-feedback-learning-loop: backlog
+
+  # Epic 9: Control Catalog Data
+  9-1-download-nist-oscal-catalog: ready-for-dev
+  9-2-transform-oscal-to-application-schema: drafted
+  9-3-generate-control-family-index: drafted
+  9-4-create-build-script-for-data-pipeline: drafted
