@@ -1,99 +1,81 @@
 # Sprint Status Tracking
-# Generated from epics.md for SSP Generator project
-# Date: 2025-11-27
+# Generated: 2025-11-27
+# Project: sspz-ui
+# Tracking System: file-system
+# Story Location: docs/sprint-artifacts
 
 # STATUS DEFINITIONS:
 # ==================
-# Story Status Values:
-#   - backlog: Story defined but not yet drafted
-#   - drafted: Story file created with details
-#   - ready: Story reviewed and ready for development
-#   - in-progress: Development actively underway
-#   - review: Implementation complete, under review
-#   - done: Story completed and verified
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
 #
-# Epic Status Values:
-#   - active: Epic is current focus
-#   - pending: Epic not yet started
-#   - complete: All stories in epic are done
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
 
+generated: 2025-11-27
 project: sspz-ui
-generated: '2025-11-27'
-current_sprint: 1
+project_key: sspz-ui
+tracking_system: file-system
+story_location: docs/sprint-artifacts
 
-# Epic Overview
-epics:
-  epic-1:
-    name: 'Foundation & Infrastructure'
-    status: active
-    stories: 6
-  epic-2:
-    name: 'User Authentication & Access'
-    status: pending
-    stories: 5
-  epic-3:
-    name: 'Control Catalog & Browsing'
-    status: pending
-    stories: 6
-  epic-4:
-    name: 'SSP Project Management'
-    status: pending
-    stories: 5
-  epic-5:
-    name: 'SSP Creation Workflow'
-    status: pending
-    stories: 8
-  epic-6:
-    name: 'Export & Import Engine'
-    status: pending
-    stories: 7
-  epic-7:
-    name: 'CLI Tool'
-    status: pending
-    stories: 6
-  epic-8:
-    name: 'AI-Assisted Generation'
-    status: pending
-    stories: 5
-  epic-9:
-    name: 'Control Catalog Data'
-    status: active
-    stories: 4
-
-# Development Status - Story Tracking
-# Format: epic_num-story_num-slug: status
 development_status:
-  # Epic 1: Foundation & Infrastructure
-  1-1-initialize-t3-stack-project: drafted
-  1-2-initialize-shadcn-ui-component-library: backlog
-  1-3-configure-postgresql-database-schema: backlog
-  1-4-set-up-monorepo-structure-for-cli: backlog
-  1-5-configure-dashboard-layout-shell: backlog
-  1-6-set-up-ci-cd-pipeline: backlog
+  # Epic 1: Foundation & Infrastructure (6 stories)
+  epic-1: backlog
+  1-1-extend-template-with-ssp-dependencies: drafted
+  1-2-create-ssp-type-definitions: drafted
+  1-3-implement-json-file-storage-service: drafted
+  1-4-initialize-go-cli-repository: drafted
+  1-5-extend-dashboard-layout-for-ssp-navigation: drafted
+  1-6-set-up-ci-cd-pipeline: drafted
+  epic-1-retrospective: optional
 
-  # Epic 2: User Authentication & Access
-  2-1-implement-user-registration: backlog
-  2-2-implement-user-login: backlog
+  # Epic 2: User Authentication & Access (5 stories)
+  epic-2: backlog
+  2-1-verify-aws-cognito-integration: backlog
+  2-2-extend-login-page-with-ssp-branding: backlog
   2-3-implement-user-profile-management: backlog
-  2-4-implement-role-based-access-control: backlog
+  2-4-implement-local-role-based-access: backlog
   2-5-implement-session-management: backlog
+  epic-2-retrospective: optional
 
-  # Epic 3: Control Catalog & Browsing
-  3-1-seed-nist-800-53-rev5-control-data: backlog
-  3-2-seed-fedramp-baseline-data: backlog
+  # Epic 3: Control Catalog & Browsing (6 stories)
+  epic-3: backlog
+  3-1-create-nist-800-53-rev-5-control-data-file: backlog
+  3-2-create-fedramp-baseline-data-file: backlog
   3-3-build-control-catalog-browse-page: backlog
   3-4-implement-control-search: backlog
   3-5-build-control-detail-view: backlog
   3-6-implement-baseline-filter: backlog
+  epic-3-retrospective: optional
 
-  # Epic 4: SSP Project Management
+  # Epic 4: SSP Project Management (5 stories)
+  epic-4: backlog
   4-1-build-ssp-dashboard: backlog
   4-2-implement-create-new-ssp: backlog
   4-3-implement-ssp-list-and-search: backlog
   4-4-implement-duplicate-ssp-as-template: backlog
   4-5-implement-archive-and-delete-ssp: backlog
+  epic-4-retrospective: optional
 
-  # Epic 5: SSP Creation Workflow
+  # Epic 5: SSP Creation Workflow (8 stories)
+  epic-5: backlog
   5-1-build-ssp-wizard-framework: backlog
   5-2-implement-system-identification-form: backlog
   5-3-implement-system-boundary-form: backlog
@@ -102,8 +84,10 @@ development_status:
   5-6-build-control-implementation-interface: backlog
   5-7-build-implementation-statement-editor: backlog
   5-8-implement-ssp-review-summary: backlog
+  epic-5-retrospective: optional
 
-  # Epic 6: Export & Import Engine
+  # Epic 6: Export & Import Engine (7 stories)
+  epic-6: backlog
   6-1-implement-oscal-ssp-generator: backlog
   6-2-build-export-page-ui: backlog
   6-3-implement-word-document-export: backlog
@@ -111,24 +95,31 @@ development_status:
   6-5-implement-oscal-validation: backlog
   6-6-implement-oscal-import: backlog
   6-7-implement-import-validation-and-error-handling: backlog
+  epic-6-retrospective: optional
 
-  # Epic 7: CLI Tool
-  7-1-build-cli-entry-point-and-auth: backlog
+  # Epic 7: Go CLI Tool (6 stories)
+  epic-7: backlog
+  7-1-build-go-cli-entry-point-and-configuration: backlog
   7-2-implement-ssp-init-command: backlog
   7-3-implement-ssp-control-commands: backlog
   7-4-implement-ssp-export-command: backlog
   7-5-implement-ssp-validate-command: backlog
   7-6-implement-ssp-import-command: backlog
+  epic-7-retrospective: optional
 
-  # Epic 8: AI-Assisted Generation
+  # Epic 8: AI-Assisted Generation (5 stories)
+  epic-8: backlog
   8-1-build-tool-library-with-pre-mapped-controls: backlog
   8-2-implement-auto-mapping-from-tool-selection: backlog
   8-3-build-approval-workflow-ui: backlog
   8-4-implement-ai-suggestion-service: backlog
   8-5-implement-feedback-learning-loop: backlog
+  epic-8-retrospective: optional
 
-  # Epic 9: Control Catalog Data
+  # Epic 9: Control Catalog Data (4 stories)
+  epic-9: backlog
   9-1-download-nist-oscal-catalog: review
   9-2-transform-oscal-to-application-schema: drafted
   9-3-generate-control-family-index: drafted
   9-4-create-build-script-for-data-pipeline: drafted
+  epic-9-retrospective: optional
