@@ -226,3 +226,128 @@ export function highlightMatch(text: string, query: string): string {
 function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
+
+/**
+ * Baseline filter type
+ */
+export type BaselineFilterValue =
+  | 'all'
+  | 'low'
+  | 'moderate'
+  | 'high'
+  | 'fedramp_low'
+  | 'fedramp_moderate'
+  | 'fedramp_high'
+  | 'fedramp_li_saas'
+
+// Cache for FedRAMP baselines
+let fedRampCache: {
+  low: Set<string>
+  moderate: Set<string>
+  high: Set<string>
+  liSaas: Set<string>
+} | null = null
+
+/**
+ * Load FedRAMP baselines data
+ */
+export async function loadFedRampBaselines(): Promise<{
+  low: Set<string>
+  moderate: Set<string>
+  high: Set<string>
+  liSaas: Set<string>
+}> {
+  if (fedRampCache) {
+    return fedRampCache
+  }
+
+  try {
+    const response = await fetch('/data/fedramp-baselines.json')
+    if (!response.ok) {
+      throw new Error('Failed to load FedRAMP baselines')
+    }
+
+    const data = await response.json()
+    fedRampCache = {
+      low: new Set(
+        data.baselines.find((b: { id: string }) => b.id === 'FEDRAMP_LOW')
+          ?.controlIds || []
+      ),
+      moderate: new Set(
+        data.baselines.find((b: { id: string }) => b.id === 'FEDRAMP_MODERATE')
+          ?.controlIds || []
+      ),
+      high: new Set(
+        data.baselines.find((b: { id: string }) => b.id === 'FEDRAMP_HIGH')
+          ?.controlIds || []
+      ),
+      liSaas: new Set(
+        data.baselines.find((b: { id: string }) => b.id === 'FEDRAMP_LI_SAAS')
+          ?.controlIds || []
+      ),
+    }
+
+    return fedRampCache
+  } catch {
+    // Return empty sets if FedRAMP data not available
+    return {
+      low: new Set(),
+      moderate: new Set(),
+      high: new Set(),
+      liSaas: new Set(),
+    }
+  }
+}
+
+/**
+ * Filter controls by baseline
+ *
+ * Story: 3.6 - Implement Baseline Filter
+ */
+export function filterControlsByBaseline(
+  controls: Control[],
+  baseline: BaselineFilterValue,
+  fedRampBaselines?: {
+    low: Set<string>
+    moderate: Set<string>
+    high: Set<string>
+    liSaas: Set<string>
+  }
+): Control[] {
+  if (baseline === 'all') {
+    return controls
+  }
+
+  // NIST baselines
+  if (baseline === 'low' || baseline === 'moderate' || baseline === 'high') {
+    return controls.filter((control) => {
+      // Handle BaselineApplicability object type
+      if (
+        typeof control.baselines === 'object' &&
+        !Array.isArray(control.baselines) &&
+        'low' in control.baselines
+      ) {
+        return control.baselines[baseline]
+      }
+      return false
+    })
+  }
+
+  // FedRAMP baselines (require fedRampBaselines data)
+  if (!fedRampBaselines) {
+    return controls
+  }
+
+  switch (baseline) {
+    case 'fedramp_low':
+      return controls.filter((c) => fedRampBaselines.low.has(c.id))
+    case 'fedramp_moderate':
+      return controls.filter((c) => fedRampBaselines.moderate.has(c.id))
+    case 'fedramp_high':
+      return controls.filter((c) => fedRampBaselines.high.has(c.id))
+    case 'fedramp_li_saas':
+      return controls.filter((c) => fedRampBaselines.liSaas.has(c.id))
+    default:
+      return controls
+  }
+}

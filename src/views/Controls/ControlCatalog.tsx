@@ -3,11 +3,13 @@
  * @module views/Controls/ControlCatalog
  *
  * Displays the NIST 800-53 control catalog for browsing and searching.
- * Features family tabs, control grid, search, detail view, and responsive layout.
+ * Features family tabs, control grid, search, detail view, baseline filter,
+ * and responsive layout.
  *
  * Story: 3.3 - Build Control Catalog Browse Page
  * Story: 3.4 - Implement Control Search
  * Story: 3.5 - Build Control Detail View
+ * Story: 3.6 - Implement Baseline Filter
  */
 
 import * as React from 'react'
@@ -17,6 +19,7 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
+import Stack from '@mui/material/Stack'
 import type {
   Control,
   ControlCatalog as ControlCatalogType,
@@ -25,16 +28,28 @@ import type {
 import {
   loadControlCatalog,
   loadControlFamilies,
+  loadFedRampBaselines,
   getControlsByFamily,
   getControlById,
   filterControlsBySearch,
+  filterControlsByBaseline,
+  type BaselineFilterValue,
 } from '@/lib/controls'
 import {
+  BaselineFilter,
   FamilyTabs,
   ControlGrid,
   ControlSearch,
   ControlDetailSheet,
 } from './components'
+
+// Type for FedRAMP baselines data
+type FedRampBaselinesData = {
+  low: Set<string>
+  moderate: Set<string>
+  high: Set<string>
+  liSaas: Set<string>
+}
 
 /**
  * Hook for loading control catalog data
@@ -42,6 +57,8 @@ import {
 function useControlCatalog() {
   const [catalog, setCatalog] = React.useState<ControlCatalogType | null>(null)
   const [families, setFamilies] = React.useState<ControlFamily[]>([])
+  const [fedRampBaselines, setFedRampBaselines] =
+    React.useState<FedRampBaselinesData | null>(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
 
@@ -53,14 +70,16 @@ function useControlCatalog() {
         setLoading(true)
         setError(null)
 
-        const [catalogData, familiesData] = await Promise.all([
+        const [catalogData, familiesData, fedRampData] = await Promise.all([
           loadControlCatalog(),
           loadControlFamilies(),
+          loadFedRampBaselines(),
         ])
 
         if (mounted) {
           setCatalog(catalogData)
           setFamilies(familiesData.families)
+          setFedRampBaselines(fedRampData)
         }
       } catch (err) {
         if (mounted) {
@@ -84,7 +103,7 @@ function useControlCatalog() {
     }
   }, [])
 
-  return { catalog, families, loading, error }
+  return { catalog, families, fedRampBaselines, loading, error }
 }
 
 /**
@@ -92,7 +111,8 @@ function useControlCatalog() {
  */
 const ControlCatalog: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const { catalog, families, loading, error } = useControlCatalog()
+  const { catalog, families, fedRampBaselines, loading, error } =
+    useControlCatalog()
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedControl, setSelectedControl] = React.useState<Control | null>(
     null
@@ -103,8 +123,15 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   const selectedFamily =
     searchParams.get('family') || (families.length > 0 ? families[0].id : 'AC')
 
+  // Get baseline filter from URL or default to 'all'
+  const baselineFilter =
+    (searchParams.get('baseline') as BaselineFilterValue) || 'all'
+
   // Check if we're in search mode (searching across all families)
   const isSearchMode = searchQuery.trim().length > 0
+
+  // Check if baseline filter is active
+  const isBaselineFiltered = baselineFilter !== 'all'
 
   // Get controls for selected family
   const familyControls = React.useMemo(() => {
@@ -118,13 +145,38 @@ const ControlCatalog: React.FC = (): JSX.Element => {
     return catalog.controls
   }, [catalog])
 
-  // Filter controls based on search (search across all families when in search mode)
+  // Filter controls based on search, family, and baseline
   const displayedControls = React.useMemo(() => {
+    let controls: Control[]
+
+    // Start with either all controls (search mode) or family controls
     if (isSearchMode) {
-      return filterControlsBySearch(allControls, searchQuery)
+      controls = filterControlsBySearch(allControls, searchQuery)
+    } else {
+      controls = familyControls
     }
-    return familyControls
-  }, [isSearchMode, allControls, familyControls, searchQuery])
+
+    // Apply baseline filter
+    if (isBaselineFiltered && fedRampBaselines) {
+      controls = filterControlsByBaseline(
+        controls,
+        baselineFilter,
+        fedRampBaselines
+      )
+    } else if (isBaselineFiltered) {
+      controls = filterControlsByBaseline(controls, baselineFilter)
+    }
+
+    return controls
+  }, [
+    isSearchMode,
+    allControls,
+    familyControls,
+    searchQuery,
+    isBaselineFiltered,
+    baselineFilter,
+    fedRampBaselines,
+  ])
 
   // Get current family info
   const currentFamily = React.useMemo(() => {
@@ -134,10 +186,26 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   // Handle family tab change
   const handleFamilyChange = React.useCallback(
     (familyId: string) => {
-      setSearchParams({ family: familyId })
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('family', familyId)
+      setSearchParams(newParams)
       setSearchQuery('') // Clear search when changing families
     },
-    [setSearchParams]
+    [searchParams, setSearchParams]
+  )
+
+  // Handle baseline filter change
+  const handleBaselineChange = React.useCallback(
+    (baseline: BaselineFilterValue) => {
+      const newParams = new URLSearchParams(searchParams)
+      if (baseline === 'all') {
+        newParams.delete('baseline')
+      } else {
+        newParams.set('baseline', baseline)
+      }
+      setSearchParams(newParams)
+    },
+    [searchParams, setSearchParams]
   )
 
   // Handle search change
@@ -221,13 +289,30 @@ const ControlCatalog: React.FC = (): JSX.Element => {
         </Typography>
       </Box>
 
-      {/* Search Bar */}
+      {/* Search and Filter Bar */}
       <Paper sx={{ p: 2, mb: 3 }}>
-        <ControlSearch
-          value={searchQuery}
-          onChange={handleSearchChange}
-          resultCount={isSearchMode ? displayedControls.length : undefined}
-        />
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          alignItems={{ xs: 'stretch', sm: 'center' }}
+        >
+          <Box sx={{ flex: 1 }}>
+            <ControlSearch
+              value={searchQuery}
+              onChange={handleSearchChange}
+              resultCount={
+                isSearchMode || isBaselineFiltered
+                  ? displayedControls.length
+                  : undefined
+              }
+            />
+          </Box>
+          <BaselineFilter
+            value={baselineFilter}
+            onChange={handleBaselineChange}
+            showFedRamp={fedRampBaselines !== null}
+          />
+        </Stack>
       </Paper>
 
       {/* Family Tabs - Hidden during search mode */}
@@ -251,8 +336,10 @@ const ControlCatalog: React.FC = (): JSX.Element => {
             {currentFamily.description}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {familyControls.length} controls • {currentFamily.baseControls} base
-            controls •{' '}
+            {isBaselineFiltered
+              ? `${displayedControls.length} controls (filtered)`
+              : `${familyControls.length} controls`}{' '}
+            • {currentFamily.baseControls} base controls •{' '}
             <Box component="span" sx={{ color: 'success.main' }}>
               {currentFamily.byBaseline?.low || 0} Low
             </Box>
@@ -276,6 +363,7 @@ const ControlCatalog: React.FC = (): JSX.Element => {
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Found {displayedControls.length} controls matching "{searchQuery}"
+            {isBaselineFiltered && ' (filtered by baseline)'}
           </Typography>
         </Box>
       )}
@@ -285,8 +373,10 @@ const ControlCatalog: React.FC = (): JSX.Element => {
         onControlClick={handleControlClick}
         emptyMessage={
           isSearchMode
-            ? `No controls found matching "${searchQuery}"`
-            : `No controls found in ${selectedFamily} family`
+            ? `No controls found matching "${searchQuery}"${isBaselineFiltered ? ' with selected baseline' : ''}`
+            : isBaselineFiltered
+              ? `No controls in ${selectedFamily} family match the selected baseline`
+              : `No controls found in ${selectedFamily} family`
         }
       />
 
