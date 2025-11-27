@@ -49,3 +49,6 @@ stats.*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# OSCAL raw data (downloaded from NIST, too large to commit)
+data/oscal-raw/

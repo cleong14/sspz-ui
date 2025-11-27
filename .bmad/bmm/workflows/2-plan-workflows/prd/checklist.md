@@ -313,6 +313,7 @@ If ANY of these are true, validation FAILS:
 **When validating:**
 
 1. **Load ALL documents - whole or sharded (but not both of each) for example epics.md vs epics/\*.md:**
+
    - PRD.md (required)
    - epics.md (required)
    - product-brief.md (if exists)
@@ -320,6 +321,7 @@ If ANY of these are true, validation FAILS:
    - research documents (if referenced)
 
 2. **Validate in order:**
+
    - Check critical failures first (immediate stop if any found)
    - Verify PRD completeness
    - Verify epics completeness
@@ -329,6 +331,7 @@ If ANY of these are true, validation FAILS:
    - Check polish and quality
 
 3. **Report findings:**
+
    - List critical failures prominently
    - Group issues by severity
    - Provide specific line numbers/sections

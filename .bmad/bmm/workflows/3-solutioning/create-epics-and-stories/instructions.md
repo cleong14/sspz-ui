@@ -80,6 +80,7 @@ No existing epics found - I'll create the initial epic breakdown.
   <action>Identify what's NEW since last epic update:
 
 - If UX exists AND not previously incorporated:
+
   - Flag: "ADD_UX_DETAILS = true"
   - Note UX sections to extract (interaction patterns, mockup references, responsive breakpoints)
 

@@ -158,22 +158,26 @@ Validate sequence: Each story N should only depend on stories 1...N-1
 <action>For each story position (1 to {{story_count}}):
 
 1. **Determine story scope from tech-spec tasks**
+
    - Group related implementation steps
    - Ensure story leaves system in working state
 
 2. **Create story title**
+
    - User-focused deliverable
    - Active, clear language
    - Good: "OAuth Backend Integration", "OAuth UI Components"
    - Bad: "Write some OAuth code", "Update files"
 
 3. **Extract acceptance criteria**
+
    - From tech-spec testing strategy and acceptance criteria
    - Must be numbered (AC #1, AC #2, etc.)
    - Must be specific and testable
    - Use Given/When/Then format when applicable
 
 4. **Map tasks to implementation steps**
+
    - Break down tech-spec implementation steps for this story
    - Create checkbox list
    - Reference AC numbers: (AC: #1), (AC: #2)

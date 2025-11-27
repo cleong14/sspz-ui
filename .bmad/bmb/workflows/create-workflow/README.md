@@ -254,6 +254,7 @@ To modify this workflow:
 ## Version History
 
 - **v6.0.0** - README.md now MANDATORY for all workflows
+
   - Added comprehensive README template
   - Enhanced validation for documentation
   - Improved Step 10 with detailed README requirements

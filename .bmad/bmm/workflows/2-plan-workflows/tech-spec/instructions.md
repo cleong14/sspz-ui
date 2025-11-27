@@ -126,11 +126,13 @@ This ensures the tech-spec is grounded in reality and gives developers everythin
 Search for and load (using dual-strategy: whole first, then sharded):
 
 1. **Product Brief:**
+
    - Search pattern: {output*folder}/\_brief*.md
    - Sharded: {output*folder}/\_brief*/index.md
    - If found: Load completely and extract key context
 
 2. **Research Documents:**
+
    - Search pattern: {output*folder}/\_research*.md
    - Sharded: {output*folder}/\_research*/index.md
    - If found: Load completely and extract insights
@@ -192,21 +194,25 @@ Store comprehensive findings as {{project_stack_summary}}
 Analyze the existing project structure:
 
 1. **Directory Structure:**
+
    - Identify main code directories (src/, lib/, app/, components/, services/)
    - Note organization patterns (feature-based, layer-based, domain-driven)
    - Identify test directories and patterns
 
 2. **Code Patterns:**
+
    - Look for dominant patterns (class-based, functional, MVC, microservices)
    - Identify naming conventions (camelCase, snake_case, PascalCase)
    - Note file organization patterns
 
 3. **Key Modules/Services:**
+
    - Identify major modules or services already in place
    - Note entry points (main.js, app.py, index.ts)
    - Document important utilities or shared code
 
 4. **Testing Patterns & Standards (CRITICAL):**
+
    - Identify test framework in use (from package.json/requirements.txt)
    - Note test file naming patterns (.test.js, test.py, .spec.ts, Test.java)
    - Document test organization (tests/, **tests**, spec/, test/)
@@ -311,26 +317,31 @@ Adapt your questioning style to the complexity:
 **Core Discovery Goals (accomplish through natural dialogue):**
 
 1. **The Problem/Need**
+
    - What user or technical problem are we solving?
    - Why does this matter now?
    - What's the impact if we don't do this?
 
 2. **The Solution Approach**
+
    - What's the proposed solution?
    - How should this work from a user/system perspective?
    - What alternatives were considered?
 
 3. **Integration & Location**
+
    - <check if="brownfield">Where does this fit in the existing codebase?</check>
    - What existing code/patterns should we reference or follow?
    - What are the integration points?
 
 4. **Scope Clarity**
+
    - What's IN scope for this work?
    - What's explicitly OUT of scope (future work, not needed)?
    - If multiple stories: What's MVP vs enhancement?
 
 5. **Constraints & Dependencies**
+
    - Technical limitations or requirements?
    - Dependencies on other systems, APIs, or services?
    - Performance, security, or compliance considerations?
@@ -952,6 +963,7 @@ Since the tech-spec is CONTEXT-RICH, you can often skip story-context generation
 **For Your {{story_count}} Stories - Iterative Approach:**
 
 1. **Start with Story 1:**
+
    - Ask DEV agent to run `dev-story`
    - Select story-{epic-slug}-1.md
    - Tech-spec provides context

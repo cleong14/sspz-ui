@@ -342,14 +342,14 @@ menu:
 
 ## Module Agent vs Simple/Expert
 
-| Aspect        | Module Agent                     | Simple/Expert Agent             |
-| ------------- | -------------------------------- | ------------------------------- |
-| Location      | `.bmad/{module}/agents/` | `.bmad/custom/agents/`  |
-| Persona       | Fixed, professional              | Customizable via install_config |
-| Handlebars    | No templating                    | Yes, extensive                  |
-| Menu actions  | Workflows, tasks, templates      | Prompts, inline actions         |
-| Configuration | Module config.yaml               | Core config or none             |
-| Purpose       | Professional tooling             | Personal utilities              |
+| Aspect        | Module Agent                | Simple/Expert Agent             |
+| ------------- | --------------------------- | ------------------------------- |
+| Location      | `.bmad/{module}/agents/`    | `.bmad/custom/agents/`          |
+| Persona       | Fixed, professional         | Customizable via install_config |
+| Handlebars    | No templating               | Yes, extensive                  |
+| Menu actions  | Workflows, tasks, templates | Prompts, inline actions         |
+| Configuration | Module config.yaml          | Core config or none             |
+| Purpose       | Professional tooling        | Personal utilities              |
 
 ## Validation Checklist
 

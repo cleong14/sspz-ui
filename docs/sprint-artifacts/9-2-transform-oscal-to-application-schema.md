@@ -13,6 +13,7 @@ so that **the UI can efficiently query and display controls**.
 1. **Given** raw OSCAL catalog data exists in `data/oscal-raw/`
    **When** running the transform script (`npm run data:transform`)
    **Then** `public/data/nist-800-53-rev5.json` is generated with:
+
    - All 20 control families (AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR)
    - All controls with their enhancements flattened for efficient search
    - Baseline applicability flags per control (Low: boolean, Moderate: boolean, High: boolean)
@@ -20,6 +21,7 @@ so that **the UI can efficiently query and display controls**.
 2. **Given** the transform runs
    **When** checking the output structure
    **Then** each control entry contains:
+
    - `id`: Control ID (e.g., "AC-1", "AC-2(1)")
    - `family`: Family code (e.g., "AC")
    - `title`: Control title
@@ -49,18 +51,21 @@ so that **the UI can efficiently query and display controls**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Create TypeScript type definitions (AC: #2, #3)
+
   - [ ] 1.1: Create `src/types/control.ts` with Control interface
   - [ ] 1.2: Create ControlFamily interface
   - [ ] 1.3: Create ControlCatalog interface (top-level)
   - [ ] 1.4: Export types for use in transform script and UI
 
 - [ ] Task 2: Create transform script (AC: #1, #6)
+
   - [ ] 2.1: Create `scripts/transform-oscal.ts`
   - [ ] 2.2: Load raw OSCAL catalog JSON
   - [ ] 2.3: Load all three baseline profile JSONs
   - [ ] 2.4: Verify input files exist, error if missing
 
 - [ ] Task 3: Implement OSCAL parsing logic (AC: #1, #2)
+
   - [ ] 3.1: Parse OSCAL catalog structure to extract controls
   - [ ] 3.2: Extract control metadata (id, title, description)
   - [ ] 3.3: Extract supplemental guidance
@@ -69,12 +74,14 @@ so that **the UI can efficiently query and display controls**.
   - [ ] 3.6: Flatten nested OSCAL structure
 
 - [ ] Task 4: Implement baseline mapping (AC: #1, #2)
+
   - [ ] 4.1: Parse LOW baseline profile for control list
   - [ ] 4.2: Parse MODERATE baseline profile for control list
   - [ ] 4.3: Parse HIGH baseline profile for control list
   - [ ] 4.4: Create baseline flags per control
 
 - [ ] Task 5: Generate output file (AC: #1, #4, #5)
+
   - [ ] 5.1: Structure output as ControlCatalog
   - [ ] 5.2: Sort controls by family then ID
   - [ ] 5.3: Write to `public/data/nist-800-53-rev5.json`
@@ -94,11 +101,13 @@ so that **the UI can efficiently query and display controls**.
 This story transforms the raw NIST OSCAL data (downloaded in Story 9.1) into an optimized JSON format for the application. The output becomes the single source of truth for control catalog data in the UI.
 
 **OSCAL Structure Understanding:**
+
 - OSCAL catalogs use a nested structure with groups (families) containing controls
 - Controls can have sub-controls (enhancements) indicated by parenthetical notation (e.g., AC-2(1))
 - Baseline profiles reference controls by ID, indicating which controls apply to each level
 
 **Output Design Goals:**
+
 - Flat array for easy filtering and search
 - Pre-computed baseline flags (avoid runtime joins)
 - Include all text needed for display (no secondary lookups)
@@ -122,27 +131,27 @@ scripts/
 
 ```typescript
 interface Control {
-  id: string;              // "AC-1", "AC-2(1)"
-  family: string;          // "AC"
-  title: string;
-  description: string;
-  guidance?: string;
+  id: string // "AC-1", "AC-2(1)"
+  family: string // "AC"
+  title: string
+  description: string
+  guidance?: string
   baselines: {
-    low: boolean;
-    moderate: boolean;
-    high: boolean;
-  };
-  parameters?: ControlParameter[];
-  enhancements?: string[]; // For base controls
-  parentControl?: string;  // For enhancements
+    low: boolean
+    moderate: boolean
+    high: boolean
+  }
+  parameters?: ControlParameter[]
+  enhancements?: string[] // For base controls
+  parentControl?: string // For enhancements
 }
 
 interface ControlCatalog {
-  version: string;
-  generatedAt: string;
-  source: string;
-  controls: Control[];
-  families: ControlFamily[];
+  version: string
+  generatedAt: string
+  source: string
+  controls: Control[]
+  families: ControlFamily[]
 }
 ```
 
@@ -174,6 +183,6 @@ Claude Opus 4 (claude-opus-4-5-20251101)
 
 ## Change Log
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author   | Change                               |
+| ---------- | -------- | ------------------------------------ |
 | 2025-11-27 | SM Agent | Story drafted from Epic 9 definition |

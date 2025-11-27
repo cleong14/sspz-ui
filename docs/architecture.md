@@ -5,6 +5,7 @@
 SSP Generator is a **dual-interface compliance tool** (Web UI + CLI) that generates NIST 800-53 and FedRAMP-compliant System Security Plans (SSPs) with AI-assisted control implementation suggestions.
 
 **Key Architectural Decisions:**
+
 - **Vite + React** SPA built on existing template infrastructure
 - **AWS Cognito** for authentication (template already configured)
 - **Material-UI (MUI)** for accessible, government-appropriate UI components
@@ -18,6 +19,7 @@ SSP Generator is a **dual-interface compliance tool** (Web UI + CLI) that genera
 **The project builds upon the existing template-vite-react infrastructure.**
 
 The template already provides:
+
 - Vite + React + TypeScript configuration
 - AWS Cognito authentication integration
 - Material-UI with comprehensive theming
@@ -28,6 +30,7 @@ The template already provides:
 - Storybook for component documentation
 
 **Additional setup required:**
+
 ```bash
 # Install additional dependencies for SSP features
 yarn add uuid date-fns file-saver jszip
@@ -46,21 +49,21 @@ yarn add -D @types/file-saver @types/uuid
 
 ## Decision Summary
 
-| Category | Decision | Version | Affects FRs | Rationale |
-|----------|----------|---------|-------------|-----------|
-| **Framework** | Vite + React | 5.x + 18.x | All | Template infrastructure, fast builds, SPA |
-| **Language** | TypeScript | 5.x | All | Type safety, IDE support |
-| **Authentication** | AWS Cognito | latest | FR1-3 | Template configured, enterprise-ready |
-| **UI Components** | Material-UI | 5.x | All Web UI | Template configured, 40+ themed components |
-| **Styling** | MUI + SCSS | - | All Web UI | Template configured, consistent theming |
-| **State Management** | React Context | - | All | Template pattern, simple and effective |
-| **Data Storage** | JSON Files | - | FR4-8, FR21-26 | Local-first, Git-friendly, portable |
-| **API Pattern** | Custom apiRequest | - | All | Template configured, JWT-based |
-| **CLI Framework** | Go | 1.21+ | FR32-38 | Separate repo, cross-platform binaries |
-| **OSCAL Processing** | Custom + AJV | - | FR27-31, FR39-41 | JSON Schema validation |
-| **AI Service** | OpenAI API | GPT-4 | FR46-49 | Implementation suggestions |
-| **Validation** | Zod + AJV | 3.x | All | Form + OSCAL schema validation |
-| **Testing** | Jest + RTL | latest | NFR requirements | Template configured |
+| Category             | Decision          | Version    | Affects FRs      | Rationale                                  |
+| -------------------- | ----------------- | ---------- | ---------------- | ------------------------------------------ |
+| **Framework**        | Vite + React      | 5.x + 18.x | All              | Template infrastructure, fast builds, SPA  |
+| **Language**         | TypeScript        | 5.x        | All              | Type safety, IDE support                   |
+| **Authentication**   | AWS Cognito       | latest     | FR1-3            | Template configured, enterprise-ready      |
+| **UI Components**    | Material-UI       | 5.x        | All Web UI       | Template configured, 40+ themed components |
+| **Styling**          | MUI + SCSS        | -          | All Web UI       | Template configured, consistent theming    |
+| **State Management** | React Context     | -          | All              | Template pattern, simple and effective     |
+| **Data Storage**     | JSON Files        | -          | FR4-8, FR21-26   | Local-first, Git-friendly, portable        |
+| **API Pattern**      | Custom apiRequest | -          | All              | Template configured, JWT-based             |
+| **CLI Framework**    | Go                | 1.21+      | FR32-38          | Separate repo, cross-platform binaries     |
+| **OSCAL Processing** | Custom + AJV      | -          | FR27-31, FR39-41 | JSON Schema validation                     |
+| **AI Service**       | OpenAI API        | GPT-4      | FR46-49          | Implementation suggestions                 |
+| **Validation**       | Zod + AJV         | 3.x        | All              | Form + OSCAL schema validation             |
+| **Testing**          | Jest + RTL        | latest     | NFR requirements | Template configured                        |
 
 ---
 
@@ -165,6 +168,7 @@ sspz-ui/                              # Web UI Repository
 ```
 
 **Go CLI Repository (Separate):**
+
 ```
 ssp-cli/                              # Go CLI Repository
 ├── cmd/
@@ -200,18 +204,18 @@ ssp-cli/                              # Go CLI Repository
 
 ## FR Category to Architecture Mapping
 
-| FR Category | Web Components | Data Storage | CLI Commands |
-|-------------|---------------|--------------|--------------|
-| **User Account (FR1-3)** | SignIn, SignOut views | AWS Cognito | N/A (separate auth) |
-| **Project Management (FR4-8)** | Projects/* views, SspCard | `~/.ssp-gen/*.json` | `ssp init`, `ssp list` |
-| **Control Catalog (FR9-13)** | Controls/* views | `public/data/*.json` | `ssp control list` |
-| **SSP System Info (FR14-18)** | SspWizard Steps 1-3 | SSP JSON files | `ssp init --name` |
-| **Control Implementation (FR19-26)** | SspWizard Step 4, ImplementationCards | SSP JSON files | `ssp control implement` |
-| **Export & Output (FR27-31)** | Export/* views | Generated files | `ssp export` |
-| **CLI Tool (FR32-38)** | N/A | Same JSON files | All `ssp` commands |
-| **Import (FR39-41)** | Import dialog | SSP JSON files | `ssp import` |
-| **FedRAMP Support (FR42-45)** | Baseline selector | FedRAMP data JSON | `ssp init --baseline` |
-| **AI-Assisted (FR46-49)** | ImplementationCards with confidence | Feedback JSON | `ssp suggest` |
+| FR Category                          | Web Components                        | Data Storage         | CLI Commands            |
+| ------------------------------------ | ------------------------------------- | -------------------- | ----------------------- |
+| **User Account (FR1-3)**             | SignIn, SignOut views                 | AWS Cognito          | N/A (separate auth)     |
+| **Project Management (FR4-8)**       | Projects/\* views, SspCard            | `~/.ssp-gen/*.json`  | `ssp init`, `ssp list`  |
+| **Control Catalog (FR9-13)**         | Controls/\* views                     | `public/data/*.json` | `ssp control list`      |
+| **SSP System Info (FR14-18)**        | SspWizard Steps 1-3                   | SSP JSON files       | `ssp init --name`       |
+| **Control Implementation (FR19-26)** | SspWizard Step 4, ImplementationCards | SSP JSON files       | `ssp control implement` |
+| **Export & Output (FR27-31)**        | Export/\* views                       | Generated files      | `ssp export`            |
+| **CLI Tool (FR32-38)**               | N/A                                   | Same JSON files      | All `ssp` commands      |
+| **Import (FR39-41)**                 | Import dialog                         | SSP JSON files       | `ssp import`            |
+| **FedRAMP Support (FR42-45)**        | Baseline selector                     | FedRAMP data JSON    | `ssp init --baseline`   |
+| **AI-Assisted (FR46-49)**            | ImplementationCards with confidence   | Feedback JSON        | `ssp suggest`           |
 
 ---
 
@@ -220,24 +224,28 @@ ssp-cli/                              # Go CLI Repository
 ### Core Technologies
 
 **Vite + React (Template Infrastructure)**
+
 - Vite 5.x for fast development and optimized production builds
 - React 18.x with functional components and hooks
 - TypeScript 5.x in strict mode
 - React Router 6.x for client-side routing
 
 **AWS Cognito (Template Infrastructure)**
+
 - User pool for authentication
 - JWT tokens for session management
 - Configured via AWS Amplify SDK
 - Already integrated in template
 
 **Material-UI (Template Infrastructure)**
+
 - Comprehensive component library (40+ themed components)
 - Custom theme with Federal Blue primary color
 - Responsive design built-in
 - WCAG 2.1 AA compliance
 
 **JSON File Storage (New)**
+
 - SSP data stored in local JSON files
 - Default location: `~/.ssp-gen/projects/`
 - Git-friendly format for version control
@@ -291,63 +299,63 @@ ssp-cli/                              # Go CLI Repository
 
 ```typescript
 interface SspProject {
-  id: string;                    // UUID
-  name: string;                  // System name
-  description?: string;
-  baseline: Baseline;            // LOW | MODERATE | HIGH | FEDRAMP_*
-  status: SspStatus;             // DRAFT | IN_PROGRESS | REVIEW | COMPLETE
-  createdAt: string;             // ISO 8601
-  updatedAt: string;             // ISO 8601
+  id: string // UUID
+  name: string // System name
+  description?: string
+  baseline: Baseline // LOW | MODERATE | HIGH | FEDRAMP_*
+  status: SspStatus // DRAFT | IN_PROGRESS | REVIEW | COMPLETE
+  createdAt: string // ISO 8601
+  updatedAt: string // ISO 8601
 
   systemInfo: {
-    systemName: string;
-    systemId?: string;
-    systemType: string;
-    description: string;
+    systemName: string
+    systemId?: string
+    systemType: string
+    description: string
     boundary: {
-      description: string;
-      components: SystemComponent[];
-      externalConnections: ExternalConnection[];
-    };
+      description: string
+      components: SystemComponent[]
+      externalConnections: ExternalConnection[]
+    }
     categorization: {
-      confidentiality: ImpactLevel;
-      integrity: ImpactLevel;
-      availability: ImpactLevel;
-    };
+      confidentiality: ImpactLevel
+      integrity: ImpactLevel
+      availability: ImpactLevel
+    }
     environment: {
-      deploymentModel: string;
-      cloudProvider?: string;
-      operatingSystems: string[];
-      technologies: string[];
-      dataTypes: string[];
-    };
+      deploymentModel: string
+      cloudProvider?: string
+      operatingSystems: string[]
+      technologies: string[]
+      dataTypes: string[]
+    }
     contacts: {
-      systemOwner: Contact;
-      authorizingOfficial: Contact;
-      securityPoc: Contact;
-      technicalPoc: Contact;
-    };
-  };
+      systemOwner: Contact
+      authorizingOfficial: Contact
+      securityPoc: Contact
+      technicalPoc: Contact
+    }
+  }
 
-  implementations: ControlImplementation[];
-  selectedTools: string[];       // Tool IDs
-  aiSuggestionFeedback: AiFeedback[];
+  implementations: ControlImplementation[]
+  selectedTools: string[] // Tool IDs
+  aiSuggestionFeedback: AiFeedback[]
 }
 
 interface ControlImplementation {
-  controlId: string;             // e.g., "AC-1", "AC-2(1)"
-  status: ImplementationStatus;  // IMPLEMENTED | PARTIAL | PLANNED | NOT_APPLICABLE | NOT_STARTED
-  statement?: string;            // Implementation statement text
-  aiGenerated: boolean;
-  aiConfidence?: string;         // HIGH | MEDIUM | LOW
-  parameters?: Record<string, string>;
+  controlId: string // e.g., "AC-1", "AC-2(1)"
+  status: ImplementationStatus // IMPLEMENTED | PARTIAL | PLANNED | NOT_APPLICABLE | NOT_STARTED
+  statement?: string // Implementation statement text
+  aiGenerated: boolean
+  aiConfidence?: string // HIGH | MEDIUM | LOW
+  parameters?: Record<string, string>
   inherited?: {
-    systemId: string;
-    systemName: string;
-  };
-  evidence?: Evidence[];
-  createdAt: string;
-  updatedAt: string;
+    systemId: string
+    systemName: string
+  }
+  evidence?: Evidence[]
+  createdAt: string
+  updatedAt: string
 }
 
 type Baseline =
@@ -357,43 +365,43 @@ type Baseline =
   | 'FEDRAMP_LOW'
   | 'FEDRAMP_MODERATE'
   | 'FEDRAMP_HIGH'
-  | 'FEDRAMP_LI_SAAS';
+  | 'FEDRAMP_LI_SAAS'
 
-type SspStatus = 'DRAFT' | 'IN_PROGRESS' | 'REVIEW' | 'COMPLETE';
+type SspStatus = 'DRAFT' | 'IN_PROGRESS' | 'REVIEW' | 'COMPLETE'
 
 type ImplementationStatus =
   | 'NOT_STARTED'
   | 'IMPLEMENTED'
   | 'PARTIALLY_IMPLEMENTED'
   | 'PLANNED'
-  | 'NOT_APPLICABLE';
+  | 'NOT_APPLICABLE'
 
-type ImpactLevel = 'LOW' | 'MODERATE' | 'HIGH';
+type ImpactLevel = 'LOW' | 'MODERATE' | 'HIGH'
 ```
 
 **Control Catalog (`public/data/nist-800-53-rev5.json`):**
 
 ```typescript
 interface ControlCatalog {
-  version: string;               // "5.1.1"
-  lastUpdated: string;           // ISO 8601
-  families: ControlFamily[];
+  version: string // "5.1.1"
+  lastUpdated: string // ISO 8601
+  families: ControlFamily[]
 }
 
 interface ControlFamily {
-  id: string;                    // "AC", "AU", etc.
-  name: string;                  // "Access Control"
-  controls: Control[];
+  id: string // "AC", "AU", etc.
+  name: string // "Access Control"
+  controls: Control[]
 }
 
 interface Control {
-  id: string;                    // "AC-1"
-  title: string;
-  description: string;
-  guidance?: string;
-  baselines: Baseline[];         // Which baselines include this control
-  parameters?: ControlParameter[];
-  enhancements?: Control[];      // Nested enhancements like AC-2(1)
+  id: string // "AC-1"
+  title: string
+  description: string
+  guidance?: string
+  baselines: Baseline[] // Which baselines include this control
+  parameters?: ControlParameter[]
+  enhancements?: Control[] // Nested enhancements like AC-2(1)
 }
 ```
 
@@ -401,25 +409,25 @@ interface Control {
 
 ```typescript
 interface ToolLibrary {
-  version: string;
-  tools: Tool[];
+  version: string
+  tools: Tool[]
 }
 
 interface Tool {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  logoUrl?: string;
-  category: ToolCategory;
-  mappings: ToolControlMapping[];
+  id: string
+  name: string
+  slug: string
+  description: string
+  logoUrl?: string
+  category: ToolCategory
+  mappings: ToolControlMapping[]
 }
 
 interface ToolControlMapping {
-  controlId: string;
-  implementationTemplate: string;
-  confidence: 'HIGH' | 'MEDIUM' | 'LOW';
-  source: 'vendor-docs' | 'community' | 'generated';
+  controlId: string
+  implementationTemplate: string
+  confidence: 'HIGH' | 'MEDIUM' | 'LOW'
+  source: 'vendor-docs' | 'community' | 'generated'
 }
 
 type ToolCategory =
@@ -430,18 +438,18 @@ type ToolCategory =
   | 'iac-scanner'
   | 'siem'
   | 'identity'
-  | 'endpoint';
+  | 'endpoint'
 ```
 
 ### File Storage Locations
 
-| Data Type | Web UI Location | CLI Location | Sync Method |
-|-----------|-----------------|--------------|-------------|
-| SSP Projects | `~/.ssp-gen/projects/*.json` | `~/.ssp-gen/projects/*.json` | Direct file access |
-| Control Catalog | `public/data/nist-*.json` | Embedded in binary | Manual update |
-| Tool Library | `public/data/tools.json` | Embedded in binary | Manual update |
-| User Preferences | `localStorage` | `~/.ssp-gen/config.json` | Separate |
-| Export Output | Download folder | Specified path | N/A |
+| Data Type        | Web UI Location              | CLI Location                 | Sync Method        |
+| ---------------- | ---------------------------- | ---------------------------- | ------------------ |
+| SSP Projects     | `~/.ssp-gen/projects/*.json` | `~/.ssp-gen/projects/*.json` | Direct file access |
+| Control Catalog  | `public/data/nist-*.json`    | Embedded in binary           | Manual update      |
+| Tool Library     | `public/data/tools.json`     | Embedded in binary           | Manual update      |
+| User Preferences | `localStorage`               | `~/.ssp-gen/config.json`     | Separate           |
+| Export Output    | Download folder              | Specified path               | N/A                |
 
 ---
 
@@ -452,6 +460,7 @@ type ToolCategory =
 **Purpose:** Enable rapid SSP completion by pre-filling control implementations based on selected security tools.
 
 **Flow:**
+
 ```
 1. User opens Tool Library in Web UI
 2. User selects tools in use (e.g., Trivy, Semgrep, Gitleaks)
@@ -469,6 +478,7 @@ type ToolCategory =
 ```
 
 **CLI Equivalent:**
+
 ```bash
 # Select tools and auto-apply high-confidence mappings
 ssp tool add trivy semgrep gitleaks --auto-approve=high
@@ -483,18 +493,18 @@ ssp control review --pending
 
 ### Naming Patterns
 
-| Category | Convention | Example |
-|----------|------------|---------|
-| **JSON file names** | kebab-case | `my-system-ssp.json` |
-| **JSON fields** | camelCase | `systemInfo`, `createdAt` |
-| **React components** | PascalCase | `SspCard`, `ControlStatusBadge` |
-| **Component files** | PascalCase | `SspCard.tsx`, `ControlStatusBadge.tsx` |
-| **Hooks** | camelCase with `use` | `useSsp`, `useControls` |
-| **Utility functions** | camelCase | `formatDate`, `generateOscal` |
-| **Constants** | SCREAMING_SNAKE | `CONTROL_FAMILIES`, `BASELINE_LEVELS` |
-| **CSS classes** | MUI sx prop or SCSS | `sx={{ p: 2 }}` |
-| **Go packages** | lowercase | `storage`, `oscal`, `commands` |
-| **Go files** | snake_case | `ssp_storage.go` |
+| Category              | Convention           | Example                                 |
+| --------------------- | -------------------- | --------------------------------------- |
+| **JSON file names**   | kebab-case           | `my-system-ssp.json`                    |
+| **JSON fields**       | camelCase            | `systemInfo`, `createdAt`               |
+| **React components**  | PascalCase           | `SspCard`, `ControlStatusBadge`         |
+| **Component files**   | PascalCase           | `SspCard.tsx`, `ControlStatusBadge.tsx` |
+| **Hooks**             | camelCase with `use` | `useSsp`, `useControls`                 |
+| **Utility functions** | camelCase            | `formatDate`, `generateOscal`           |
+| **Constants**         | SCREAMING_SNAKE      | `CONTROL_FAMILIES`, `BASELINE_LEVELS`   |
+| **CSS classes**       | MUI sx prop or SCSS  | `sx={{ p: 2 }}`                         |
+| **Go packages**       | lowercase            | `storage`, `oscal`, `commands`          |
+| **Go files**          | snake_case           | `ssp_storage.go`                        |
 
 ### State Management Pattern
 
@@ -503,10 +513,10 @@ Using React Context (template pattern):
 ```typescript
 // contexts/SspContext.tsx
 interface SspState {
-  projects: SspProject[];
-  currentProject: SspProject | null;
-  isLoading: boolean;
-  error: Error | null;
+  projects: SspProject[]
+  currentProject: SspProject | null
+  isLoading: boolean
+  error: Error | null
 }
 
 type SspAction =
@@ -515,19 +525,19 @@ type SspAction =
   | { type: 'CREATE_PROJECT'; payload: SspProject }
   | { type: 'UPDATE_PROJECT'; payload: SspProject }
   | { type: 'DELETE_PROJECT'; payload: string }
-  | { type: 'SET_ERROR'; payload: Error };
+  | { type: 'SET_ERROR'; payload: Error }
 
 // Hook usage
-const { projects, currentProject, createProject, updateProject } = useSsp();
+const { projects, currentProject, createProject, updateProject } = useSsp()
 ```
 
 ### File Operations Pattern
 
 ```typescript
 // lib/storage/ssp-storage.ts
-import { SspProject } from '@/types/ssp';
+import { SspProject } from '@/types/ssp'
 
-const SSP_DIR = '~/.ssp-gen/projects';
+const SSP_DIR = '~/.ssp-gen/projects'
 
 export const sspStorage = {
   async list(): Promise<SspProject[]> {
@@ -540,7 +550,7 @@ export const sspStorage = {
 
   async save(project: SspProject): Promise<void> {
     // Write project to JSON file
-    project.updatedAt = new Date().toISOString();
+    project.updatedAt = new Date().toISOString()
   },
 
   async delete(id: string): Promise<void> {
@@ -549,8 +559,8 @@ export const sspStorage = {
 
   async export(id: string, format: ExportFormat): Promise<Blob> {
     // Generate export file
-  }
-};
+  },
+}
 ```
 
 ### Error Handling Strategy
@@ -609,6 +619,7 @@ function useSsp() {
 ### Go CLI Authentication
 
 The Go CLI operates independently of the web auth:
+
 - **Local only:** No authentication required for local file access
 - **Optional API key:** For AI suggestions feature
 - **Config file:** `~/.ssp-gen/config.json` stores preferences
@@ -641,13 +652,13 @@ The Go CLI operates independently of the web auth:
 
 ### NFR Targets
 
-| Metric | Target | Strategy |
-|--------|--------|----------|
-| Page load | <2s | Vite optimization, code splitting |
-| Control search | <500ms | In-memory filtering, memoization |
-| SSP export | <30s | Streaming generation, web workers |
-| CLI commands | <5s | Go binary, embedded data |
-| File save | <100ms | JSON.stringify, async write |
+| Metric         | Target | Strategy                          |
+| -------------- | ------ | --------------------------------- |
+| Page load      | <2s    | Vite optimization, code splitting |
+| Control search | <500ms | In-memory filtering, memoization  |
+| SSP export     | <30s   | Streaming generation, web workers |
+| CLI commands   | <5s    | Go binary, embedded data          |
+| File save      | <100ms | JSON.stringify, async write       |
 
 ---
 
@@ -687,6 +698,7 @@ The Go CLI operates independently of the web auth:
 - **Direct download:** From GitHub releases page
 
 **Build targets:**
+
 ```makefile
 # Makefile in ssp-cli repo
 build-all:
@@ -773,6 +785,7 @@ VITE_OPENAI_API_KEY=sk-...  # Optional, for AI suggestions
 **Decision:** Keep Vite + React (SPA) from existing template.
 
 **Rationale:**
+
 - Template infrastructure already configured and tested
 - Simpler architecture (no server-side complexity)
 - Faster development builds with Vite
@@ -788,6 +801,7 @@ VITE_OPENAI_API_KEY=sk-...  # Optional, for AI suggestions
 **Decision:** Use local JSON files instead of database.
 
 **Rationale:**
+
 - Local-first architecture (data stays on user's machine)
 - Git-friendly for version control of SSPs
 - No server infrastructure to maintain
@@ -803,6 +817,7 @@ VITE_OPENAI_API_KEY=sk-...  # Optional, for AI suggestions
 **Decision:** Build CLI in Go with direct file access.
 
 **Rationale:**
+
 - Single binary distribution (no runtime dependencies)
 - Cross-platform builds from single codebase
 - Fast startup time
@@ -818,6 +833,7 @@ VITE_OPENAI_API_KEY=sk-...  # Optional, for AI suggestions
 **Decision:** Keep AWS Cognito from existing template.
 
 **Rationale:**
+
 - Already configured in template
 - Enterprise-ready authentication
 - Supports MFA, federation, etc.
@@ -832,6 +848,7 @@ VITE_OPENAI_API_KEY=sk-...  # Optional, for AI suggestions
 **Decision:** Keep Material-UI from existing template.
 
 **Rationale:**
+
 - 40+ components already themed
 - Comprehensive design system
 - Template provides custom Federal Blue theme

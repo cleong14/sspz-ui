@@ -39,6 +39,7 @@
 ### Resource Usage
 
 - **CPU Usage**
+
   - **Status:** {STATUS} {STATUS_ICON}
   - **Threshold:** {THRESHOLD_VALUE}
   - **Actual:** {ACTUAL_VALUE}
@@ -150,6 +151,7 @@
 ### Disaster Recovery (if applicable)
 
 - **RTO (Recovery Time Objective)**
+
   - **Status:** {STATUS} {STATUS_ICON}
   - **Threshold:** {THRESHOLD_VALUE}
   - **Actual:** {ACTUAL_VALUE}
@@ -232,6 +234,7 @@
 {QUICK_WIN_COUNT} quick wins identified for immediate implementation:
 
 1. **{QUICK_WIN_TITLE_1}** ({NFR_CATEGORY}) - {PRIORITY} - {ESTIMATED_EFFORT}
+
    - {QUICK_WIN_DESCRIPTION}
    - No code changes needed / Minimal code changes
 
@@ -245,6 +248,7 @@
 ### Immediate (Before Release) - CRITICAL/HIGH Priority
 
 1. **{ACTION_TITLE_1}** - {PRIORITY} - {ESTIMATED_EFFORT} - {OWNER}
+
    - {ACTION_DESCRIPTION}
    - {SPECIFIC_STEPS}
    - {VALIDATION_CRITERIA}
@@ -257,6 +261,7 @@
 ### Short-term (Next Sprint) - MEDIUM Priority
 
 1. **{ACTION_TITLE_3}** - {PRIORITY} - {ESTIMATED_EFFORT} - {OWNER}
+
    - {ACTION_DESCRIPTION}
 
 2. **{ACTION_TITLE_4}** - {PRIORITY} - {ESTIMATED_EFFORT} - {OWNER}
@@ -276,6 +281,7 @@
 ### Performance Monitoring
 
 - [ ] {MONITORING_TOOL_1} - {MONITORING_DESCRIPTION}
+
   - **Owner:** {OWNER}
   - **Deadline:** {DEADLINE}
 
@@ -338,6 +344,7 @@
 {EVIDENCE_GAP_COUNT} evidence gaps identified - action required:
 
 - [ ] **{NFR_NAME_1}** ({NFR_CATEGORY})
+
   - **Owner:** {OWNER}
   - **Deadline:** {DEADLINE}
   - **Suggested Evidence:** {SUGGESTED_EVIDENCE_SOURCE}

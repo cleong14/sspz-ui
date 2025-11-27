@@ -11,12 +11,14 @@
 The SSP Generator is a user-friendly web application that simplifies the creation of System Security Plans (SSPs) based on NIST 800-53 controls. Unlike enterprise GRC tools that are expensive and complex, or open-source CLI tools that require technical expertise, this tool provides an intuitive interface accessible to both compliance officers and software engineers.
 
 The tool bridges the gap between:
+
 - **Enterprise solutions** (RegScale, Anitian, Telos) - powerful but expensive and complex
 - **Open source tools** (GSA oscal-gen-tool, Compliance Trestle) - free but require technical expertise
 
 ### What Makes This Special
 
 **Dual-Interface Design:** A single tool that serves two distinct user personas:
+
 1. **Compliance Officers** - Intuitive web UI with guided workflows, no technical expertise required
 2. **Software Engineers** - CLI tool for automation, CI/CD integration, and infrastructure-as-code workflows
 
@@ -33,6 +35,7 @@ This approach democratizes SSP creation, making compliance accessible to organiz
 **Architecture:** API-First (shared backend for Web UI and CLI)
 
 This is a govtech/compliance domain project requiring attention to:
+
 - Security framework standards (NIST 800-53, FedRAMP)
 - OSCAL format compliance for interoperability
 - Accessibility for government users
@@ -46,11 +49,13 @@ This is a govtech/compliance domain project requiring attention to:
 ### Core Success Metrics
 
 1. **User Adoption**
+
    - Compliance officers can generate a complete SSP without developer assistance
    - Developers can integrate SSP generation into CI/CD pipelines
    - First SSP generated within 1 hour of onboarding (vs weeks with manual methods)
 
 2. **Output Quality**
+
    - Generated SSPs pass OSCAL validation
    - SSPs are accepted by authorizing officials without major rework
    - Control implementation statements are comprehensive and accurate
@@ -72,7 +77,9 @@ This is a govtech/compliance domain project requiring attention to:
 ### MVP - Minimum Viable Product
 
 **Core Capabilities:**
+
 1. **NIST 800-53 + FedRAMP Control Catalog**
+
    - Complete NIST 800-53 Rev 5 control catalog
    - FedRAMP baselines (Low, Moderate, High, LI-SaaS)
    - Control family browsing and search
@@ -80,6 +87,7 @@ This is a govtech/compliance domain project requiring attention to:
    - FedRAMP-specific parameters and extensions
 
 2. **SSP Document Generation**
+
    - Create new SSP projects
    - Select appropriate baseline (NIST or FedRAMP)
    - Input system information (name, boundary, description)
@@ -88,18 +96,21 @@ This is a govtech/compliance domain project requiring attention to:
    - Export to Word/PDF for human review
 
 3. **AI-Assisted Control Implementation**
+
    - Suggest implementation statements based on system description
    - Show confidence levels and reasoning for transparency
    - Accept, modify, or reject AI suggestions
    - Learn from user modifications to improve suggestions
 
 4. **Web Interface**
+
    - Intuitive dashboard for compliance officers
    - Guided workflow for SSP creation
    - Progress tracking across control families
    - Save/resume capability for in-progress SSPs
 
 5. **CLI Tool**
+
    - Initialize SSP projects from command line
    - Import/export OSCAL files
    - Validate SSP against schema
@@ -113,18 +124,21 @@ This is a govtech/compliance domain project requiring attention to:
 ### Growth Features (Post-MVP)
 
 1. **Additional Framework Support**
+
    - CMMC (Cybersecurity Maturity Model Certification)
    - SOC 2 mapping
    - ISO 27001 controls
    - StateRAMP baselines
 
 2. **Collaboration Features**
+
    - Multi-user editing
    - Review/approval workflows
    - Comment threads on controls
    - Audit trail and change history
 
 3. **Advanced AI Capabilities**
+
    - Gap analysis and recommendations
    - Control inheritance suggestions
    - Automated evidence linking
@@ -139,11 +153,13 @@ This is a govtech/compliance domain project requiring attention to:
 ### Vision (Future)
 
 1. **Continuous Compliance**
+
    - Real-time control status monitoring
    - Automated evidence collection
    - Drift detection and alerting
 
 2. **FedRAMP 20x Alignment**
+
    - Key Security Indicators (KSIs) dashboard
    - Automated validation workflows
    - Machine-readable compliance artifacts
@@ -160,18 +176,21 @@ This is a govtech/compliance domain project requiring attention to:
 ### GovTech Compliance Domain
 
 **NIST 800-53 Rev 5 Alignment:**
+
 - Support all 20 control families
 - Handle control enhancements
 - Support parameter customization
 - Track control implementation status
 
 **OSCAL Compliance:**
+
 - Generate valid OSCAL SSP documents
 - Support XML, JSON, and YAML formats
 - Pass NIST OSCAL validation tools
 - Enable import/export interoperability
 
 **Accessibility (Section 508):**
+
 - WCAG 2.1 AA compliance for web interface
 - Keyboard navigation support
 - Screen reader compatibility
@@ -184,12 +203,14 @@ This is a govtech/compliance domain project requiring attention to:
 ### Design Philosophy
 
 **For Compliance Officers:**
+
 - "Guided, not overwhelming" - Step-by-step workflows
 - "Jargon-light" - Plain language explanations alongside technical terms
 - "Progress visibility" - Clear indication of completion status
 - "No dead ends" - Contextual help at every step
 
 **For Developers:**
+
 - "Convention over configuration" - Sensible defaults
 - "Scriptable everything" - All operations available via CLI
 - "Git-friendly" - YAML/JSON outputs for version control
@@ -198,6 +219,7 @@ This is a govtech/compliance domain project requiring attention to:
 ### Key Interactions
 
 1. **SSP Creation Wizard** (Web UI)
+
    - Step 1: System Information
    - Step 2: Baseline Selection
    - Step 3: Control Implementation (by family)
@@ -352,12 +374,12 @@ This is a govtech/compliance domain project requiring attention to:
 
 ### Competitive Landscape Awareness
 
-| Competitor | Strength | Gap We Address |
-|------------|----------|----------------|
-| RegScale | AI generation, enterprise features | Complexity, cost |
-| Telos Xacta | Enterprise GRC, Gartner recognized | Enterprise-only focus |
-| GSA Tools | Free, official | Requires technical expertise |
-| Compliance Trestle | Powerful CLI | No web UI |
+| Competitor         | Strength                           | Gap We Address               |
+| ------------------ | ---------------------------------- | ---------------------------- |
+| RegScale           | AI generation, enterprise features | Complexity, cost             |
+| Telos Xacta        | Enterprise GRC, Gartner recognized | Enterprise-only focus        |
+| GSA Tools          | Free, official                     | Requires technical expertise |
+| Compliance Trestle | Powerful CLI                       | No web UI                    |
 
 ---
 
@@ -401,6 +423,7 @@ This is a govtech/compliance domain project requiring attention to:
 ```
 
 **Key Architectural Decisions:**
+
 - **Local-first design:** Both Web UI and CLI access the same local JSON files
 - **No backend server:** All data stored locally, portable and Git-friendly
 - **Existing template infrastructure:** Vite + React + MUI + AWS Cognito
@@ -415,15 +438,15 @@ This is a govtech/compliance domain project requiring attention to:
 
 Based on Party Mode review, implementation can be sequenced as:
 
-| Epic | Name | Dependencies | Key Deliverables |
-|------|------|--------------|------------------|
-| 1 | Core Infrastructure | None | API, Auth, Project Management |
-| 2 | Control Catalog | Epic 1 | NIST 800-53 + FedRAMP data, search |
-| 3 | SSP Creation Workflow | Epic 1, 2 | Web UI wizard, system info, control impl |
-| 4 | Export Engine | Epic 2 | OSCAL, Word, PDF generation |
-| 5 | CLI Tool | Epic 1, 2 | Init, import, export, validate commands |
-| 6 | AI-Assisted Generation | Epic 2, 3 | Suggestions, confidence, learning |
-| 7 | Import & Interoperability | Epic 4 | OSCAL import, validation |
+| Epic | Name                      | Dependencies | Key Deliverables                         |
+| ---- | ------------------------- | ------------ | ---------------------------------------- |
+| 1    | Core Infrastructure       | None         | API, Auth, Project Management            |
+| 2    | Control Catalog           | Epic 1       | NIST 800-53 + FedRAMP data, search       |
+| 3    | SSP Creation Workflow     | Epic 1, 2    | Web UI wizard, system info, control impl |
+| 4    | Export Engine             | Epic 2       | OSCAL, Word, PDF generation              |
+| 5    | CLI Tool                  | Epic 1, 2    | Init, import, export, validate commands  |
+| 6    | AI-Assisted Generation    | Epic 2, 3    | Suggestions, confidence, learning        |
+| 7    | Import & Interoperability | Epic 4       | OSCAL import, validation                 |
 
 This sequencing enables incremental value delivery.
 

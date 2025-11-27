@@ -15,17 +15,17 @@ This document provides the complete epic and story breakdown for SSP Generator, 
 
 ### Epic Summary
 
-| Epic | Name | Stories | FRs Covered |
-|------|------|---------|-------------|
-| 1 | Foundation & Infrastructure | 6 | Infrastructure |
-| 2 | User Authentication & Access | 5 | FR1-FR3 |
-| 3 | Control Catalog & Browsing | 6 | FR9-FR13, FR42-FR44 |
-| 4 | SSP Project Management | 5 | FR4-FR8 |
-| 5 | SSP Creation Workflow | 8 | FR14-FR26 |
-| 6 | Export & Import Engine | 7 | FR27-FR31, FR39-FR41, FR45 |
-| 7 | CLI Tool | 6 | FR32-FR38 |
-| 8 | AI-Assisted Generation | 5 | FR46-FR49 |
-| 9 | Control Catalog Data | 4 | Foundation for FR9-FR13, FR42-FR44 |
+| Epic | Name                         | Stories | FRs Covered                        |
+| ---- | ---------------------------- | ------- | ---------------------------------- |
+| 1    | Foundation & Infrastructure  | 6       | Infrastructure                     |
+| 2    | User Authentication & Access | 5       | FR1-FR3                            |
+| 3    | Control Catalog & Browsing   | 6       | FR9-FR13, FR42-FR44                |
+| 4    | SSP Project Management       | 5       | FR4-FR8                            |
+| 5    | SSP Creation Workflow        | 8       | FR14-FR26                          |
+| 6    | Export & Import Engine       | 7       | FR27-FR31, FR39-FR41, FR45         |
+| 7    | CLI Tool                     | 6       | FR32-FR38                          |
+| 8    | AI-Assisted Generation       | 5       | FR46-FR49                          |
+| 9    | Control Catalog Data         | 4       | Foundation for FR9-FR13, FR42-FR44 |
 
 **Total: 52 Stories across 9 Epics**
 
@@ -33,57 +33,57 @@ This document provides the complete epic and story breakdown for SSP Generator, 
 
 ## Functional Requirements Inventory
 
-| FR ID | Description | Epic |
-|-------|-------------|------|
-| FR1 | Users can create accounts and authenticate securely | Epic 2 |
-| FR2 | Users can manage their profile and preferences | Epic 2 |
-| FR3 | System supports role-based access (viewer, editor, admin) | Epic 2 |
-| FR4 | Users can create new SSP projects | Epic 4 |
-| FR5 | Users can list and search their SSP projects | Epic 4 |
-| FR6 | Users can duplicate existing SSP projects as templates | Epic 4 |
-| FR7 | Users can archive or delete SSP projects | Epic 4 |
-| FR8 | Users can save work-in-progress and resume later | Epic 4 |
-| FR9 | System displays complete NIST 800-53 Rev 5 control catalog | Epic 3 |
-| FR10 | Users can browse controls by family (AC, AU, CA, etc.) | Epic 3 |
-| FR11 | Users can search controls by ID, title, or keyword | Epic 3 |
-| FR12 | Users can view control details including guidance and enhancements | Epic 3 |
-| FR13 | System displays baseline applicability (Low/Moderate/High) | Epic 3 |
-| FR14 | Users can input system identification information | Epic 5 |
-| FR15 | Users can define system boundary and components | Epic 5 |
-| FR16 | Users can specify system categorization (C/I/A) | Epic 5 |
-| FR17 | Users can document system environment and architecture | Epic 5 |
-| FR18 | Users can identify system owners and contacts | Epic 5 |
-| FR19 | Users can select appropriate baseline (Low, Moderate, High) | Epic 5 |
-| FR20 | System automatically loads applicable controls for selected baseline | Epic 5 |
-| FR21 | Users can set implementation status per control | Epic 5 |
-| FR22 | Users can write control implementation statements | Epic 5 |
-| FR23 | Users can customize control parameters where applicable | Epic 5 |
-| FR24 | Users can mark controls as inherited from other systems | Epic 5 |
-| FR25 | Users can attach evidence or references to controls | Epic 5 |
-| FR26 | Users can track implementation progress by control family | Epic 5 |
-| FR27 | Users can export SSP to OSCAL format (JSON, YAML, XML) | Epic 6 |
-| FR28 | Users can export SSP to Word document format | Epic 6 |
-| FR29 | Users can export SSP to PDF format | Epic 6 |
-| FR30 | Users can validate SSP against OSCAL schema before export | Epic 6 |
-| FR31 | System reports validation errors with actionable guidance | Epic 6 |
-| FR32 | CLI can initialize new SSP projects | Epic 7 |
-| FR33 | CLI can import existing OSCAL SSP files | Epic 7 |
-| FR34 | CLI can update control implementation status | Epic 7 |
-| FR35 | CLI can export to all supported formats | Epic 7 |
-| FR36 | CLI can validate SSP against schema | Epic 7 |
-| FR37 | CLI supports configuration via file and environment variables | Epic 7 |
-| FR38 | CLI provides machine-readable output (JSON) for scripting | Epic 7 |
-| FR39 | Users can import existing OSCAL SSP files | Epic 6 |
-| FR40 | System validates imported files and reports issues | Epic 6 |
-| FR41 | Users can update imported SSPs and re-export | Epic 6 |
-| FR42 | System displays FedRAMP control baselines | Epic 3 |
-| FR43 | Users can select FedRAMP baseline and inherit NIST 800-53 controls | Epic 3 |
-| FR44 | System includes FedRAMP-specific parameters and extensions | Epic 3 |
-| FR45 | Users can export FedRAMP-formatted OSCAL SSP | Epic 6 |
-| FR46 | System suggests control implementation statements | Epic 8 |
-| FR47 | Users can accept, modify, or reject AI-generated suggestions | Epic 8 |
-| FR48 | System displays confidence levels and reasoning | Epic 8 |
-| FR49 | System improves suggestions based on user modifications | Epic 8 |
+| FR ID | Description                                                          | Epic   |
+| ----- | -------------------------------------------------------------------- | ------ |
+| FR1   | Users can create accounts and authenticate securely                  | Epic 2 |
+| FR2   | Users can manage their profile and preferences                       | Epic 2 |
+| FR3   | System supports role-based access (viewer, editor, admin)            | Epic 2 |
+| FR4   | Users can create new SSP projects                                    | Epic 4 |
+| FR5   | Users can list and search their SSP projects                         | Epic 4 |
+| FR6   | Users can duplicate existing SSP projects as templates               | Epic 4 |
+| FR7   | Users can archive or delete SSP projects                             | Epic 4 |
+| FR8   | Users can save work-in-progress and resume later                     | Epic 4 |
+| FR9   | System displays complete NIST 800-53 Rev 5 control catalog           | Epic 3 |
+| FR10  | Users can browse controls by family (AC, AU, CA, etc.)               | Epic 3 |
+| FR11  | Users can search controls by ID, title, or keyword                   | Epic 3 |
+| FR12  | Users can view control details including guidance and enhancements   | Epic 3 |
+| FR13  | System displays baseline applicability (Low/Moderate/High)           | Epic 3 |
+| FR14  | Users can input system identification information                    | Epic 5 |
+| FR15  | Users can define system boundary and components                      | Epic 5 |
+| FR16  | Users can specify system categorization (C/I/A)                      | Epic 5 |
+| FR17  | Users can document system environment and architecture               | Epic 5 |
+| FR18  | Users can identify system owners and contacts                        | Epic 5 |
+| FR19  | Users can select appropriate baseline (Low, Moderate, High)          | Epic 5 |
+| FR20  | System automatically loads applicable controls for selected baseline | Epic 5 |
+| FR21  | Users can set implementation status per control                      | Epic 5 |
+| FR22  | Users can write control implementation statements                    | Epic 5 |
+| FR23  | Users can customize control parameters where applicable              | Epic 5 |
+| FR24  | Users can mark controls as inherited from other systems              | Epic 5 |
+| FR25  | Users can attach evidence or references to controls                  | Epic 5 |
+| FR26  | Users can track implementation progress by control family            | Epic 5 |
+| FR27  | Users can export SSP to OSCAL format (JSON, YAML, XML)               | Epic 6 |
+| FR28  | Users can export SSP to Word document format                         | Epic 6 |
+| FR29  | Users can export SSP to PDF format                                   | Epic 6 |
+| FR30  | Users can validate SSP against OSCAL schema before export            | Epic 6 |
+| FR31  | System reports validation errors with actionable guidance            | Epic 6 |
+| FR32  | CLI can initialize new SSP projects                                  | Epic 7 |
+| FR33  | CLI can import existing OSCAL SSP files                              | Epic 7 |
+| FR34  | CLI can update control implementation status                         | Epic 7 |
+| FR35  | CLI can export to all supported formats                              | Epic 7 |
+| FR36  | CLI can validate SSP against schema                                  | Epic 7 |
+| FR37  | CLI supports configuration via file and environment variables        | Epic 7 |
+| FR38  | CLI provides machine-readable output (JSON) for scripting            | Epic 7 |
+| FR39  | Users can import existing OSCAL SSP files                            | Epic 6 |
+| FR40  | System validates imported files and reports issues                   | Epic 6 |
+| FR41  | Users can update imported SSPs and re-export                         | Epic 6 |
+| FR42  | System displays FedRAMP control baselines                            | Epic 3 |
+| FR43  | Users can select FedRAMP baseline and inherit NIST 800-53 controls   | Epic 3 |
+| FR44  | System includes FedRAMP-specific parameters and extensions           | Epic 3 |
+| FR45  | Users can export FedRAMP-formatted OSCAL SSP                         | Epic 6 |
+| FR46  | System suggests control implementation statements                    | Epic 8 |
+| FR47  | Users can accept, modify, or reject AI-generated suggestions         | Epic 8 |
+| FR48  | System displays confidence levels and reasoning                      | Epic 8 |
+| FR49  | System improves suggestions based on user modifications              | Epic 8 |
 
 ---
 
@@ -125,6 +125,7 @@ So that **I have all libraries needed for SSP features**.
 **Given** existing template-vite-react infrastructure
 **When** installing additional dependencies
 **Then** the following are added:
+
 - uuid, date-fns for data utilities
 - file-saver, jszip for export features
 - ajv, ajv-formats for OSCAL schema validation
@@ -137,6 +138,7 @@ So that **I have all libraries needed for SSP features**.
 **Prerequisites:** None (first story)
 
 **Technical Notes:**
+
 - Run `yarn add uuid date-fns file-saver jszip ajv ajv-formats docx pdfmake`
 - Template already provides: Vite, React, MUI, AWS Cognito, React Router
 - Reference: Architecture doc "Project Initialization" section
@@ -154,6 +156,7 @@ So that **I have type safety across the application**.
 **Given** template TypeScript configuration
 **When** creating type definitions
 **Then** types are defined for:
+
 - SspProject (id, name, baseline, status, systemInfo, implementations)
 - ControlImplementation (controlId, status, statement, aiGenerated)
 - Control, ControlFamily, ControlCatalog
@@ -166,6 +169,7 @@ So that **I have type safety across the application**.
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Create src/types/ssp.ts, src/types/control.ts, src/types/tool.ts
 - Use TypeScript strict mode
 - Reference: Architecture doc "Data Architecture" section
@@ -183,6 +187,7 @@ So that **data persists locally and is portable**.
 **Given** type definitions are created
 **When** implementing storage service
 **Then** sspStorage service provides:
+
 - list(): Load all SSP projects from ~/.ssp-gen/projects/
 - get(id): Load specific project
 - save(project): Write project to JSON file
@@ -195,6 +200,7 @@ So that **data persists locally and is portable**.
 **Prerequisites:** Story 1.2
 
 **Technical Notes:**
+
 - Create src/lib/storage/ssp-storage.ts
 - Use browser File System Access API where supported
 - Fallback to download/upload for unsupported browsers
@@ -213,6 +219,7 @@ So that **CLI development can proceed independently**.
 **Given** decision to use Go for CLI
 **When** initializing CLI repository
 **Then** ssp-cli repository is created with:
+
 - Go module initialized (go.mod)
 - cmd/ssp/main.go entry point with cobra or flag package
 - internal/commands/ directory structure
@@ -226,6 +233,7 @@ So that **CLI development can proceed independently**.
 **Prerequisites:** None (can be parallel with Story 1.1)
 
 **Technical Notes:**
+
 - Separate repository from Web UI
 - Use cobra or standard flag package for CLI framework
 - Match JSON file format with Web UI exactly
@@ -244,6 +252,7 @@ So that **users can navigate to all SSP features**.
 **Given** template AppLayout exists
 **When** extending navigation
 **Then** sidebar includes:
+
 - Dashboard (home)
 - Projects (SSP list)
 - Control Catalog
@@ -257,6 +266,7 @@ So that **users can navigate to all SSP features**.
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Extend existing src/layouts/AppLayout/
 - Update src/router/router.tsx with new routes
 - Use template's existing MUI Drawer component
@@ -275,6 +285,7 @@ So that **code quality is enforced and deployments are automated**.
 **Given** project repository exists
 **When** configuring CI/CD
 **Then** GitHub Actions workflows include:
+
 - ci.yml: Lint, type-check, unit tests on PR
 - deploy.yml: Deploy to static hosting (Vercel/Netlify) on main branch
 - Environment secrets for AWS Cognito configured
@@ -285,9 +296,10 @@ So that **code quality is enforced and deployments are automated**.
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Template may already have CI/CD partially configured
 - Static hosting deployment (no database)
-- Configure VITE_COGNITO_* secrets
+- Configure VITE*COGNITO*\* secrets
 - Reference: Architecture doc "Deployment Architecture"
 
 ---
@@ -313,6 +325,7 @@ So that **users can register and login securely**.
 **Given** template AWS Cognito configuration
 **When** testing authentication flow
 **Then** the following work correctly:
+
 - User registration (sign up with email/password)
 - Email verification
 - User login (sign in)
@@ -325,6 +338,7 @@ So that **users can register and login securely**.
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Template already provides: configureCognito(), getJWT(), AuthProvider
 - Verify existing SignIn and SignOut views work
 - Document required Cognito User Pool settings
@@ -343,6 +357,7 @@ So that **I know I'm using the SSP Generator**.
 **Given** template SignIn view exists
 **When** extending with SSP branding
 **Then** login page includes:
+
 - SSP Generator logo/title
 - Welcome message for compliance users
 - Clear sign-up link for new users
@@ -354,6 +369,7 @@ So that **I know I'm using the SSP Generator**.
 **Prerequisites:** Story 2.1
 
 **Technical Notes:**
+
 - Extend existing src/views/SignIn/
 - Use template's MUI components
 - Add SSP-specific welcome messaging
@@ -372,6 +388,7 @@ So that **I can see my account details**.
 **Given** I am logged in
 **When** I navigate to Settings > Profile
 **Then** I can view:
+
 - Display name (from Cognito attributes)
 - Email address
 - Account creation date
@@ -382,6 +399,7 @@ So that **I can see my account details**.
 **Prerequisites:** Story 2.1
 
 **Technical Notes:**
+
 - Use AWS Amplify Auth.currentUserInfo()
 - Password change via Auth.changePassword()
 - Store user preferences in localStorage
@@ -400,6 +418,7 @@ So that **different users see appropriate options**.
 **Given** user is authenticated
 **When** determining access level
 **Then** role is determined from:
+
 - Cognito user groups (if configured)
 - Local preference setting (for single-user/demo mode)
 
@@ -414,6 +433,7 @@ So that **different users see appropriate options**.
 **Prerequisites:** Story 2.2
 
 **Technical Notes:**
+
 - Role stored in Cognito groups or local setting
 - UI-level enforcement (data is local anyway)
 - Consider single-user vs multi-user scenarios
@@ -445,6 +465,7 @@ So that **I don't have to log in repeatedly**.
 **Prerequisites:** Story 2.1
 
 **Technical Notes:**
+
 - Template already handles session via AWS Amplify
 - authLoader in router checks JWT validity
 - Use existing SignOut view for logout
@@ -473,6 +494,7 @@ So that **users can browse the complete control catalog**.
 **Given** project structure is set up
 **When** creating control catalog data
 **Then** public/data/nist-800-53-rev5.json contains:
+
 - All 20 control families (AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR)
 - All 1000+ controls with enhancements (e.g., AC-2(1), AC-2(2))
 - Baseline applicability (Low: 150, Moderate: 304, High: 392)
@@ -484,6 +506,7 @@ So that **users can browse the complete control catalog**.
 **Prerequisites:** Story 1.2
 
 **Technical Notes:**
+
 - Download from https://github.com/usnistgov/oscal-content
 - Transform OSCAL to simplified JSON format
 - Store in public/data/ for static serving
@@ -502,6 +525,7 @@ So that **users can select FedRAMP-specific controls**.
 **Given** NIST control data exists
 **When** creating FedRAMP data
 **Then** public/data/fedramp-baselines.json contains:
+
 - FedRAMP Low (125 controls)
 - FedRAMP Moderate (325 controls)
 - FedRAMP High (421 controls)
@@ -514,6 +538,7 @@ So that **users can select FedRAMP-specific controls**.
 **Prerequisites:** Story 3.1
 
 **Technical Notes:**
+
 - Source from FedRAMP automation repository
 - Include parameter substitutions
 - Reference: FR42, FR43, FR44
@@ -531,6 +556,7 @@ So that **I can understand requirements systematically**.
 **Given** I navigate to Control Catalog
 **When** the page loads
 **Then** I see:
+
 - Tabs for each control family (AC, AT, AU, etc.)
 - Control cards in a filterable grid (3 columns desktop, 2 tablet, 1 mobile)
 - Each card shows: Control ID, Title, baseline badges (Low/Mod/High)
@@ -542,6 +568,7 @@ So that **I can understand requirements systematically**.
 **Prerequisites:** Story 3.1, Story 1.5
 
 **Technical Notes:**
+
 - Use shadcn Tabs for family navigation
 - Implement card gallery layout per UX spec section 4.1
 - Reference: FR9, FR10, FR13
@@ -570,6 +597,7 @@ So that **I can quickly find specific controls**.
 **Prerequisites:** Story 3.3
 
 **Technical Notes:**
+
 - Implement PostgreSQL full-text search
 - Use shadcn Command component for search UI
 - Reference: FR11
@@ -587,6 +615,7 @@ So that **I understand implementation requirements**.
 **Given** I click on a control card
 **When** the detail view opens (slide-out sheet)
 **Then** I see:
+
 - Control ID and Title
 - Full description text
 - Implementation guidance
@@ -600,6 +629,7 @@ So that **I understand implementation requirements**.
 **Prerequisites:** Story 3.3
 
 **Technical Notes:**
+
 - Use shadcn Sheet component for slide-out
 - Display enhancements as collapsible accordion
 - Reference: FR12
@@ -627,6 +657,7 @@ So that **I see only applicable controls for my system**.
 **Prerequisites:** Story 3.2, Story 3.3
 
 **Technical Notes:**
+
 - Multi-select filter for comparing baselines
 - Store filter preference in URL params for sharing
 - Reference: FR13, FR43
@@ -654,6 +685,7 @@ So that **I can track compliance progress across systems**.
 **Given** I am logged in
 **When** I navigate to the Dashboard
 **Then** I see:
+
 - Summary stats (Total SSPs, In Progress, Complete)
 - SSP project cards in a grid layout
 - Each card shows: System name, baseline, progress ring, last updated
@@ -664,6 +696,7 @@ So that **I can track compliance progress across systems**.
 **Prerequisites:** Story 2.2, Story 1.5
 
 **Technical Notes:**
+
 - Dense dashboard layout per UX spec section 4.1
 - Progress ring shows control completion percentage
 - Reference: FR5
@@ -681,6 +714,7 @@ So that **I can start documenting my system's security**.
 **Given** I click "Create New SSP" on dashboard
 **When** the creation modal opens
 **Then** I can enter:
+
 - System name (required, max 200 chars)
 - Description (optional)
 - Baseline selection (Low/Moderate/High/FedRAMP variants)
@@ -692,6 +726,7 @@ So that **I can start documenting my system's security**.
 **Prerequisites:** Story 4.1, Story 3.2
 
 **Technical Notes:**
+
 - Use tRPC mutation `ssp.create`
 - Validate with Zod schema
 - Reference: FR4, FR19
@@ -709,6 +744,7 @@ So that **I can find specific systems quickly**.
 **Given** I have multiple SSP projects
 **When** I use the search/filter on dashboard
 **Then** I can:
+
 - Search by system name
 - Filter by status (Draft, In Progress, Complete)
 - Filter by baseline
@@ -720,6 +756,7 @@ So that **I can find specific systems quickly**.
 **Prerequisites:** Story 4.1
 
 **Technical Notes:**
+
 - Combine search and filters in toolbar
 - Use shadcn Command for search
 - Reference: FR5
@@ -738,6 +775,7 @@ So that **I can reuse work for similar systems**.
 **When** I click "Duplicate" from the SSP card menu
 **Then** a modal asks for new system name
 **And** clicking "Duplicate" creates a copy with:
+
 - All system info copied
 - All control implementations copied
 - Status reset to DRAFT
@@ -748,6 +786,7 @@ So that **I can reuse work for similar systems**.
 **Prerequisites:** Story 4.2
 
 **Technical Notes:**
+
 - Deep copy all related records
 - Reset timestamps and status
 - Reference: FR6
@@ -776,6 +815,7 @@ So that **I can manage my project list**.
 **Prerequisites:** Story 4.1
 
 **Technical Notes:**
+
 - Soft delete for archive (add archivedAt timestamp)
 - Hard delete with cascade for permanent deletion
 - Reference: FR7
@@ -803,6 +843,7 @@ So that **users can complete SSPs step-by-step**.
 **Given** user opens an SSP in DRAFT or IN_PROGRESS status
 **When** the wizard loads
 **Then** wizard displays:
+
 - Horizontal step indicator (desktop) / vertical accordion (mobile)
 - Steps: 1. System Info, 2. Baseline, 3. System Details, 4. Controls, 5. Review
 - Current step highlighted
@@ -814,6 +855,7 @@ So that **users can complete SSPs step-by-step**.
 **Prerequisites:** Story 4.2, Story 1.5
 
 **Technical Notes:**
+
 - Use shadcn Tabs or custom stepper
 - Auto-save with debounce on input change
 - Reference: UX Design spec section 5.1
@@ -831,6 +873,7 @@ So that **my SSP identifies the system properly**.
 **Given** I am on Step 1 of the SSP wizard
 **When** I fill out the form
 **Then** I can enter:
+
 - System Name (required)
 - System Identifier/Acronym
 - System Description (rich text)
@@ -843,6 +886,7 @@ So that **my SSP identifies the system properly**.
 **Prerequisites:** Story 5.1
 
 **Technical Notes:**
+
 - Store in Ssp.systemInfo JSON field
 - Use shadcn Form with react-hook-form
 - Reference: FR14
@@ -860,6 +904,7 @@ So that **the authorization scope is clear**.
 **Given** I am on Step 1
 **When** I scroll to boundary section
 **Then** I can document:
+
 - Authorization boundary description
 - Network diagram reference (file upload or link)
 - System components list (add/remove items)
@@ -870,6 +915,7 @@ So that **the authorization scope is clear**.
 **Prerequisites:** Story 5.2
 
 **Technical Notes:**
+
 - Dynamic list component for components
 - File upload stores reference path
 - Reference: FR15
@@ -887,6 +933,7 @@ So that **the appropriate baseline is selected**.
 **Given** I am on Step 2
 **When** I set categorization
 **Then** I can select for each of Confidentiality, Integrity, Availability:
+
 - Low, Moderate, or High impact level
 - System calculates overall categorization (highest of the three)
 - Recommended baseline is suggested based on categorization
@@ -897,6 +944,7 @@ So that **the appropriate baseline is selected**.
 **Prerequisites:** Story 5.1, Story 3.2
 
 **Technical Notes:**
+
 - FIPS 199 categorization methodology
 - Auto-suggest baseline but allow override
 - Reference: FR16, FR19
@@ -914,6 +962,7 @@ So that **implementation context is captured**.
 **Given** I am on Step 3
 **When** I fill out environment details
 **Then** I can document:
+
 - Deployment model (on-premise, cloud, hybrid)
 - Cloud service provider (if applicable)
 - Operating systems and platforms
@@ -921,6 +970,7 @@ So that **implementation context is captured**.
 - Data types processed
 
 **And** system owners and contacts section includes:
+
 - System Owner name, title, email
 - Authorizing Official
 - Security POC
@@ -929,6 +979,7 @@ So that **implementation context is captured**.
 **Prerequisites:** Story 5.1
 
 **Technical Notes:**
+
 - Contact fields with email validation
 - Multi-select for technologies
 - Reference: FR17, FR18
@@ -946,6 +997,7 @@ So that **I can demonstrate compliance**.
 **Given** I am on Step 4 (Controls)
 **When** the interface loads
 **Then** I see:
+
 - Control families as tabs or accordion sections
 - Progress ring per family showing X/Y completed
 - List of controls with status badges
@@ -957,6 +1009,7 @@ So that **I can demonstrate compliance**.
 **Prerequisites:** Story 5.1, Story 3.3
 
 **Technical Notes:**
+
 - Load controls based on selected baseline (FR20)
 - Use split-panel layout per UX spec
 - Reference: FR21, FR26
@@ -974,6 +1027,7 @@ So that **I can document how controls are met**.
 **Given** I click on a control in Step 4
 **When** the editor opens (slide-out sheet)
 **Then** I can:
+
 - Set implementation status (Implemented, Partial, Planned, N/A)
 - Write implementation statement (rich text, 5000 char max)
 - Customize control parameters if applicable
@@ -986,6 +1040,7 @@ So that **I can document how controls are met**.
 **Prerequisites:** Story 5.6
 
 **Technical Notes:**
+
 - Use shadcn Sheet for editor
 - Store in ControlImplementation table
 - Reference: FR21, FR22, FR23, FR24, FR25
@@ -1003,6 +1058,7 @@ So that **I can verify everything is correct**.
 **Given** I reach Step 5 (Review)
 **When** the summary loads
 **Then** I see:
+
 - System info summary (collapsible)
 - Categorization and baseline
 - Control implementation summary by family
@@ -1016,6 +1072,7 @@ So that **I can verify everything is correct**.
 **Prerequisites:** Story 5.7
 
 **Technical Notes:**
+
 - Validation rules for minimum completeness
 - Navigation links to previous steps
 - Reference: FR8
@@ -1043,6 +1100,7 @@ So that **exports meet federal standards**.
 **Given** an SSP with complete data
 **When** OSCAL generation is triggered
 **Then** output document includes:
+
 - OSCAL SSP structure per NIST schema
 - All system info mapped to OSCAL fields
 - All control implementations with statements
@@ -1054,6 +1112,7 @@ So that **exports meet federal standards**.
 **Prerequisites:** Story 5.8
 
 **Technical Notes:**
+
 - Build src/lib/oscal/generator.ts
 - Use official OSCAL schemas for validation
 - Reference: FR27
@@ -1071,6 +1130,7 @@ So that **I can submit for authorization**.
 **Given** I click "Export" from SSP review
 **When** export page loads
 **Then** I see:
+
 - Format options: OSCAL (JSON/YAML/XML), Word, PDF
 - Preview panel showing document structure
 - Download button per format
@@ -1082,6 +1142,7 @@ So that **I can submit for authorization**.
 **Prerequisites:** Story 6.1
 
 **Technical Notes:**
+
 - Use streaming for large documents
 - Show progress indicator during generation
 - Reference: FR27, FR45
@@ -1099,6 +1160,7 @@ So that **I can share with stakeholders who prefer Word**.
 **Given** I select Word format on export page
 **When** I click Download
 **Then** a .docx file is generated with:
+
 - Title page with system info
 - Table of contents
 - Formatted sections for each control family
@@ -1111,6 +1173,7 @@ So that **I can share with stakeholders who prefer Word**.
 **Prerequisites:** Story 6.2
 
 **Technical Notes:**
+
 - Use docx library for Node.js
 - Template-based generation
 - Reference: FR28
@@ -1128,6 +1191,7 @@ So that **I have a read-only version for distribution**.
 **Given** I select PDF format on export page
 **When** I click Download
 **Then** a .pdf file is generated with:
+
 - Same content as Word export
 - Proper page breaks
 - Embedded fonts
@@ -1138,6 +1202,7 @@ So that **I have a read-only version for distribution**.
 **Prerequisites:** Story 6.3
 
 **Technical Notes:**
+
 - Use puppeteer or react-pdf for generation
 - Ensure WCAG compliance for PDF/UA
 - Reference: FR29
@@ -1155,6 +1220,7 @@ So that **I know it will be accepted**.
 **Given** I have an SSP ready for export
 **When** I click "Validate" button
 **Then** system checks against OSCAL schema and reports:
+
 - Valid: Green checkmark "SSP is OSCAL-compliant"
 - Invalid: List of errors with line references and fix suggestions
 
@@ -1164,6 +1230,7 @@ So that **I know it will be accepted**.
 **Prerequisites:** Story 6.1
 
 **Technical Notes:**
+
 - Build src/lib/oscal/validator.ts
 - Use NIST OSCAL validation libraries
 - Reference: FR30, FR31
@@ -1181,6 +1248,7 @@ So that **I can continue work started elsewhere**.
 **Given** I click "Import SSP" on dashboard
 **When** I upload an OSCAL file (JSON, YAML, or XML)
 **Then** system:
+
 - Validates the file format
 - Parses all SSP data
 - Creates new SSP record with imported data
@@ -1193,6 +1261,7 @@ So that **I can continue work started elsewhere**.
 **Prerequisites:** Story 6.5
 
 **Technical Notes:**
+
 - Build src/lib/oscal/parser.ts
 - Handle format detection automatically
 - Reference: FR39, FR40
@@ -1210,6 +1279,7 @@ So that **I can fix issues with my file**.
 **Given** I upload an invalid OSCAL file
 **When** import validation runs
 **Then** I see:
+
 - Specific error messages (e.g., "Missing required field: system-name")
 - Line numbers for XML/JSON errors
 - Suggestions for fixes
@@ -1223,6 +1293,7 @@ So that **I can fix issues with my file**.
 **Prerequisites:** Story 6.6
 
 **Technical Notes:**
+
 - Distinguish errors (blocking) from warnings (non-blocking)
 - Provide actionable guidance per error type
 - Reference: FR40, FR41
@@ -1262,6 +1333,7 @@ So that **CLI can be customized per user**.
 **Prerequisites:** Story 1.4
 
 **Technical Notes:**
+
 - No authentication needed for local file access
 - Config file at ~/.ssp-gen/config.json
 - Optional OpenAI API key for AI suggestions
@@ -1290,6 +1362,7 @@ So that **I can script SSP creation**.
 **Prerequisites:** Story 7.1
 
 **Technical Notes:**
+
 - Create JSON file matching Web UI format exactly
 - Generate UUID for project ID
 - Use cobra package for CLI framework
@@ -1317,6 +1390,7 @@ So that **I can automate compliance documentation**.
 **Prerequisites:** Story 7.2
 
 **Technical Notes:**
+
 - Direct JSON file manipulation
 - Support --statement-file ./ac-1.md for long statements
 - Validate control ID against embedded catalog
@@ -1344,6 +1418,7 @@ So that **I can generate documents in CI/CD**.
 **Prerequisites:** Story 7.2
 
 **Technical Notes:**
+
 - Implement OSCAL generation in Go
 - Word/PDF export may require external tools or be Web UI only
 - Reference: FR35
@@ -1361,6 +1436,7 @@ So that **I can check compliance in CI/CD**.
 **Given** I have an SSP project or OSCAL file
 **When** I run `ssp validate [--project <id>]` or `ssp validate ./ssp.json`
 **Then** validation runs and outputs:
+
 - "Valid" with exit code 0, or
 - Error list with exit code 1
 
@@ -1370,6 +1446,7 @@ So that **I can check compliance in CI/CD**.
 **Prerequisites:** Story 7.2
 
 **Technical Notes:**
+
 - Embed OSCAL JSON Schema in binary
 - Use gojsonschema for validation
 - Reference: FR36
@@ -1396,6 +1473,7 @@ So that **I can migrate existing SSPs**.
 **Prerequisites:** Story 7.1
 
 **Technical Notes:**
+
 - Parse OSCAL JSON/YAML formats
 - Map to internal SSP structure
 - Reference: FR33, FR38
@@ -1423,6 +1501,7 @@ So that **control implementations are pre-filled**.
 **Given** I am in the SSP wizard Step 4
 **When** I open the Tool Library
 **Then** I see a grid of security tools:
+
 - Logo, name, description
 - Badge showing "X controls mapped"
 - Categories: vulnerability scanner, SAST, secrets detection, etc.
@@ -1433,6 +1512,7 @@ So that **control implementations are pre-filled**.
 **Prerequisites:** Story 5.6
 
 **Technical Notes:**
+
 - Seed 20+ common tools (Trivy, Semgrep, Gitleaks, etc.)
 - Store in Tool and ToolControlMapping tables
 - Reference: UX Design spec section 2.5
@@ -1450,6 +1530,7 @@ So that **I don't have to write from scratch**.
 **Given** I select a tool (e.g., Trivy)
 **When** mappings load
 **Then** I see Implementation Statement Cards for each mapped control:
+
 - Control ID and title
 - Pre-written implementation statement
 - Confidence indicator (High/Medium/Low)
@@ -1461,6 +1542,7 @@ So that **I don't have to write from scratch**.
 **Prerequisites:** Story 8.1
 
 **Technical Notes:**
+
 - Query ToolControlMapping table
 - Show in split-panel view per UX spec
 - Reference: Architecture doc lines 269-315
@@ -1492,6 +1574,7 @@ So that **I control what goes into my SSP**.
 **Prerequisites:** Story 8.2
 
 **Technical Notes:**
+
 - Use shadcn Dialog for approve confirmation
 - Use shadcn Sheet for modify editor
 - Reference: FR47, UX Design spec section 2.5
@@ -1509,11 +1592,13 @@ So that **I get help even for tools not in the library**.
 **Given** I am writing a control implementation
 **When** I click "Get AI Suggestion"
 **Then** system generates suggestion based on:
+
 - System description from SSP
 - Control requirements
 - Selected tools and technologies
 
 **And** suggestion displays with:
+
 - Confidence level (High/Medium/Low)
 - Reasoning ("Based on your use of AWS and Trivy...")
 - Edit controls before accepting
@@ -1521,6 +1606,7 @@ So that **I get help even for tools not in the library**.
 **Prerequisites:** Story 8.2, Story 5.7
 
 **Technical Notes:**
+
 - Build src/lib/ai/suggestions.ts
 - Use OpenAI GPT-4 API
 - Include confidence scoring logic
@@ -1539,12 +1625,14 @@ So that **suggestions improve over time**.
 **Given** user modifies an AI suggestion
 **When** they save the modification
 **Then** system logs:
+
 - Original suggestion
 - User's modification
 - Control context
 - Acceptance/rejection rate
 
 **And** this data is used to:
+
 - Improve ToolControlMapping templates
 - Train future suggestion prompts
 - Flag low-confidence mappings for review
@@ -1552,6 +1640,7 @@ So that **suggestions improve over time**.
 **Prerequisites:** Story 8.3
 
 **Technical Notes:**
+
 - Create AiSuggestionFeedback table
 - Aggregate feedback for mapping improvements
 - Reference: FR49
@@ -1560,57 +1649,57 @@ So that **suggestions improve over time**.
 
 ## FR Coverage Matrix
 
-| FR | Description | Epic | Story |
-|----|-------------|------|-------|
-| FR1 | Create accounts and authenticate | Epic 2 | 2.1, 2.2 |
-| FR2 | Manage profile and preferences | Epic 2 | 2.3 |
-| FR3 | Role-based access control | Epic 2 | 2.4 |
-| FR4 | Create new SSP projects | Epic 4 | 4.2 |
-| FR5 | List and search SSP projects | Epic 4 | 4.1, 4.3 |
-| FR6 | Duplicate SSP as template | Epic 4 | 4.4 |
-| FR7 | Archive or delete SSP | Epic 4 | 4.5 |
-| FR8 | Save and resume work | Epic 5 | 5.1, 5.8 |
-| FR9 | Display NIST 800-53 catalog | Epic 3 | 3.1, 3.3 |
-| FR10 | Browse controls by family | Epic 3 | 3.3 |
-| FR11 | Search controls | Epic 3 | 3.4 |
-| FR12 | View control details | Epic 3 | 3.5 |
-| FR13 | Display baseline applicability | Epic 3 | 3.3, 3.6 |
-| FR14 | Input system identification | Epic 5 | 5.2 |
-| FR15 | Define system boundary | Epic 5 | 5.3 |
-| FR16 | Specify security categorization | Epic 5 | 5.4 |
-| FR17 | Document system environment | Epic 5 | 5.5 |
-| FR18 | Identify system owners | Epic 5 | 5.5 |
-| FR19 | Select baseline | Epic 5 | 5.4 |
-| FR20 | Auto-load baseline controls | Epic 5 | 5.6 |
-| FR21 | Set implementation status | Epic 5 | 5.7 |
-| FR22 | Write implementation statements | Epic 5 | 5.7 |
-| FR23 | Customize control parameters | Epic 5 | 5.7 |
-| FR24 | Mark controls as inherited | Epic 5 | 5.7 |
-| FR25 | Attach evidence/references | Epic 5 | 5.7 |
-| FR26 | Track progress by family | Epic 5 | 5.6 |
-| FR27 | Export to OSCAL format | Epic 6 | 6.1, 6.2 |
-| FR28 | Export to Word format | Epic 6 | 6.3 |
-| FR29 | Export to PDF format | Epic 6 | 6.4 |
-| FR30 | Validate against OSCAL schema | Epic 6 | 6.5 |
-| FR31 | Report validation errors | Epic 6 | 6.5 |
-| FR32 | CLI init projects | Epic 7 | 7.2 |
-| FR33 | CLI import OSCAL files | Epic 7 | 7.6 |
-| FR34 | CLI update control status | Epic 7 | 7.3 |
-| FR35 | CLI export all formats | Epic 7 | 7.4 |
-| FR36 | CLI validate SSP | Epic 7 | 7.5 |
-| FR37 | CLI config via file/env | Epic 7 | 7.1 |
-| FR38 | CLI machine-readable output | Epic 7 | 7.4, 7.5, 7.6 |
-| FR39 | Import OSCAL SSP files | Epic 6 | 6.6 |
-| FR40 | Validate imported files | Epic 6 | 6.7 |
-| FR41 | Update imported SSPs | Epic 6 | 6.7 |
-| FR42 | Display FedRAMP baselines | Epic 3 | 3.2 |
-| FR43 | Select FedRAMP baseline | Epic 3 | 3.6 |
-| FR44 | FedRAMP parameters/extensions | Epic 3 | 3.2 |
-| FR45 | Export FedRAMP OSCAL | Epic 6 | 6.2 |
-| FR46 | AI implementation suggestions | Epic 8 | 8.4 |
-| FR47 | Accept/modify/reject suggestions | Epic 8 | 8.3 |
-| FR48 | Display confidence and reasoning | Epic 8 | 8.4 |
-| FR49 | Learn from user modifications | Epic 8 | 8.5 |
+| FR   | Description                      | Epic   | Story         |
+| ---- | -------------------------------- | ------ | ------------- |
+| FR1  | Create accounts and authenticate | Epic 2 | 2.1, 2.2      |
+| FR2  | Manage profile and preferences   | Epic 2 | 2.3           |
+| FR3  | Role-based access control        | Epic 2 | 2.4           |
+| FR4  | Create new SSP projects          | Epic 4 | 4.2           |
+| FR5  | List and search SSP projects     | Epic 4 | 4.1, 4.3      |
+| FR6  | Duplicate SSP as template        | Epic 4 | 4.4           |
+| FR7  | Archive or delete SSP            | Epic 4 | 4.5           |
+| FR8  | Save and resume work             | Epic 5 | 5.1, 5.8      |
+| FR9  | Display NIST 800-53 catalog      | Epic 3 | 3.1, 3.3      |
+| FR10 | Browse controls by family        | Epic 3 | 3.3           |
+| FR11 | Search controls                  | Epic 3 | 3.4           |
+| FR12 | View control details             | Epic 3 | 3.5           |
+| FR13 | Display baseline applicability   | Epic 3 | 3.3, 3.6      |
+| FR14 | Input system identification      | Epic 5 | 5.2           |
+| FR15 | Define system boundary           | Epic 5 | 5.3           |
+| FR16 | Specify security categorization  | Epic 5 | 5.4           |
+| FR17 | Document system environment      | Epic 5 | 5.5           |
+| FR18 | Identify system owners           | Epic 5 | 5.5           |
+| FR19 | Select baseline                  | Epic 5 | 5.4           |
+| FR20 | Auto-load baseline controls      | Epic 5 | 5.6           |
+| FR21 | Set implementation status        | Epic 5 | 5.7           |
+| FR22 | Write implementation statements  | Epic 5 | 5.7           |
+| FR23 | Customize control parameters     | Epic 5 | 5.7           |
+| FR24 | Mark controls as inherited       | Epic 5 | 5.7           |
+| FR25 | Attach evidence/references       | Epic 5 | 5.7           |
+| FR26 | Track progress by family         | Epic 5 | 5.6           |
+| FR27 | Export to OSCAL format           | Epic 6 | 6.1, 6.2      |
+| FR28 | Export to Word format            | Epic 6 | 6.3           |
+| FR29 | Export to PDF format             | Epic 6 | 6.4           |
+| FR30 | Validate against OSCAL schema    | Epic 6 | 6.5           |
+| FR31 | Report validation errors         | Epic 6 | 6.5           |
+| FR32 | CLI init projects                | Epic 7 | 7.2           |
+| FR33 | CLI import OSCAL files           | Epic 7 | 7.6           |
+| FR34 | CLI update control status        | Epic 7 | 7.3           |
+| FR35 | CLI export all formats           | Epic 7 | 7.4           |
+| FR36 | CLI validate SSP                 | Epic 7 | 7.5           |
+| FR37 | CLI config via file/env          | Epic 7 | 7.1           |
+| FR38 | CLI machine-readable output      | Epic 7 | 7.4, 7.5, 7.6 |
+| FR39 | Import OSCAL SSP files           | Epic 6 | 6.6           |
+| FR40 | Validate imported files          | Epic 6 | 6.7           |
+| FR41 | Update imported SSPs             | Epic 6 | 6.7           |
+| FR42 | Display FedRAMP baselines        | Epic 3 | 3.2           |
+| FR43 | Select FedRAMP baseline          | Epic 3 | 3.6           |
+| FR44 | FedRAMP parameters/extensions    | Epic 3 | 3.2           |
+| FR45 | Export FedRAMP OSCAL             | Epic 6 | 6.2           |
+| FR46 | AI implementation suggestions    | Epic 8 | 8.4           |
+| FR47 | Accept/modify/reject suggestions | Epic 8 | 8.3           |
+| FR48 | Display confidence and reasoning | Epic 8 | 8.4           |
+| FR49 | Learn from user modifications    | Epic 8 | 8.5           |
 
 ---
 
@@ -1637,6 +1726,7 @@ So that **I have authoritative control data**.
 **Given** the NIST OSCAL content repository is accessible
 **When** running the download script
 **Then** the following are downloaded to `data/oscal-raw/`:
+
 - NIST 800-53 Rev 5 catalog (JSON format)
 - NIST 800-53 Rev 5 baselines (Low, Moderate, High)
 - Control enhancement data
@@ -1647,6 +1737,7 @@ So that **I have authoritative control data**.
 **Prerequisites:** None (first story)
 
 **Technical Notes:**
+
 - Source: https://github.com/usnistgov/oscal-content
 - Use curl/wget in script or fetch in Node.js
 - Store raw OSCAL in `data/oscal-raw/` (gitignored for size)
@@ -1665,6 +1756,7 @@ So that **the UI can efficiently query and display controls**.
 **Given** raw OSCAL catalog data exists
 **When** running the transform script
 **Then** `public/data/nist-800-53-rev5.json` is generated with:
+
 - All 20 control families (AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR)
 - All controls with enhancements flattened for search
 - Baseline applicability flags (Low: boolean, Moderate: boolean, High: boolean)
@@ -1676,6 +1768,7 @@ So that **the UI can efficiently query and display controls**.
 **Prerequisites:** Story 9.1
 
 **Technical Notes:**
+
 - Create `scripts/transform-oscal.ts` using TypeScript
 - Map OSCAL structure to simplified app schema
 - Include control parameters and guidance text
@@ -1694,6 +1787,7 @@ So that **browsing by family is performant**.
 **Given** transformed control catalog exists
 **When** generating the family index
 **Then** `public/data/control-families.json` contains:
+
 - List of all 20 families with metadata
 - Control count per family per baseline
 - Family descriptions and abbreviations
@@ -1704,6 +1798,7 @@ So that **browsing by family is performant**.
 **Prerequisites:** Story 9.2
 
 **Technical Notes:**
+
 - Family IDs: AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PM, PS, PT, RA, SA, SC, SI, SR
 - Include total counts and baseline-specific counts
 - Reference: FR10 (browse by family)
@@ -1721,6 +1816,7 @@ So that **data updates are automated and reproducible**.
 **Given** the project has source code and scripts
 **When** running `npm run build:data`
 **Then** the following execute in sequence:
+
 1. Download latest OSCAL from NIST (if needed/forced)
 2. Transform to application schema
 3. Generate family index
@@ -1734,6 +1830,7 @@ So that **data updates are automated and reproducible**.
 **Prerequisites:** Story 9.1, 9.2, 9.3
 
 **Technical Notes:**
+
 - Create `scripts/build-data.ts` as orchestrator
 - Add npm script: `"build:data": "tsx scripts/build-data.ts"`
 - Include in CI to validate data files exist and are valid
@@ -1751,6 +1848,7 @@ So that **data updates are automated and reproducible**.
 - **Context Integrated:** PRD + UX Design + Architecture
 
 **Architecture Summary:**
+
 - **Web UI:** Vite + React + MUI + AWS Cognito (template infrastructure)
 - **Data Storage:** Local JSON files (~/.ssp-gen/projects/)
 - **CLI:** Go binary (separate repository) with direct file access
@@ -1767,12 +1865,14 @@ So that **data updates are automated and reproducible**.
 7. **Epic 8** (AI) - Enhancement, depends on Epic 5
 
 **Key Technical Notes:**
+
 - Story 1.4 (Go CLI repo) can be developed independently in parallel
 - Stories reference MUI components instead of shadcn/ui
 - Stories reference JSON file storage instead of PostgreSQL/Prisma
 - Stories reference AWS Cognito instead of NextAuth
 
 **Next Steps:**
+
 - Run `sprint-planning` workflow to generate sprint status file
 - Run `create-story` workflow to generate detailed story files
 - Begin implementation with Epic 1, Story 1.1

@@ -11,6 +11,7 @@ so that **I have a type-safe full-stack foundation**.
 ## Acceptance Criteria
 
 1. **Given** no existing project **When** running the T3 initialization commands **Then** a new Next.js 15 project is created with:
+
    - TypeScript strict mode enabled
    - tRPC v11 configured with React Query
    - Prisma ORM initialized
@@ -21,6 +22,7 @@ so that **I have a type-safe full-stack foundation**.
 2. **Given** the project is initialized **When** reviewing the project structure **Then** the directory layout matches the Architecture spec section "Project Structure" (lines 72-186)
 
 3. **Given** the T3 app is created **When** checking configuration **Then** the project uses:
+
    - Next.js App Router (not Pages Router)
    - Environment validation with t3-env
    - TypeScript 5.x in strict mode
@@ -32,28 +34,33 @@ so that **I have a type-safe full-stack foundation**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Create T3 App (AC: #1)
+
   - [ ] 1.1: Run `npm create t3-app@latest ssp-generator -- --typescript --tailwind --trpc --prisma --nextAuth --appRouter`
   - [ ] 1.2: Navigate to project directory
   - [ ] 1.3: Verify all selected features are enabled in generated config
 
 - [ ] Task 2: Verify Project Structure (AC: #2)
+
   - [ ] 2.1: Confirm `src/app/` directory structure exists (App Router)
   - [ ] 2.2: Confirm `src/server/api/` directory contains tRPC routers
   - [ ] 2.3: Confirm `prisma/schema.prisma` file exists
   - [ ] 2.4: Confirm `src/env.js` for t3-env validation exists
 
 - [ ] Task 3: Validate TypeScript Configuration (AC: #3)
+
   - [ ] 3.1: Verify `tsconfig.json` has `strict: true`
   - [ ] 3.2: Verify TypeScript version is 5.x
   - [ ] 3.3: Run `npx tsc --noEmit` to ensure no type errors
 
 - [ ] Task 4: Test Development Server (AC: #4)
+
   - [ ] 4.1: Run `npm install` to install all dependencies
   - [ ] 4.2: Run `npm run dev`
   - [ ] 4.3: Access `http://localhost:3000` and verify default page loads
   - [ ] 4.4: Verify no console errors in terminal or browser
 
 - [ ] Task 5: Run Code Quality Checks (AC: #5)
+
   - [ ] 5.1: Run `npm run lint` - verify passes
   - [ ] 5.2: Run `npm run typecheck` (or equivalent) - verify passes
   - [ ] 5.3: Fix any linting or type errors if present
@@ -79,18 +86,19 @@ The architecture specifies an **API-first design** where both Web UI and CLI con
 
 ### Key Technology Versions (from Architecture ADR)
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js | 15.x | Framework with App Router |
-| TypeScript | 5.x | Type safety |
-| tRPC | 11.x | API layer |
-| Prisma | 6.x | Database ORM |
-| NextAuth.js | 5.x | Authentication |
-| Tailwind CSS | 4.x | Styling |
+| Technology   | Version | Purpose                   |
+| ------------ | ------- | ------------------------- |
+| Next.js      | 15.x    | Framework with App Router |
+| TypeScript   | 5.x     | Type safety               |
+| tRPC         | 11.x    | API layer                 |
+| Prisma       | 6.x     | Database ORM              |
+| NextAuth.js  | 5.x     | Authentication            |
+| Tailwind CSS | 4.x     | Styling                   |
 
 ### Project Structure Notes
 
 This story creates the base project structure. Key directories established:
+
 - `src/app/` - Next.js App Router pages
 - `src/server/api/` - tRPC routers
 - `src/components/` - React components (empty initially)
@@ -98,6 +106,7 @@ This story creates the base project structure. Key directories established:
 - `public/` - Static assets
 
 Subsequent stories will add:
+
 - `packages/cli/` - CLI tool (Story 1.4)
 - `src/components/ui/` - shadcn components (Story 1.2)
 - `data/controls/` - NIST control data (Story 3.1)
@@ -105,6 +114,7 @@ Subsequent stories will add:
 ### Environment Variables Required
 
 From Architecture doc (lines 736-744):
+
 ```bash
 DATABASE_URL="postgresql://user:password@localhost:5432/ssp_generator"
 NEXTAUTH_SECRET="your-secret-here"
@@ -138,6 +148,6 @@ Note: `OPENAI_API_KEY` is needed for AI features (Epic 8) but not required for t
 
 ## Change Log
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author   | Change                                               |
+| ---------- | -------- | ---------------------------------------------------- |
 | 2025-11-26 | SM Agent | Story drafted from epics.md and architecture context |

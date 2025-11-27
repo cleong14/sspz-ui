@@ -100,6 +100,7 @@ You may need to run sprint-planning to refresh tracking.
 **Next Steps:**
 
 1. **Recommended:** Run `story-context` workflow to generate implementation context
+
    - This creates a comprehensive context XML for the DEV agent
    - Includes relevant architecture, dependencies, and existing code
 

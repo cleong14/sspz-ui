@@ -116,11 +116,13 @@ Let the conversation flow naturally. Build a shared vision of what "better" look
 <action>For each improvement area, facilitate collaboratively:
 
 1. **Explain the current state and why it matters**
+
    - Show relevant sections of the module
    - Explain how it works now and implications
    - Connect to user's goals from step 2
 
 2. **Propose improvements with rationale**
+
    - Suggest specific changes that align with best practices
    - Explain WHY each change helps
    - Provide examples from reference modules: {bmm_module_dir}, {bmb_module_dir}, {cis_module_dir}
@@ -129,6 +131,7 @@ Let the conversation flow naturally. Build a shared vision of what "better" look
    - Reference the structure guide's patterns naturally
 
 3. **Collaborate on the approach**
+
    - Ask if the proposed change addresses their need
    - Invite modifications or alternative approaches
    - Explain tradeoffs when relevant

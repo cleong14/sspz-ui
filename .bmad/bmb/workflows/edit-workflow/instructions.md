@@ -125,11 +125,13 @@ Let the conversation flow naturally. Build a shared vision of what "better" look
 <action>For each improvement area, facilitate collaboratively:
 
 1. **Explain the current state and why it matters**
+
    - Show relevant sections of the workflow
    - Explain how it works now and implications
    - Connect to user's goals from step 2
 
 2. **Propose improvements with rationale**
+
    - Suggest specific changes that align with best practices
    - Explain WHY each change helps
    - Provide examples from the loaded guides when helpful
@@ -137,6 +139,7 @@ Let the conversation flow naturally. Build a shared vision of what "better" look
    - Reference the creation guide's patterns naturally
 
 3. **Collaborate on the approach**
+
    - Ask if the proposed change addresses their need
    - Invite modifications or alternative approaches
    - Explain tradeoffs when relevant

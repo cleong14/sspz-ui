@@ -15,110 +15,110 @@
 #   - {file-path}: File created/found (e.g., "docs/prd.md")
 #   - skipped: Optional/conditional workflow that was skipped
 
-generated: "2025-11-26"
-project: "sspz-ui"
-project_type: "SSP Generator Feature"
-selected_track: "bmad-method"
-field_type: "brownfield"
-workflow_path: "method-brownfield.yaml"
+generated: '2025-11-26'
+project: 'sspz-ui'
+project_type: 'SSP Generator Feature'
+selected_track: 'bmad-method'
+field_type: 'brownfield'
+workflow_path: 'method-brownfield.yaml'
 
 workflow_status:
   # Prerequisite: Documentation (for brownfield projects)
   prerequisite:
-    name: "Documentation"
-    note: "Skipped - codebase is template scaffold with no SSP-related code"
+    name: 'Documentation'
+    note: 'Skipped - codebase is template scaffold with no SSP-related code'
     workflows:
-      - id: "document-project"
-        status: "skipped"
-        agent: "analyst"
-        command: "*document-project"
-        note: "Not needed - template codebase has no relevant SSP generator code"
+      - id: 'document-project'
+        status: 'skipped'
+        agent: 'analyst'
+        command: '*document-project'
+        note: 'Not needed - template codebase has no relevant SSP generator code'
 
   # Phase 0: Discovery (Optional)
   phase_0:
-    name: "Discovery"
+    name: 'Discovery'
     optional: true
     workflows:
-      - id: "brainstorm-project"
-        status: "skipped"
-        agent: "analyst"
-        command: "*brainstorm-project"
+      - id: 'brainstorm-project'
+        status: 'skipped'
+        agent: 'analyst'
+        command: '*brainstorm-project'
 
-      - id: "research"
-        status: "docs/research-ssp-generator-2025-11-26.md"
-        agent: "analyst"
-        command: "*research"
+      - id: 'research'
+        status: 'docs/research-ssp-generator-2025-11-26.md'
+        agent: 'analyst'
+        command: '*research'
 
-      - id: "product-brief"
-        status: "skipped"
-        agent: "analyst"
-        command: "*product-brief"
+      - id: 'product-brief'
+        status: 'skipped'
+        agent: 'analyst'
+        command: '*product-brief'
 
   # Phase 1: Planning (Required)
   phase_1:
-    name: "Planning"
+    name: 'Planning'
     required: true
     workflows:
-      - id: "prd"
-        status: "docs/prd.md"
-        agent: "pm"
-        command: "*prd"
-        note: "Completed with Party Mode review - FedRAMP + AI-assist in MVP"
+      - id: 'prd'
+        status: 'docs/prd.md'
+        agent: 'pm'
+        command: '*prd'
+        note: 'Completed with Party Mode review - FedRAMP + AI-assist in MVP'
 
-      - id: "validate-prd"
-        status: "optional"
-        agent: "pm"
-        command: "*validate-prd"
+      - id: 'validate-prd'
+        status: 'optional'
+        agent: 'pm'
+        command: '*validate-prd'
 
-      - id: "create-design"
-        status: "docs/ux-design-specification.md"
-        condition: "if_has_ui"
-        agent: "ux-designer"
-        command: "*create-design"
-        note: "Complete - includes color themes HTML and design directions HTML"
+      - id: 'create-design'
+        status: 'docs/ux-design-specification.md'
+        condition: 'if_has_ui'
+        agent: 'ux-designer'
+        command: '*create-design'
+        note: 'Complete - includes color themes HTML and design directions HTML'
 
   # Phase 2: Solutioning (Required)
   phase_2:
-    name: "Solutioning"
+    name: 'Solutioning'
     required: true
     workflows:
-      - id: "create-architecture"
-        status: "docs/architecture.md"
-        agent: "architect"
-        command: "*create-architecture"
-        output: "Integration architecture - solution design for SSP generator"
-        note: "Complete - T3 Stack + CLI monorepo architecture"
+      - id: 'create-architecture'
+        status: 'docs/architecture.md'
+        agent: 'architect'
+        command: '*create-architecture'
+        output: 'Integration architecture - solution design for SSP generator'
+        note: 'Complete - T3 Stack + CLI monorepo architecture'
 
-      - id: "create-epics-and-stories"
-        status: "required"
-        agent: "pm"
-        command: "*create-epics-and-stories"
-        note: "Break down PRD into implementable epics and stories"
+      - id: 'create-epics-and-stories'
+        status: 'required'
+        agent: 'pm'
+        command: '*create-epics-and-stories'
+        note: 'Break down PRD into implementable epics and stories'
 
-      - id: "test-design"
-        status: "recommended"
-        agent: "tea"
-        command: "*test-design"
-        output: "System-level testability review"
+      - id: 'test-design'
+        status: 'recommended'
+        agent: 'tea'
+        command: '*test-design'
+        output: 'System-level testability review'
 
-      - id: "validate-architecture"
-        status: "optional"
-        agent: "architect"
-        command: "*validate-architecture"
+      - id: 'validate-architecture'
+        status: 'optional'
+        agent: 'architect'
+        command: '*validate-architecture'
 
-      - id: "implementation-readiness"
-        status: "required"
-        agent: "architect"
-        command: "*implementation-readiness"
-        note: "Validates PRD + UX + Architecture + Epics cohesion"
+      - id: 'implementation-readiness'
+        status: 'required'
+        agent: 'architect'
+        command: '*implementation-readiness'
+        note: 'Validates PRD + UX + Architecture + Epics cohesion'
 
   # Phase 3: Implementation (Required)
   phase_3:
-    name: "Implementation"
+    name: 'Implementation'
     required: true
     workflows:
-      - id: "sprint-planning"
-        status: "required"
-        agent: "sm"
-        command: "*sprint-planning"
-        note: "Creates sprint plan with stories - tracked in sprint-status.yaml"
+      - id: 'sprint-planning'
+        status: 'required'
+        agent: 'sm'
+        command: '*sprint-planning'
+        note: 'Creates sprint plan with stories - tracked in sprint-status.yaml'

@@ -59,18 +59,21 @@ A good BMAD module should be:
 ## Module Architecture Questions
 
 1. **Module Identity**
+
    - Module code (kebab-case, e.g., "rpg-toolkit")
    - Module name (friendly, e.g., "RPG Toolkit")
    - Module purpose (one sentence)
    - Target audience
 
 2. **Agent Lineup**
+
    - Agent names and roles
    - Communication styles and personalities
    - Expertise areas
    - Command sets (what each agent can do)
 
 3. **Workflow Portfolio**
+
    - Document generation workflows
    - Action/automation workflows
    - Analysis/research workflows

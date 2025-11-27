@@ -65,11 +65,13 @@ Collaboratively define scope:
 Work with the user to establish:
 
 1. **Market Category Definition**
+
    - Primary category/industry
    - Adjacent or overlapping markets
    - Where this fits in the value chain
 
 2. **Geographic Scope**
+
    - Global, regional, or country-specific?
    - Primary markets vs. expansion markets
    - Regulatory considerations by region

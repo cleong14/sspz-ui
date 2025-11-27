@@ -18,45 +18,45 @@
 #   - complete: All stories in epic are done
 
 project: sspz-ui
-generated: "2025-11-27"
+generated: '2025-11-27'
 current_sprint: 1
 
 # Epic Overview
 epics:
   epic-1:
-    name: "Foundation & Infrastructure"
+    name: 'Foundation & Infrastructure'
     status: active
     stories: 6
   epic-2:
-    name: "User Authentication & Access"
+    name: 'User Authentication & Access'
     status: pending
     stories: 5
   epic-3:
-    name: "Control Catalog & Browsing"
+    name: 'Control Catalog & Browsing'
     status: pending
     stories: 6
   epic-4:
-    name: "SSP Project Management"
+    name: 'SSP Project Management'
     status: pending
     stories: 5
   epic-5:
-    name: "SSP Creation Workflow"
+    name: 'SSP Creation Workflow'
     status: pending
     stories: 8
   epic-6:
-    name: "Export & Import Engine"
+    name: 'Export & Import Engine'
     status: pending
     stories: 7
   epic-7:
-    name: "CLI Tool"
+    name: 'CLI Tool'
     status: pending
     stories: 6
   epic-8:
-    name: "AI-Assisted Generation"
+    name: 'AI-Assisted Generation'
     status: pending
     stories: 5
   epic-9:
-    name: "Control Catalog Data"
+    name: 'Control Catalog Data'
     status: active
     stories: 4
 
@@ -128,7 +128,7 @@ development_status:
   8-5-implement-feedback-learning-loop: backlog
 
   # Epic 9: Control Catalog Data
-  9-1-download-nist-oscal-catalog: ready-for-dev
+  9-1-download-nist-oscal-catalog: review
   9-2-transform-oscal-to-application-schema: drafted
   9-3-generate-control-family-index: drafted
   9-4-create-build-script-for-data-pipeline: drafted

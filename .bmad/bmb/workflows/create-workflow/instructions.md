@@ -315,12 +315,14 @@ Load and use the template at: {template_instructions}
 Generate the instructions.md file following the workflow creation guide:
 
 1. ALWAYS include critical headers:
+
    - Workflow engine reference: {project-root}/.bmad/core/tasks/workflow.xml
    - workflow.yaml reference: must be loaded and processed
 
 2. Structure with <workflow> tags containing all steps
 
 3. For each step from design phase, follow guide conventions:
+
    - Step attributes: n="X" goal="clear goal statement"
    - Optional steps: optional="true"
    - Repeating: repeat="3" or repeat="for-each-X" or repeat="until-approved"
@@ -328,6 +330,7 @@ Generate the instructions.md file following the workflow creation guide:
    - Sub-steps: Use 3a, 3b notation
 
 4. Use proper XML tags from guide:
+
    - Execution: <action>, <check>, <ask>, <goto>, <invoke-workflow>
    - Output: <template-output>, <invoke-task halt="true">{project-root}/.bmad/core/tasks/advanced-elicitation.xml</invoke-task>, <critical>, <example>
    - Flow: <loop>, <break>, <continue>
@@ -496,6 +499,7 @@ Generate the template.md file following guide conventions:
    ```
 
    Note: {{date}} and {{user_name}} are optional in headers. Primary purpose of these variables:
+
    - {{date}} - Gives agent current date awareness (not confused with training cutoff)
    - {{user_name}} - Optional author attribution
    - {{communication_language}} - NOT for document output! Tells agent how to communicate during execution
@@ -544,11 +548,13 @@ Create checklist.md following guide best practices:
    ✅ "- [ ] Each function has JSDoc comments with parameters and return types"
 
 2. Group checks logically:
+
    - Structure: All sections present, no placeholders, proper formatting
    - Content Quality: Clear and specific, technically accurate, consistent terminology
    - Completeness: Ready for next phase, dependencies documented, action items defined
 
 3. Include workflow-specific validations based on type:
+
    - Document workflows: Template variables mapped, sections complete
    - Action workflows: Actions clearly defined, error handling specified
    - Interactive: User prompts clear, decision points documented
@@ -623,6 +629,7 @@ If yes:
 
 1. Copy core workflow metadata (name, description, author)
 2. Convert all file paths to .bmad/-relative paths:
+
    - Remove {project-root}/ prefix
    - Remove {config_source} references (use hardcoded values)
    - Example: "{project-root}/.bmad/bmm/workflows/x" → ".bmad/bmm/workflows/x"
@@ -630,6 +637,7 @@ If yes:
 3. List ALL referenced files by scanning:
 
    **Scan instructions.md for:**
+
    - File paths in <action> tags
    - Data files (CSV, JSON, YAML, etc.)
    - Validation/checklist files
@@ -638,10 +646,12 @@ If yes:
    - Shared templates or includes
 
    **Scan template.md for:**
+
    - Any includes or references to other files
    - Shared template fragments
 
    **Critical: Workflow Dependencies**
+
    - If instructions call another workflow, that workflow's yaml MUST be in web_bundle_files
    - Example: `<invoke-workflow>{project-root}/.bmad/core/workflows/x/workflow.yaml</invoke-workflow>`
      → Add ".bmad/core/workflows/x/workflow.yaml" to web_bundle_files

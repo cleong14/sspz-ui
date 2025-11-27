@@ -61,13 +61,13 @@ That's it! To execute, tell the BMAD agent: `workflow path/to/my-workflow/`
 
 ### Tasks vs Workflows
 
-| Aspect         | Task               | Workflow                      |
-| -------------- | ------------------ | ----------------------------- |
-| **Purpose**    | Single operation   | Multi-step process            |
-| **Format**     | XML                | Folder with YAML config       |
-| **Location**   | `/src/core/tasks/` | `/.bmad/*/workflows/` |
-| **User Input** | Minimal            | Extensive                     |
-| **Output**     | Variable           | Usually documents             |
+| Aspect         | Task               | Workflow                |
+| -------------- | ------------------ | ----------------------- |
+| **Purpose**    | Single operation   | Multi-step process      |
+| **Format**     | XML                | Folder with YAML config |
+| **Location**   | `/src/core/tasks/` | `/.bmad/*/workflows/`   |
+| **User Input** | Minimal            | Extensive               |
+| **Output**     | Variable           | Usually documents       |
 
 ### Workflow Types
 
@@ -1245,10 +1245,12 @@ web_bundle:
 ### Converting Existing Workflows
 
 1. **Remove Config Dependencies**:
+
    - Replace `{config_source}:variable` with hardcoded values
    - Convert `{project-root}/.bmad/` to `.bmad/`
 
 2. **Inventory All Files**:
+
    - Scan instructions.md for file references
    - Check template.md for includes
    - List all data files

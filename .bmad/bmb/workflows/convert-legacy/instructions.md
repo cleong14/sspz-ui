@@ -120,6 +120,7 @@ For Modules:
 <action>Transform v4 YAML agent to v6 YAML format:</action>
 
 1. Convert agent metadata structure:
+
    - v4 `agent.name` → v6 `agent.metadata.name`
    - v4 `agent.id` → v6 `agent.metadata.id`
    - v4 `agent.title` → v6 `agent.metadata.title`
@@ -127,12 +128,14 @@ For Modules:
    - Add v6 `agent.metadata.module` field
 
 2. Transform persona structure:
+
    - v4 `persona.role` → v6 `agent.persona.role` (keep as YAML string)
    - v4 `persona.style` → v6 `agent.persona.communication_style`
    - v4 `persona.identity` → v6 `agent.persona.identity`
    - v4 `persona.core_principles` → v6 `agent.persona.principles` (as array)
 
 3. Convert commands to menu:
+
    - v4 `commands:` list → v6 `agent.menu:` array
    - Each command becomes menu item with:
      - `trigger:` (without \* prefix - added at build)
@@ -142,6 +145,7 @@ For Modules:
    - Map template references to workflow invocations
 
 4. Add v6-specific sections (in YAML):
+
    - `agent.prompts:` array for inline prompts (if using action: "#id")
    - `agent.critical_actions:` array for startup requirements
    - `agent.activation_rules:` for universal agent rules
@@ -187,11 +191,13 @@ For Modules:
 <action>Convert v4 Template (YAML) to v6 Workflow:</action>
 
 1. Extract template metadata:
+
    - Template id, name, version → workflow.yaml name/description
    - Output settings → default_output_file
    - Workflow mode (interactive/yolo) → workflow settings
 
 2. Convert template sections to instructions.md:
+
    - Each YAML section → workflow step
    - `elicit: true` → `<invoke-task halt="true">{project-root}/.bmad/core/tasks/advanced-elicitation.xml</invoke-task>` tag
    - Conditional sections → `if="condition"` attribute
@@ -199,6 +205,7 @@ For Modules:
    - Section instructions → step content
 
 3. Extract template structure to template.md:
+
    - Section content fields → template structure
    - {{variables}} → preserve as-is
    - Nested sections → hierarchical markdown
@@ -252,12 +259,14 @@ date: system-generated
 <action>Convert v4 Task (Markdown) to v6 Workflow:</action>
 
 1. Analyze task purpose and output:
+
    - Does it generate documents? → Create template.md
    - Does it process data? → Action workflow
    - Does it guide user interaction? → Interactive workflow
    - Check for file outputs, templates, or document generation
 
 2. Extract task components:
+
    - Execution notices and critical rules → workflow.yaml metadata
    - Step-by-step instructions → instructions.md steps
    - Decision trees and branching → flow control tags
@@ -265,6 +274,7 @@ date: system-generated
 
 3. Based on confirmed workflow type:
    <check if="Document workflow">
+
    - Create template.md from output patterns
    - Map generation steps to instructions
    - Add template-output tags for sections

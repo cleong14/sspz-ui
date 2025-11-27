@@ -244,17 +244,20 @@ Let the conversation flow naturally. Build a shared vision of what "better" look
 <action>For each improvement area, facilitate collaboratively:
 
 1. **Explain the current state and why it matters**
+
    - Show relevant sections of the agent
    - Explain how it works now and implications
    - Connect to user's goals from step 2
 
 2. **Propose improvements with rationale**
+
    - Suggest specific changes that align with best practices
    - Explain WHY each change helps
    - Provide examples from the loaded guides when helpful
    - Show before/after comparisons for clarity
 
 3. **Collaborate on the approach**
+
    - Ask if the proposed change addresses their need
    - Invite modifications or alternative approaches
    - Explain tradeoffs when relevant
@@ -349,6 +352,7 @@ communication_style: 'Experienced analyst who uses systematic approaches and ens
 **Step 2: Extract Non-Style Content to Proper Fields**
 
 - Create a working copy with sections:
+
   - ROLE (capabilities/skills)
   - IDENTITY (background/context)
   - PURE STYLE (verbal patterns only)
@@ -457,11 +461,13 @@ persona:
 **Understanding the Modern Types:**
 
 - **Simple** = Self-contained in single .agent.yaml file
+
   - NOT capability-limited! Can be as powerful as any agent
   - Architecture choice: everything in one file
   - Example: commit-poet (reference_simple_agent)
 
 - **Expert** = Includes sidecar files (templates, docs, knowledge bases)
+
   - Folder structure with .agent.yaml + additional files
   - Sidecar files referenced in menu items or prompts
   - Example: journal-keeper (reference_expert_agent)
@@ -478,17 +484,20 @@ persona:
 If agent uses "full/hybrid/standalone" terminology:
 
 1. **Identify current structure:**
+
    - Single file? → Probably Simple
    - Has sidecar files? → Probably Expert
    - Part of module ecosystem? → Probably Module
    - Multiple could apply? → Choose based on PRIMARY characteristic
 
 2. **Update any references in comments/docs:**
+
    - Change "full agent" → Simple or Module (depending on context)
    - Change "hybrid agent" → Usually Simple or Expert
    - Change "standalone agent" → Usually Simple
 
 3. **Verify type choice:**
+
    - Read {understanding_agent_types} together
    - Compare against reference agents
    - Confirm structure matches chosen type

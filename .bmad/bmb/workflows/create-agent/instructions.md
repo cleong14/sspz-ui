@@ -42,10 +42,12 @@
 **Agent Type Decision Framework:**
 
 - **Simple Agent** - Self-contained (all in YAML), stateless, no persistent memory
+
   - Choose when: Single-purpose utility, each run independent, logic fits in YAML
   - CAN write to {output_folder}, update files, execute commands
 
 - **Expert Agent** - Personal sidecar files, persistent memory, domain-restricted
+
   - Choose when: Needs to remember across sessions, personal knowledge base, learning over time
   - CAN have personal workflows in sidecar if critical_actions loads workflow engine
 
@@ -179,6 +181,7 @@ DO write: "Systematic and probing. Structures findings hierarchically." ← Pure
 <ask>How should this agent guide users - with adaptive conversation (intent-based) or structured steps (prescriptive)?</ask>
 
 - **Intent-Based (Recommended)** - Agent adapts conversation based on user context, skill level, and needs
+
   - Example: "Guide user to understand their problem by exploring symptoms, attempts, and desired outcomes"
   - Flexible, conversational, responsive to user's unique situation
 

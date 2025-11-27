@@ -13,6 +13,7 @@ so that **data updates are automated and reproducible**.
 1. **Given** the project has all data scripts from Stories 9.1-9.3
    **When** running `npm run data:build`
    **Then** the following execute in sequence:
+
    1. Download latest OSCAL from NIST (if needed or forced)
    2. Transform to application schema
    3. Generate family index
@@ -22,6 +23,7 @@ so that **data updates are automated and reproducible**.
 2. **Given** data pipeline runs successfully
    **When** checking output
    **Then** summary report shows:
+
    - Files generated with sizes
    - Control counts (total, by baseline)
    - Family counts
@@ -46,24 +48,28 @@ so that **data updates are automated and reproducible**.
 ## Tasks / Subtasks
 
 - [ ] Task 1: Create orchestrator script (AC: #1, #5)
+
   - [ ] 1.1: Create `scripts/build-data.ts` as main entry point
   - [ ] 1.2: Import and sequence download, transform, and index scripts
   - [ ] 1.3: Implement error handling with clear messages
   - [ ] 1.4: Track execution time per step
 
 - [ ] Task 2: Implement CLI flags (AC: #3, #4)
+
   - [ ] 2.1: Add `--force` flag to bypass cache and regenerate
   - [ ] 2.2: Add `--validate-only` flag for CI validation
   - [ ] 2.3: Add `--verbose` flag for detailed logging
   - [ ] 2.4: Use `process.argv` or simple arg parsing
 
 - [ ] Task 3: Implement validation step (AC: #4, #6)
+
   - [ ] 3.1: Verify `public/data/nist-800-53-rev5.json` exists and is valid JSON
   - [ ] 3.2: Verify `public/data/control-families.json` exists and is valid JSON
   - [ ] 3.3: Verify control counts match between catalog and family index
   - [ ] 3.4: Verify all 20 families are present in index
 
 - [ ] Task 4: Implement summary report (AC: #2)
+
   - [ ] 4.1: Calculate and display file sizes
   - [ ] 4.2: Display control counts (total, per baseline)
   - [ ] 4.3: Display family count
@@ -71,11 +77,13 @@ so that **data updates are automated and reproducible**.
   - [ ] 4.5: Use clear formatting for terminal output
 
 - [ ] Task 5: Add npm scripts (AC: #1)
+
   - [ ] 5.1: Add `"data:build": "tsx scripts/build-data.ts"` to package.json
   - [ ] 5.2: Update existing individual scripts to be importable
   - [ ] 5.3: Consider adding `"prebuild": "npm run data:build -- --validate-only"` for CI
 
 - [ ] Task 6: CI Integration (AC: #6)
+
   - [ ] 6.1: Add data validation step to GitHub Actions workflow
   - [ ] 6.2: Ensure CI fails if data files are missing
   - [ ] 6.3: Document CI integration in README
@@ -91,6 +99,7 @@ so that **data updates are automated and reproducible**.
 ### Architecture Context
 
 This story completes Epic 9 by creating the orchestrator that ties together all data pipeline steps. The goal is a single, reliable command that:
+
 - Works for local development (initial setup)
 - Works for CI (validation)
 - Works for updates (when NIST releases new data)
@@ -187,6 +196,6 @@ Claude Opus 4 (claude-opus-4-5-20251101)
 
 ## Change Log
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author   | Change                               |
+| ---------- | -------- | ------------------------------------ |
 | 2025-11-27 | SM Agent | Story drafted from Epic 9 definition |
