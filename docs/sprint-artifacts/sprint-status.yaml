@@ -81,7 +81,7 @@ development_status:
   epic-1: contexted
   1-1-extend-template-with-ssp-dependencies: done
   1-2-create-ssp-type-definitions: done
-  1-3-implement-json-file-storage-service: drafted
+  1-3-implement-json-file-storage-service: done
   1-4-initialize-go-cli-repository: skipped # Separate repository - no coupling
   1-5-extend-dashboard-layout-for-ssp-navigation: drafted
   1-6-set-up-ci-cd-pipeline: skipped # Deferred per user request

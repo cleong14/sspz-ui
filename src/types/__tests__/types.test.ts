@@ -9,25 +9,20 @@
 import { describe, it, expect } from '@jest/globals'
 import type {
   // SSP Types
-  SspProject,
   Baseline,
   SspStatus,
   ImpactLevel,
   Contact,
-  SystemInfo,
   CreateSspInput,
   // Control Types
   Control,
   ControlFamily,
-  ControlCatalog,
   ControlImplementation,
   ImplementationStatus,
   ImplementationProgress,
   // Tool Types
   Tool,
   ToolCategory,
-  ToolControlMapping,
-  ToolLibrary,
 } from '../index'
 
 describe('SSP Type Definitions', () => {
