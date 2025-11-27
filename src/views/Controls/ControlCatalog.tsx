@@ -3,10 +3,11 @@
  * @module views/Controls/ControlCatalog
  *
  * Displays the NIST 800-53 control catalog for browsing and searching.
- * Features family tabs, control grid, search, and responsive layout.
+ * Features family tabs, control grid, search, detail view, and responsive layout.
  *
  * Story: 3.3 - Build Control Catalog Browse Page
  * Story: 3.4 - Implement Control Search
+ * Story: 3.5 - Build Control Detail View
  */
 
 import * as React from 'react'
@@ -25,9 +26,15 @@ import {
   loadControlCatalog,
   loadControlFamilies,
   getControlsByFamily,
+  getControlById,
   filterControlsBySearch,
 } from '@/lib/controls'
-import { FamilyTabs, ControlGrid, ControlSearch } from './components'
+import {
+  FamilyTabs,
+  ControlGrid,
+  ControlSearch,
+  ControlDetailSheet,
+} from './components'
 
 /**
  * Hook for loading control catalog data
@@ -87,6 +94,10 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { catalog, families, loading, error } = useControlCatalog()
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [selectedControl, setSelectedControl] = React.useState<Control | null>(
+    null
+  )
+  const [detailOpen, setDetailOpen] = React.useState(false)
 
   // Get selected family from URL or default to first family
   const selectedFamily =
@@ -134,11 +145,30 @@ const ControlCatalog: React.FC = (): JSX.Element => {
     setSearchQuery(query)
   }, [])
 
-  // Handle control click - will open detail view in Story 3.5
+  // Handle control click - opens detail view
   const handleControlClick = React.useCallback((control: Control) => {
-    // TODO: Open control detail sheet (Story 3.5)
-    console.log('Selected control:', control.id)
+    setSelectedControl(control)
+    setDetailOpen(true)
   }, [])
+
+  // Handle detail sheet close
+  const handleDetailClose = React.useCallback(() => {
+    setDetailOpen(false)
+  }, [])
+
+  // Handle related control click (from detail sheet)
+  const handleRelatedControlClick = React.useCallback(
+    (controlId: string) => {
+      if (!catalog) return
+
+      const control = getControlById(catalog, controlId)
+      if (control) {
+        setSelectedControl(control)
+        // Keep detail sheet open, just switch content
+      }
+    },
+    [catalog]
+  )
 
   // Loading state
   if (loading) {
@@ -258,6 +288,14 @@ const ControlCatalog: React.FC = (): JSX.Element => {
             ? `No controls found matching "${searchQuery}"`
             : `No controls found in ${selectedFamily} family`
         }
+      />
+
+      {/* Control Detail Sheet */}
+      <ControlDetailSheet
+        control={selectedControl}
+        open={detailOpen}
+        onClose={handleDetailClose}
+        onRelatedControlClick={handleRelatedControlClick}
       />
     </Box>
   )

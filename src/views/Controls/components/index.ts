@@ -4,6 +4,7 @@
  */
 
 export { default as ControlCard } from './ControlCard'
+export { default as ControlDetailSheet } from './ControlDetailSheet'
 export { default as ControlGrid } from './ControlGrid'
 export { default as ControlSearch } from './ControlSearch'
 export { default as FamilyTabs } from './FamilyTabs'
