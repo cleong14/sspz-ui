@@ -3,9 +3,10 @@
  * @module views/Controls/ControlCatalog
  *
  * Displays the NIST 800-53 control catalog for browsing and searching.
- * Features family tabs, control grid, and responsive layout.
+ * Features family tabs, control grid, search, and responsive layout.
  *
  * Story: 3.3 - Build Control Catalog Browse Page
+ * Story: 3.4 - Implement Control Search
  */
 
 import * as React from 'react'
@@ -24,8 +25,9 @@ import {
   loadControlCatalog,
   loadControlFamilies,
   getControlsByFamily,
+  filterControlsBySearch,
 } from '@/lib/controls'
-import { FamilyTabs, ControlGrid } from './components'
+import { FamilyTabs, ControlGrid, ControlSearch } from './components'
 
 /**
  * Hook for loading control catalog data
@@ -84,16 +86,34 @@ function useControlCatalog() {
 const ControlCatalog: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { catalog, families, loading, error } = useControlCatalog()
+  const [searchQuery, setSearchQuery] = React.useState('')
 
   // Get selected family from URL or default to first family
   const selectedFamily =
     searchParams.get('family') || (families.length > 0 ? families[0].id : 'AC')
+
+  // Check if we're in search mode (searching across all families)
+  const isSearchMode = searchQuery.trim().length > 0
 
   // Get controls for selected family
   const familyControls = React.useMemo(() => {
     if (!catalog) return []
     return getControlsByFamily(catalog, selectedFamily)
   }, [catalog, selectedFamily])
+
+  // Get all controls for search
+  const allControls = React.useMemo(() => {
+    if (!catalog?.controls) return []
+    return catalog.controls
+  }, [catalog])
+
+  // Filter controls based on search (search across all families when in search mode)
+  const displayedControls = React.useMemo(() => {
+    if (isSearchMode) {
+      return filterControlsBySearch(allControls, searchQuery)
+    }
+    return familyControls
+  }, [isSearchMode, allControls, familyControls, searchQuery])
 
   // Get current family info
   const currentFamily = React.useMemo(() => {
@@ -104,9 +124,15 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   const handleFamilyChange = React.useCallback(
     (familyId: string) => {
       setSearchParams({ family: familyId })
+      setSearchQuery('') // Clear search when changing families
     },
     [setSearchParams]
   )
+
+  // Handle search change
+  const handleSearchChange = React.useCallback((query: string) => {
+    setSearchQuery(query)
+  }, [])
 
   // Handle control click - will open detail view in Story 3.5
   const handleControlClick = React.useCallback((control: Control) => {
@@ -121,6 +147,7 @@ const ControlCatalog: React.FC = (): JSX.Element => {
         <Typography variant="h4" component="h1" gutterBottom>
           Control Catalog
         </Typography>
+        <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
         <Skeleton variant="rectangular" height={48} sx={{ mb: 3 }} />
         <Box
           sx={{
@@ -164,15 +191,28 @@ const ControlCatalog: React.FC = (): JSX.Element => {
         </Typography>
       </Box>
 
-      <Paper sx={{ mb: 3 }}>
-        <FamilyTabs
-          families={families}
-          selectedFamily={selectedFamily}
-          onFamilyChange={handleFamilyChange}
+      {/* Search Bar */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <ControlSearch
+          value={searchQuery}
+          onChange={handleSearchChange}
+          resultCount={isSearchMode ? displayedControls.length : undefined}
         />
       </Paper>
 
-      {currentFamily && (
+      {/* Family Tabs - Hidden during search mode */}
+      {!isSearchMode && (
+        <Paper sx={{ mb: 3 }}>
+          <FamilyTabs
+            families={families}
+            selectedFamily={selectedFamily}
+            onFamilyChange={handleFamilyChange}
+          />
+        </Paper>
+      )}
+
+      {/* Family Info - Hidden during search mode */}
+      {!isSearchMode && currentFamily && (
         <Box sx={{ mb: 3 }}>
           <Typography variant="h6" component="h2" gutterBottom>
             {currentFamily.name}
@@ -198,10 +238,26 @@ const ControlCatalog: React.FC = (): JSX.Element => {
         </Box>
       )}
 
+      {/* Search Results Header */}
+      {isSearchMode && (
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Search Results
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Found {displayedControls.length} controls matching "{searchQuery}"
+          </Typography>
+        </Box>
+      )}
+
       <ControlGrid
-        controls={familyControls}
+        controls={displayedControls}
         onControlClick={handleControlClick}
-        emptyMessage={`No controls found in ${selectedFamily} family`}
+        emptyMessage={
+          isSearchMode
+            ? `No controls found matching "${searchQuery}"`
+            : `No controls found in ${selectedFamily} family`
+        }
       />
     </Box>
   )
