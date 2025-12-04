@@ -6,6 +6,22 @@
  * 3 columns on desktop, 2 on tablet, 1 on mobile.
  *
  * Story: 3.3 - Build Control Catalog Browse Page
+ *
+ * Performance Note:
+ * The control catalog has ~1196 controls. Current implementation renders
+ * all visible controls with standard MUI Grid. This works well for:
+ * - Family browsing: Typically 20-200 controls per family
+ * - Filtered views: Baseline filters reduce item count
+ *
+ * Consider virtualization (react-window or react-virtuoso) if:
+ * - Search results frequently show >500 controls
+ * - Users report scrolling performance issues
+ * - Memory usage becomes a concern on low-end devices
+ *
+ * Virtualization trade-offs:
+ * - Pro: Better performance with large lists
+ * - Con: More complex scroll behavior, accessibility considerations
+ * - Con: Fixed row heights required (react-window) or more config
  */
 
 import * as React from 'react'

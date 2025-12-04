@@ -27,29 +27,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LinkIcon from '@mui/icons-material/Link'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import type { Control } from '@/types/control'
-import { getBaselineBadges } from '@/lib/controls'
+import { getBaselineBadges, getBaselineColor } from '@/lib/controls'
 
 interface ControlDetailSheetProps {
   control: Control | null
   open: boolean
   onClose: () => void
   onRelatedControlClick?: (controlId: string) => void
-}
-
-/**
- * Get the color for a baseline badge
- */
-function getBaselineColor(baseline: string): 'success' | 'warning' | 'error' {
-  switch (baseline) {
-    case 'Low':
-      return 'success'
-    case 'Moderate':
-      return 'warning'
-    case 'High':
-      return 'error'
-    default:
-      return 'success'
-  }
 }
 
 /**

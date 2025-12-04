@@ -16,27 +16,11 @@ import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import type { Control } from '@/types/control'
-import { getBaselineBadges } from '@/lib/controls'
+import { getBaselineBadges, getBaselineColor } from '@/lib/controls'
 
 interface ControlCardProps {
   control: Control
   onClick?: (control: Control) => void
-}
-
-/**
- * Get the color for a baseline badge
- */
-function getBaselineColor(baseline: string): 'success' | 'warning' | 'error' {
-  switch (baseline) {
-    case 'Low':
-      return 'success'
-    case 'Moderate':
-      return 'warning'
-    case 'High':
-      return 'error'
-    default:
-      return 'success'
-  }
 }
 
 /**

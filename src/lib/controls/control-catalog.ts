@@ -118,6 +118,30 @@ export function getBaselineBadges(control: Control): string[] {
 }
 
 /**
+ * Get MUI color for a baseline level
+ */
+export function getBaselineColor(
+  baseline: string
+): 'success' | 'warning' | 'error' | 'default' | 'info' {
+  const normalized = baseline.toLowerCase()
+  switch (normalized) {
+    case 'low':
+    case 'fedramp_low':
+      return 'success'
+    case 'moderate':
+    case 'fedramp_moderate':
+      return 'warning'
+    case 'high':
+    case 'fedramp_high':
+      return 'error'
+    case 'fedramp_li_saas':
+      return 'info'
+    default:
+      return 'default'
+  }
+}
+
+/**
  * Search result with match information
  */
 export interface SearchResult {

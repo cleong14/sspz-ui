@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import ListSubheader from '@mui/material/ListSubheader'
 import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
+import { getBaselineColor } from '@/lib/controls'
 
 export type BaselineFilterValue =
   | 'all'
@@ -52,18 +53,6 @@ const FEDRAMP_OPTIONS: BaselineOption[] = [
   { value: 'fedramp_high', label: 'FedRAMP High', color: 'error' },
   { value: 'fedramp_li_saas', label: 'FedRAMP LI-SaaS', color: 'info' },
 ]
-
-/**
- * Get display color for baseline
- */
-function getBaselineColor(
-  value: BaselineFilterValue
-): 'default' | 'success' | 'warning' | 'error' | 'info' {
-  const option = [...NIST_OPTIONS, ...FEDRAMP_OPTIONS].find(
-    (o) => o.value === value
-  )
-  return option?.color || 'default'
-}
 
 /**
  * Get display label for baseline

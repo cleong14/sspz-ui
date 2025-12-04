@@ -113,11 +113,13 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { catalog, families, fedRampBaselines, loading, error } =
     useControlCatalog()
-  const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedControl, setSelectedControl] = React.useState<Control | null>(
     null
   )
   const [detailOpen, setDetailOpen] = React.useState(false)
+
+  // Get search query from URL or default to empty string
+  const searchQuery = searchParams.get('q') || ''
 
   // Get selected family from URL or default to first family
   const selectedFamily =
@@ -188,8 +190,8 @@ const ControlCatalog: React.FC = (): JSX.Element => {
     (familyId: string) => {
       const newParams = new URLSearchParams(searchParams)
       newParams.set('family', familyId)
+      newParams.delete('q') // Clear search when changing families
       setSearchParams(newParams)
-      setSearchQuery('') // Clear search when changing families
     },
     [searchParams, setSearchParams]
   )
@@ -209,9 +211,18 @@ const ControlCatalog: React.FC = (): JSX.Element => {
   )
 
   // Handle search change
-  const handleSearchChange = React.useCallback((query: string) => {
-    setSearchQuery(query)
-  }, [])
+  const handleSearchChange = React.useCallback(
+    (query: string) => {
+      const newParams = new URLSearchParams(searchParams)
+      if (query.trim()) {
+        newParams.set('q', query)
+      } else {
+        newParams.delete('q')
+      }
+      setSearchParams(newParams, { replace: true })
+    },
+    [searchParams, setSearchParams]
+  )
 
   // Handle control click - opens detail view
   const handleControlClick = React.useCallback((control: Control) => {
