@@ -52,7 +52,7 @@ epics:
     stories: 6
   epic-4:
     name: 'SSP Project Management'
-    status: backlog
+    status: complete
     stories: 5
   epic-5:
     name: 'SSP Creation Workflow'
@@ -107,13 +107,13 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4: SSP Project Management (5 stories)
-  epic-4: backlog
-  4-1-build-ssp-dashboard: backlog
-  4-2-implement-create-new-ssp: backlog
-  4-3-implement-ssp-list-and-search: backlog
-  4-4-implement-duplicate-ssp-as-template: backlog
-  4-5-implement-archive-and-delete-ssp: backlog
-  epic-4-retrospective: optional
+  epic-4: complete
+  4-1-build-ssp-dashboard: done
+  4-2-implement-create-new-ssp: done
+  4-3-implement-ssp-list-and-search: done
+  4-4-implement-duplicate-ssp-as-template: done
+  4-5-implement-archive-and-delete-ssp: done
+  epic-4-retrospective: completed
 
   # Epic 5: SSP Creation Workflow (8 stories)
   epic-5: backlog
