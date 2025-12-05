@@ -69,3 +69,15 @@ export {
   getOscalFileExtension,
   getOscalMimeType,
 } from './generator'
+
+// Validator (Story 6.5)
+export {
+  OscalValidator,
+  validateOscalSsp,
+  validateSspProject,
+  isValidSspProject,
+  formatValidationSummary,
+  type ValidationResult,
+  type ValidationError,
+  type ValidationOptions,
+} from './validator'

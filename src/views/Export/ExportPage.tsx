@@ -50,6 +50,8 @@ import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
   Info as InfoIcon,
+  VerifiedUser as VerifiedUserIcon,
+  Error as ErrorIcon,
 } from '@mui/icons-material'
 import { saveAs } from 'file-saver'
 
@@ -61,6 +63,8 @@ import {
   exportOscalSsp,
   getOscalFileExtension,
   getOscalMimeType,
+  validateSspProject,
+  type ValidationResult,
 } from '@/lib/oscal'
 import {
   generateWordDocument,
@@ -154,6 +158,9 @@ export default function ExportPage() {
     message: '',
     severity: 'success',
   })
+  const [validating, setValidating] = useState(false)
+  const [oscalValidation, setOscalValidation] =
+    useState<ValidationResult | null>(null)
 
   // Load project
   useEffect(() => {
@@ -293,6 +300,42 @@ export default function ExportPage() {
       })
     }
   }, [previewContent])
+
+  // OSCAL Validation handler
+  const handleValidate = useCallback(() => {
+    if (!project) return
+
+    setValidating(true)
+    // Use setTimeout to allow UI to update before validation
+    setTimeout(() => {
+      try {
+        const result = validateSspProject(project, { fedramp: fedrampMode })
+        setOscalValidation(result)
+
+        if (result.isValid) {
+          setSnackbar({
+            open: true,
+            message: 'SSP is OSCAL-compliant!',
+            severity: 'success',
+          })
+        } else {
+          setSnackbar({
+            open: true,
+            message: `Validation found ${result.errorCount} error(s)`,
+            severity: 'error',
+          })
+        }
+      } catch (error) {
+        setSnackbar({
+          open: true,
+          message: error instanceof Error ? error.message : 'Validation failed',
+          severity: 'error',
+        })
+      } finally {
+        setValidating(false)
+      }
+    }, 100)
+  }, [project, fedrampMode])
 
   // Loading state
   if (loading) {
@@ -490,6 +533,151 @@ export default function ExportPage() {
                     </Box>
                   }
                 />
+              </Box>
+            )}
+
+            {/* OSCAL Validation Section */}
+            {selectedFormat.startsWith('oscal-') && (
+              <Box mt={3}>
+                <Divider sx={{ mb: 2 }} />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  mb={2}
+                >
+                  <Box>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      OSCAL Validation
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Validate SSP against OSCAL schema before export
+                    </Typography>
+                  </Box>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={
+                      validating ? (
+                        <CircularProgress size={16} />
+                      ) : (
+                        <VerifiedUserIcon />
+                      )
+                    }
+                    onClick={handleValidate}
+                    disabled={validating}
+                  >
+                    {validating ? 'Validating...' : 'Validate'}
+                  </Button>
+                </Box>
+
+                {/* Validation Results */}
+                {oscalValidation && (
+                  <Box
+                    sx={{
+                      p: 2,
+                      borderRadius: 1,
+                      bgcolor: oscalValidation.isValid
+                        ? 'success.light'
+                        : 'error.light',
+                      border: 1,
+                      borderColor: oscalValidation.isValid
+                        ? 'success.main'
+                        : 'error.main',
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" gap={1} mb={1}>
+                      {oscalValidation.isValid ? (
+                        <>
+                          <CheckCircleIcon color="success" />
+                          <Typography
+                            variant="subtitle2"
+                            color="success.dark"
+                            fontWeight="bold"
+                          >
+                            SSP is OSCAL-compliant
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          <ErrorIcon color="error" />
+                          <Typography
+                            variant="subtitle2"
+                            color="error.dark"
+                            fontWeight="bold"
+                          >
+                            {oscalValidation.errorCount} error(s) found
+                          </Typography>
+                        </>
+                      )}
+                      {oscalValidation.warningCount > 0 && (
+                        <Chip
+                          label={`${oscalValidation.warningCount} warning(s)`}
+                          size="small"
+                          color="warning"
+                          variant="outlined"
+                          sx={{ ml: 1 }}
+                        />
+                      )}
+                    </Box>
+
+                    {/* Error List */}
+                    {oscalValidation.errors.length > 0 && (
+                      <Box sx={{ mt: 1 }}>
+                        {oscalValidation.errors.slice(0, 5).map((err, idx) => (
+                          <Box key={idx} sx={{ mb: 0.5 }}>
+                            <Typography variant="body2" color="error.dark">
+                              {err.message}
+                            </Typography>
+                            {err.suggestion && (
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                Fix: {err.suggestion}
+                              </Typography>
+                            )}
+                          </Box>
+                        ))}
+                        {oscalValidation.errors.length > 5 && (
+                          <Typography variant="caption" color="text.secondary">
+                            ... and {oscalValidation.errors.length - 5} more
+                            errors
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
+
+                    {/* Warning List */}
+                    {oscalValidation.warnings.length > 0 && (
+                      <Box sx={{ mt: 1 }}>
+                        {oscalValidation.warnings
+                          .slice(0, 3)
+                          .map((warn, idx) => (
+                            <Box key={idx} sx={{ mb: 0.5 }}>
+                              <Typography variant="body2" color="warning.dark">
+                                {warn.message}
+                              </Typography>
+                              {warn.suggestion && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  Suggestion: {warn.suggestion}
+                                </Typography>
+                              )}
+                            </Box>
+                          ))}
+                        {oscalValidation.warnings.length > 3 && (
+                          <Typography variant="caption" color="text.secondary">
+                            ... and {oscalValidation.warnings.length - 3} more
+                            warnings
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                )}
               </Box>
             )}
 
