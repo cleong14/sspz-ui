@@ -50,6 +50,10 @@ export interface ParseError {
   line?: number
   /** Column number if applicable */
   column?: number
+  /** Path in the document (JSON pointer or XPath) */
+  path?: string
+  /** Suggested fix for the error */
+  suggestion?: string
 }
 
 export interface ParseWarning {
@@ -59,6 +63,10 @@ export interface ParseWarning {
   message: string
   /** Field that triggered the warning */
   field?: string
+  /** Path in the document */
+  path?: string
+  /** Suggested fix */
+  suggestion?: string
 }
 
 export interface ParseOptions {
@@ -68,6 +76,90 @@ export interface ParseOptions {
   projectName?: string
   /** Use strict parsing (fail on warnings) */
   strict?: boolean
+}
+
+// ============================================================================
+// Error Handling Helpers
+// ============================================================================
+
+/**
+ * Extract line number from JSON parse error
+ */
+function extractJsonErrorLocation(
+  error: Error,
+  content: string
+): { line?: number; column?: number } {
+  // JSON parse errors often contain position info like "at position 123"
+  const posMatch = error.message.match(/position\s+(\d+)/i)
+  if (posMatch) {
+    const position = parseInt(posMatch[1], 10)
+    const lines = content.substring(0, position).split('\n')
+    return {
+      line: lines.length,
+      column: lines[lines.length - 1].length + 1,
+    }
+  }
+
+  // Some parsers report "line X column Y"
+  const lineColMatch = error.message.match(/line\s+(\d+).*column\s+(\d+)/i)
+  if (lineColMatch) {
+    return {
+      line: parseInt(lineColMatch[1], 10),
+      column: parseInt(lineColMatch[2], 10),
+    }
+  }
+
+  return {}
+}
+
+/**
+ * Get suggestion for common parse errors
+ */
+function getSuggestionForParseError(code: string, message: string): string {
+  switch (code) {
+    case 'UNKNOWN_FORMAT':
+      return 'Ensure your file is a valid JSON, YAML, or XML document. Check for syntax errors.'
+    case 'PARSE_ERROR':
+      if (message.includes('Unexpected token')) {
+        return 'Check for missing commas, brackets, or quotes in your JSON.'
+      }
+      if (message.includes('duplicate key')) {
+        return 'Remove duplicate keys from your document.'
+      }
+      return 'Check the file for syntax errors such as missing commas, quotes, or brackets.'
+    case 'XML_PARSE_ERROR':
+      return 'Ensure XML is well-formed with proper opening/closing tags and valid characters.'
+    case 'INVALID_STRUCTURE':
+      return 'The document must contain a "system-security-plan" root element. Verify the OSCAL structure.'
+    case 'CONVERSION_ERROR':
+      return 'Check that all required OSCAL fields are present and properly formatted.'
+    case 'FILE_READ_ERROR':
+      return 'Ensure the file exists and you have permission to read it.'
+    case 'MISSING_SYSTEM_NAME':
+      return 'Add a "system-name" field under "system-characteristics".'
+    default:
+      return 'Review the OSCAL SSP specification and ensure your document follows the required format.'
+  }
+}
+
+/**
+ * Get suggestion for warnings
+ */
+function getSuggestionForWarning(code: string): string {
+  switch (code) {
+    case 'MISSING_SYSTEM_NAME':
+      return 'Add a system name to properly identify this SSP.'
+    case 'MISSING_DESCRIPTION':
+      return 'Add a system description for better documentation.'
+    case 'MISSING_CONTACTS':
+      return 'Add contact information for system owners and security personnel.'
+    case 'INCOMPLETE_CATEGORIZATION':
+      return 'Specify security impact levels for confidentiality, integrity, and availability.'
+    case 'EMPTY_CONTROL_IMPLEMENTATION':
+      return 'Add implementation statements to document how controls are met.'
+    default:
+      return 'Review and complete this field for a comprehensive SSP.'
+  }
 }
 
 // ============================================================================
@@ -487,8 +579,34 @@ function convertToSspProject(
       code: 'MISSING_SYSTEM_NAME',
       message: 'System name not found, using default',
       field: 'system-name',
+      path: '/system-security-plan/system-characteristics/system-name',
+      suggestion: getSuggestionForWarning('MISSING_SYSTEM_NAME'),
     })
     systemInfo.systemName = options.projectName || 'Imported SSP'
+  }
+
+  // Additional warnings for incomplete data
+  if (!systemInfo.description) {
+    warnings.push({
+      code: 'MISSING_DESCRIPTION',
+      message: 'System description is empty',
+      field: 'description',
+      path: '/system-security-plan/system-characteristics/description',
+      suggestion: getSuggestionForWarning('MISSING_DESCRIPTION'),
+    })
+  }
+
+  if (
+    !systemInfo.contacts.systemOwner.name &&
+    !systemInfo.contacts.securityPoc.name
+  ) {
+    warnings.push({
+      code: 'MISSING_CONTACTS',
+      message: 'No contact information found for system owner or security POC',
+      field: 'contacts',
+      path: '/system-security-plan/metadata/parties',
+      suggestion: getSuggestionForWarning('MISSING_CONTACTS'),
+    })
   }
 
   const baseline = extractBaseline(ssp['import-profile'].href || '')
@@ -562,12 +680,14 @@ export function parseOscalSsp(
       case 'xml':
         oscalDoc = parseXmlToObject(content)
         if (!oscalDoc) {
+          const xmlErrorCode = 'XML_PARSE_ERROR'
           return {
             success: false,
             errors: [
               {
-                code: 'XML_PARSE_ERROR',
+                code: xmlErrorCode,
                 message: 'Failed to parse XML document',
+                suggestion: getSuggestionForParseError(xmlErrorCode, ''),
               },
             ],
             warnings: [],
@@ -577,15 +697,38 @@ export function parseOscalSsp(
         break
     }
   } catch (error) {
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : `Failed to parse ${format.toUpperCase()} document`
+
+    const location =
+      error instanceof Error && format === 'json'
+        ? extractJsonErrorLocation(error, content)
+        : {}
+
+    // YAML errors from js-yaml include line/column info
+    let yamlLocation: { line?: number; column?: number } = {}
+    if (format === 'yaml' && error instanceof Error) {
+      const yamlMatch = error.message.match(/at line (\d+), column (\d+)/i)
+      if (yamlMatch) {
+        yamlLocation = {
+          line: parseInt(yamlMatch[1], 10),
+          column: parseInt(yamlMatch[2], 10),
+        }
+      }
+    }
+
+    const parseErrorCode = 'PARSE_ERROR'
     return {
       success: false,
       errors: [
         {
-          code: 'PARSE_ERROR',
-          message:
-            error instanceof Error
-              ? error.message
-              : `Failed to parse ${format.toUpperCase()} document`,
+          code: parseErrorCode,
+          message: errorMessage,
+          line: location.line || yamlLocation.line,
+          column: location.column || yamlLocation.column,
+          suggestion: getSuggestionForParseError(parseErrorCode, errorMessage),
         },
       ],
       warnings: [],
@@ -594,13 +737,16 @@ export function parseOscalSsp(
   }
 
   if (!oscalDoc || !oscalDoc['system-security-plan']) {
+    const structureCode = 'INVALID_STRUCTURE'
     return {
       success: false,
       errors: [
         {
-          code: 'INVALID_STRUCTURE',
+          code: structureCode,
           message:
             'Document does not contain a valid system-security-plan element',
+          path: '/system-security-plan',
+          suggestion: getSuggestionForParseError(structureCode, ''),
         },
       ],
       warnings: [],
@@ -697,4 +843,71 @@ export function isValidOscalSsp(
 ): boolean {
   const result = parseOscalSsp(content, options)
   return result.success
+}
+
+/**
+ * Generate an error report for download
+ */
+export function generateErrorReport(
+  result: ParseResult,
+  filename?: string
+): string {
+  const lines: string[] = [
+    '================================',
+    'OSCAL SSP Import Error Report',
+    '================================',
+    '',
+    `Generated: ${new Date().toISOString()}`,
+    `File: ${filename || 'Unknown'}`,
+    `Format: ${result.detectedFormat || 'Unknown'}`,
+    '',
+  ]
+
+  if (result.errors.length > 0) {
+    lines.push('ERRORS', '------', '')
+    result.errors.forEach((error, idx) => {
+      lines.push(`${idx + 1}. [${error.code}] ${error.message}`)
+      if (error.line !== undefined) {
+        lines.push(
+          `   Location: Line ${error.line}${error.column ? `, Column ${error.column}` : ''}`
+        )
+      }
+      if (error.path) {
+        lines.push(`   Path: ${error.path}`)
+      }
+      if (error.suggestion) {
+        lines.push(`   Suggestion: ${error.suggestion}`)
+      }
+      lines.push('')
+    })
+  }
+
+  if (result.warnings.length > 0) {
+    lines.push('WARNINGS', '--------', '')
+    result.warnings.forEach((warning, idx) => {
+      lines.push(`${idx + 1}. [${warning.code}] ${warning.message}`)
+      if (warning.field) {
+        lines.push(`   Field: ${warning.field}`)
+      }
+      if (warning.path) {
+        lines.push(`   Path: ${warning.path}`)
+      }
+      if (warning.suggestion) {
+        lines.push(`   Suggestion: ${warning.suggestion}`)
+      }
+      lines.push('')
+    })
+  }
+
+  lines.push(
+    '================================',
+    'End of Report',
+    '================================',
+    '',
+    'For more information about OSCAL SSP format, visit:',
+    'https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/',
+    ''
+  )
+
+  return lines.join('\n')
 }

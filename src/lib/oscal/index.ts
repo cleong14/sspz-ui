@@ -82,13 +82,14 @@ export {
   type ValidationOptions,
 } from './validator'
 
-// Parser (Story 6.6)
+// Parser (Story 6.6, 6.7)
 export {
   parseOscalSsp,
   parseOscalFile,
   isValidOscalSsp,
   detectFormat,
   detectFormatFromFilename,
+  generateErrorReport,
   type ParseResult,
   type ParseError,
   type ParseWarning,

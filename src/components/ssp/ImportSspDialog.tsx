@@ -5,6 +5,7 @@
  * Dialog for importing OSCAL SSP files (JSON, YAML, XML).
  *
  * Story: 6.6 - Implement OSCAL Import
+ * Story: 6.7 - Implement Import Validation and Error Handling
  */
 
 import { useState, useCallback, useRef } from 'react'
@@ -25,15 +26,24 @@ import {
   LinearProgress,
   Chip,
   Divider,
+  Collapse,
+  IconButton,
 } from '@mui/material'
 import {
   CloudUpload as UploadIcon,
-  Description as FileIcon,
   CheckCircle as SuccessIcon,
   Error as ErrorIcon,
   Warning as WarningIcon,
+  Download as DownloadIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material'
-import { parseOscalFile, type ParseResult } from '@/lib/oscal'
+import {
+  parseOscalFile,
+  generateErrorReport,
+  type ParseResult,
+} from '@/lib/oscal'
 import type { SspProject } from '@/types/ssp'
 
 interface ImportSspDialogProps {
@@ -60,12 +70,16 @@ export default function ImportSspDialog({
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [parseResult, setParseResult] = useState<ParseResult | null>(null)
   const [dragOver, setDragOver] = useState(false)
+  const [showAllErrors, setShowAllErrors] = useState(false)
+  const [showAllWarnings, setShowAllWarnings] = useState(false)
 
   const resetState = useCallback(() => {
     setStep('select')
     setSelectedFile(null)
     setParseResult(null)
     setDragOver(false)
+    setShowAllErrors(false)
+    setShowAllWarnings(false)
   }, [])
 
   const handleClose = useCallback(() => {
@@ -148,6 +162,21 @@ export default function ImportSspDialog({
     resetState()
     fileInputRef.current?.click()
   }, [resetState])
+
+  const handleDownloadErrorReport = useCallback(() => {
+    if (!parseResult) return
+
+    const report = generateErrorReport(parseResult, selectedFile?.name)
+    const blob = new Blob([report], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `import-error-report-${Date.now()}.txt`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }, [parseResult, selectedFile])
 
   return (
     <Dialog
@@ -278,27 +307,71 @@ export default function ImportSspDialog({
               <>
                 <Divider sx={{ my: 2 }} />
                 <Alert severity="warning" sx={{ mb: 2 }}>
-                  <AlertTitle>
-                    {parseResult.warnings.length} warning(s)
+                  <AlertTitle
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <span>{parseResult.warnings.length} warning(s)</span>
+                    {parseResult.warnings.length > 3 && (
+                      <IconButton
+                        size="small"
+                        onClick={() => setShowAllWarnings(!showAllWarnings)}
+                        sx={{ ml: 1, p: 0 }}
+                      >
+                        {showAllWarnings ? (
+                          <ExpandLessIcon />
+                        ) : (
+                          <ExpandMoreIcon />
+                        )}
+                      </IconButton>
+                    )}
                   </AlertTitle>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    These issues won't prevent import but should be reviewed.
+                  </Typography>
                   <List dense disablePadding>
-                    {parseResult.warnings.slice(0, 5).map((warning, idx) => (
-                      <ListItem key={idx} disableGutters sx={{ py: 0 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <WarningIcon fontSize="small" color="warning" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={warning.message}
-                          primaryTypographyProps={{ variant: 'body2' }}
-                        />
+                    {(showAllWarnings
+                      ? parseResult.warnings
+                      : parseResult.warnings.slice(0, 3)
+                    ).map((warning, idx) => (
+                      <ListItem
+                        key={idx}
+                        disableGutters
+                        sx={{
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          py: 0.5,
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <ListItemIcon sx={{ minWidth: 32 }}>
+                            <WarningIcon fontSize="small" color="warning" />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={warning.message}
+                            primaryTypographyProps={{ variant: 'body2' }}
+                          />
+                        </Box>
+                        {warning.suggestion && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ pl: 4, mt: 0.25 }}
+                          >
+                            {warning.suggestion}
+                          </Typography>
+                        )}
                       </ListItem>
                     ))}
-                    {parseResult.warnings.length > 5 && (
-                      <Typography variant="caption" color="text.secondary">
-                        ...and {parseResult.warnings.length - 5} more
-                      </Typography>
-                    )}
                   </List>
+                  {!showAllWarnings && parseResult.warnings.length > 3 && (
+                    <Typography variant="caption" color="text.secondary">
+                      ...and {parseResult.warnings.length - 3} more warnings
+                    </Typography>
+                  )}
                 </Alert>
               </>
             )}
@@ -311,27 +384,153 @@ export default function ImportSspDialog({
             <Alert severity="error" sx={{ mb: 2 }}>
               <AlertTitle>Import failed</AlertTitle>
               The file could not be parsed as a valid OSCAL SSP document.
+              {parseResult?.errors && parseResult.errors.length > 0 && (
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {parseResult.errors.length} error(s) found
+                </Typography>
+              )}
             </Alert>
 
             {parseResult?.errors && parseResult.errors.length > 0 && (
-              <List dense>
-                {parseResult.errors.map((error, idx) => (
-                  <ListItem key={idx}>
-                    <ListItemIcon>
-                      <ErrorIcon color="error" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={error.message}
-                      secondary={error.code}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              <Box sx={{ mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mb: 1,
+                  }}
+                >
+                  <Typography variant="subtitle2" color="error">
+                    Errors
+                  </Typography>
+                  {parseResult.errors.length > 3 && (
+                    <IconButton
+                      size="small"
+                      onClick={() => setShowAllErrors(!showAllErrors)}
+                    >
+                      {showAllErrors ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                  )}
+                </Box>
+                <List dense disablePadding>
+                  {(showAllErrors
+                    ? parseResult.errors
+                    : parseResult.errors.slice(0, 3)
+                  ).map((error, idx) => (
+                    <ListItem
+                      key={idx}
+                      sx={{
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        bgcolor: 'error.lighter',
+                        borderRadius: 1,
+                        mb: 1,
+                        py: 1,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <ListItemIcon sx={{ minWidth: 32 }}>
+                          <ErrorIcon color="error" fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={error.message}
+                          secondary={
+                            <Box component="span">
+                              <Chip
+                                label={error.code}
+                                size="small"
+                                variant="outlined"
+                                sx={{ mr: 1, fontSize: '0.7rem', height: 20 }}
+                              />
+                              {error.line !== undefined && (
+                                <Typography
+                                  component="span"
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  Line {error.line}
+                                  {error.column && `, Col ${error.column}`}
+                                </Typography>
+                              )}
+                            </Box>
+                          }
+                          primaryTypographyProps={{ variant: 'body2' }}
+                        />
+                      </Box>
+                      {error.suggestion && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            mt: 1,
+                            pl: 4,
+                          }}
+                        >
+                          <InfoIcon
+                            sx={{
+                              fontSize: 14,
+                              mr: 0.5,
+                              mt: 0.25,
+                              color: 'info.main',
+                            }}
+                          />
+                          <Typography variant="caption" color="text.secondary">
+                            {error.suggestion}
+                          </Typography>
+                        </Box>
+                      )}
+                    </ListItem>
+                  ))}
+                </List>
+                {!showAllErrors && parseResult.errors.length > 3 && (
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: 'block', textAlign: 'center' }}
+                  >
+                    ...and {parseResult.errors.length - 3} more errors
+                  </Typography>
+                )}
+              </Box>
             )}
+
+            <Divider sx={{ my: 2 }} />
+
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Button
+                size="small"
+                startIcon={<DownloadIcon />}
+                onClick={handleDownloadErrorReport}
+                variant="outlined"
+              >
+                Download Error Report
+              </Button>
+              <Typography variant="caption" color="text.secondary">
+                Save for review and fixing
+              </Typography>
+            </Box>
 
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
               Please ensure your file is a valid OSCAL SSP document in JSON,
-              YAML, or XML format.
+              YAML, or XML format. For more information, visit{' '}
+              <Typography
+                component="a"
+                href="https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="body2"
+                color="primary"
+              >
+                OSCAL SSP Reference
+              </Typography>
+              .
             </Typography>
           </Box>
         )}
