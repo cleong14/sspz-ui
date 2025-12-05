@@ -61,20 +61,12 @@ import { v4 as uuidv4 } from 'uuid'
 import type { WizardStepProps } from '../SspWizard'
 import type {
   Control,
-  ControlFamily,
   ControlImplementation,
   ImplementationStatus,
   Evidence,
   InheritedControl,
 } from '@/types/control'
-
-// ============================================================================
-// Types
-// ============================================================================
-
-interface ControlWithImplementation extends Control {
-  implementation?: ControlImplementation
-}
+import { useControlCatalog } from '@/hooks/useControlCatalog'
 
 // ============================================================================
 // Constants
@@ -127,80 +119,12 @@ const EVIDENCE_TYPES = [
   { value: 'other', label: 'Other' },
 ] as const
 
-// Mock control families for demonstration
-// In production, these would come from the control catalog
-const MOCK_FAMILIES: ControlFamily[] = [
-  { id: 'AC', name: 'Access Control', totalControls: 25 },
-  { id: 'AT', name: 'Awareness and Training', totalControls: 6 },
-  { id: 'AU', name: 'Audit and Accountability', totalControls: 16 },
-  {
-    id: 'CA',
-    name: 'Assessment, Authorization, and Monitoring',
-    totalControls: 9,
-  },
-  { id: 'CM', name: 'Configuration Management', totalControls: 14 },
-  { id: 'CP', name: 'Contingency Planning', totalControls: 13 },
-  { id: 'IA', name: 'Identification and Authentication', totalControls: 12 },
-  { id: 'IR', name: 'Incident Response', totalControls: 10 },
-  { id: 'MA', name: 'Maintenance', totalControls: 7 },
-  { id: 'MP', name: 'Media Protection', totalControls: 8 },
-  {
-    id: 'PE',
-    name: 'Physical and Environmental Protection',
-    totalControls: 23,
-  },
-  { id: 'PL', name: 'Planning', totalControls: 11 },
-  { id: 'PM', name: 'Program Management', totalControls: 32 },
-  { id: 'PS', name: 'Personnel Security', totalControls: 9 },
-  { id: 'PT', name: 'PII Processing and Transparency', totalControls: 8 },
-  { id: 'RA', name: 'Risk Assessment', totalControls: 10 },
-  { id: 'SA', name: 'System and Services Acquisition', totalControls: 23 },
-  { id: 'SC', name: 'System and Communications Protection', totalControls: 51 },
-  { id: 'SI', name: 'System and Information Integrity', totalControls: 23 },
-  { id: 'SR', name: 'Supply Chain Risk Management', totalControls: 12 },
-]
-
-// Generate mock controls for each family
-function generateMockControls(familyId: string, count: number): Control[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${familyId}-${i + 1}`,
-    family: familyId,
-    title: `${familyId}-${i + 1} Control Title`,
-    description: `This control requires the organization to implement security measures related to ${familyId.toLowerCase()}. Specific requirements depend on the system categorization and organizational policies.`,
-    baselines: { low: i < 5, moderate: i < 10, high: true },
-  }))
-}
-
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
 function getStatusInfo(status: ImplementationStatus) {
   return STATUS_OPTIONS.find((s) => s.value === status) || STATUS_OPTIONS[0]
-}
-
-function calculateFamilyProgress(
-  familyId: string,
-  implementations: ControlImplementation[]
-): { total: number; completed: number; percentage: number } {
-  const familyImplementations = implementations.filter((impl) =>
-    impl.controlId.startsWith(familyId)
-  )
-  const completed = familyImplementations.filter(
-    (impl) =>
-      impl.status === 'IMPLEMENTED' ||
-      impl.status === 'NOT_APPLICABLE' ||
-      impl.status === 'PARTIALLY_IMPLEMENTED'
-  ).length
-
-  const family = MOCK_FAMILIES.find((f) => f.id === familyId)
-  const total = family?.totalControls || 0
-
-  return {
-    total,
-    completed,
-    percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
-  }
 }
 
 // ============================================================================
@@ -214,24 +138,37 @@ const ControlImplementationStep: React.FC<WizardStepProps> = ({
   project,
   onUpdate,
 }) => {
+  // Load real control catalog data
+  const {
+    families,
+    loading: catalogLoading,
+    error: catalogError,
+    getControlsForFamily,
+    getFamilyControlCount,
+    getBaselineControlCount,
+  } = useControlCatalog(project.baseline)
+
   // State
-  const [selectedFamily, setSelectedFamily] = useState<string>(
-    MOCK_FAMILIES[0].id
-  )
+  const [selectedFamily, setSelectedFamily] = useState<string>('')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<
     ImplementationStatus | 'ALL'
   >('ALL')
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
-  // Get controls for selected family
+  // Set initial selected family when catalog loads
+  useEffect(() => {
+    if (families.length > 0 && !selectedFamily) {
+      setSelectedFamily(families[0].id)
+    }
+  }, [families, selectedFamily])
+
+  // Get controls for selected family, filtered by baseline
   const familyControls = useMemo(() => {
-    const family = MOCK_FAMILIES.find((f) => f.id === selectedFamily)
-    if (!family) return []
-    return generateMockControls(selectedFamily, family.totalControls || 10)
-  }, [selectedFamily])
+    if (!selectedFamily) return []
+    return getControlsForFamily(selectedFamily, project.baseline)
+  }, [selectedFamily, project.baseline, getControlsForFamily])
 
   // Get implementation for a control
   const getImplementation = useCallback(
@@ -270,12 +207,38 @@ const ControlImplementationStep: React.FC<WizardStepProps> = ({
     return controls
   }, [familyControls, searchQuery, statusFilter, getImplementation])
 
+  // Calculate family progress
+  const calculateFamilyProgress = useCallback(
+    (familyId: string) => {
+      const familyControlCount = getFamilyControlCount(
+        familyId,
+        project.baseline
+      )
+      const familyImplementations = project.implementations.filter((impl) =>
+        impl.controlId.toUpperCase().startsWith(familyId.toUpperCase())
+      )
+      const completed = familyImplementations.filter(
+        (impl) =>
+          impl.status === 'IMPLEMENTED' ||
+          impl.status === 'NOT_APPLICABLE' ||
+          impl.status === 'PARTIALLY_IMPLEMENTED'
+      ).length
+
+      return {
+        total: familyControlCount,
+        completed,
+        percentage:
+          familyControlCount > 0
+            ? Math.round((completed / familyControlCount) * 100)
+            : 0,
+      }
+    },
+    [getFamilyControlCount, project.baseline, project.implementations]
+  )
+
   // Calculate overall progress
   const overallProgress = useMemo(() => {
-    const totalControls = MOCK_FAMILIES.reduce(
-      (sum, f) => sum + (f.totalControls || 0),
-      0
-    )
+    const totalControls = getBaselineControlCount(project.baseline)
     const completedControls = project.implementations.filter(
       (impl) =>
         impl.status === 'IMPLEMENTED' ||
@@ -291,7 +254,7 @@ const ControlImplementationStep: React.FC<WizardStepProps> = ({
           ? Math.round((completedControls / totalControls) * 100)
           : 0,
     }
-  }, [project.implementations])
+  }, [project.implementations, project.baseline, getBaselineControlCount])
 
   // Handlers
   const handleFamilyChange = useCallback(
@@ -394,6 +357,40 @@ const ControlImplementationStep: React.FC<WizardStepProps> = ({
     ? getImplementation(selectedControl.id)
     : undefined
 
+  // Loading state
+  if (catalogLoading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          p: 4,
+        }}
+      >
+        <CircularProgress sx={{ mb: 2 }} />
+        <Typography color="text.secondary">
+          Loading control catalog...
+        </Typography>
+      </Box>
+    )
+  }
+
+  // Error state
+  if (catalogError) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Failed to load control catalog: {catalogError}
+        </Alert>
+        <Typography variant="body2" color="text.secondary">
+          Please try refreshing the page. If the problem persists, check that
+          the control catalog files are accessible.
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <Box>
       {/* Header with progress */}
@@ -441,11 +438,8 @@ const ControlImplementationStep: React.FC<WizardStepProps> = ({
               orientation="vertical"
               sx={{ maxHeight: 300 }}
             >
-              {MOCK_FAMILIES.map((family) => {
-                const progress = calculateFamilyProgress(
-                  family.id,
-                  project.implementations
-                )
+              {families.map((family) => {
+                const progress = calculateFamilyProgress(family.id)
                 return (
                   <Tab
                     key={family.id}
