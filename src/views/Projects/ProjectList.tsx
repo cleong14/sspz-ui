@@ -34,9 +34,15 @@ import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import SortIcon from '@mui/icons-material/Sort'
+import UploadIcon from '@mui/icons-material/Upload'
 import { useSsp } from '@/contexts/SspContext'
 import { useAlert } from '@/hooks/useAlert'
-import { SspCard, SspEmptyState, CreateSspDialog } from '@/components/ssp'
+import {
+  SspCard,
+  SspEmptyState,
+  CreateSspDialog,
+  ImportSspDialog,
+} from '@/components/ssp'
 import type {
   SspProject,
   SspStatus,
@@ -65,6 +71,7 @@ const ProjectList: React.FC = (): JSX.Element => {
     hasDirectoryAccess,
     loadProjects,
     createProject,
+    importProject,
     archiveProject,
     restoreProject,
     duplicateProject,
@@ -74,6 +81,7 @@ const ProjectList: React.FC = (): JSX.Element => {
 
   // Dialog states
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [importDialogOpen, setImportDialogOpen] = useState(false)
   const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<SspProject | null>(
@@ -206,6 +214,27 @@ const ProjectList: React.FC = (): JSX.Element => {
         message: 'Failed to create SSP',
         severity: 'error',
       })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleImportProject = async (project: SspProject) => {
+    setIsSubmitting(true)
+    try {
+      await importProject(project)
+      setImportDialogOpen(false)
+      setAlert({
+        message: `"${project.name}" imported successfully`,
+        severity: 'success',
+      })
+      navigate(`/app/projects/${project.id}`)
+    } catch {
+      setAlert({
+        message: 'Failed to import SSP',
+        severity: 'error',
+      })
+      throw new Error('Import failed')
     } finally {
       setIsSubmitting(false)
     }
@@ -388,13 +417,22 @@ const ProjectList: React.FC = (): JSX.Element => {
         <Typography variant="h4" component="h1">
           Projects
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => setCreateDialogOpen(true)}
-        >
-          Create New SSP
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            startIcon={<UploadIcon />}
+            onClick={() => setImportDialogOpen(true)}
+          >
+            Import SSP
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setCreateDialogOpen(true)}
+          >
+            Create New SSP
+          </Button>
+        </Stack>
       </Box>
 
       {/* Search and Filters */}
@@ -573,6 +611,14 @@ const ProjectList: React.FC = (): JSX.Element => {
         open={createDialogOpen}
         onClose={() => setCreateDialogOpen(false)}
         onSubmit={handleCreateProject}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Import Dialog */}
+      <ImportSspDialog
+        open={importDialogOpen}
+        onClose={() => setImportDialogOpen(false)}
+        onImport={handleImportProject}
         isSubmitting={isSubmitting}
       />
 

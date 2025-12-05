@@ -8934,6 +8934,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-yaml@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10/a0ce595db8a987904badd21fc50f9f444cb73069f4b95a76cc222e0a17b3ff180669059c763ec314bc4c3ce284379177a9da80e83c5f650c6c1310cafbfaa8e6
+  languageName: node
+  linkType: hard
+
 "@types/jsdom@npm:^20.0.0":
   version: 20.0.1
   resolution: "@types/jsdom@npm:20.0.1"
@@ -21229,6 +21236,7 @@ __metadata:
     "@types/babel__core": "npm:^7.20.5"
     "@types/file-saver": "npm:^2.0.7"
     "@types/jest": "npm:^29.5.14"
+    "@types/js-yaml": "npm:^4.0.9"
     "@types/lodash": "npm:^4.17.18"
     "@types/node": "npm:^20.19.1"
     "@types/pdfmake": "npm:^0.2.12"
