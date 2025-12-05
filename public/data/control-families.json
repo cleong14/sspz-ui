@@ -1,0 +1,269 @@
+{
+  "version": "1.0",
+  "generatedAt": "2025-11-27T15:28:27.276Z",
+  "catalogVersion": "1.0",
+  "families": [
+    {
+      "id": "AC",
+      "name": "Access Control",
+      "description": "Controls for managing access to systems and information, including account management, access enforcement, and remote access.",
+      "totalControls": 147,
+      "baseControls": 25,
+      "byBaseline": {
+        "low": 11,
+        "moderate": 39,
+        "high": 46
+      }
+    },
+    {
+      "id": "AT",
+      "name": "Awareness and Training",
+      "description": "Controls for security awareness and training programs to ensure personnel understand security responsibilities.",
+      "totalControls": 17,
+      "baseControls": 6,
+      "byBaseline": {
+        "low": 5,
+        "moderate": 6,
+        "high": 6
+      }
+    },
+    {
+      "id": "AU",
+      "name": "Audit and Accountability",
+      "description": "Controls for audit logging, monitoring, and maintaining accountability for system activities.",
+      "totalControls": 69,
+      "baseControls": 16,
+      "byBaseline": {
+        "low": 10,
+        "moderate": 16,
+        "high": 25
+      }
+    },
+    {
+      "id": "CA",
+      "name": "Assessment, Authorization, and Monitoring",
+      "description": "Controls for security assessments, authorization processes, and continuous monitoring.",
+      "totalControls": 32,
+      "baseControls": 9,
+      "byBaseline": {
+        "low": 8,
+        "moderate": 10,
+        "high": 14
+      }
+    },
+    {
+      "id": "CM",
+      "name": "Configuration Management",
+      "description": "Controls for managing system configurations, baselines, and change control processes.",
+      "totalControls": 66,
+      "baseControls": 14,
+      "byBaseline": {
+        "low": 9,
+        "moderate": 24,
+        "high": 32
+      }
+    },
+    {
+      "id": "CP",
+      "name": "Contingency Planning",
+      "description": "Controls for business continuity, disaster recovery, and system backup procedures.",
+      "totalControls": 56,
+      "baseControls": 13,
+      "byBaseline": {
+        "low": 6,
+        "moderate": 23,
+        "high": 35
+      }
+    },
+    {
+      "id": "IA",
+      "name": "Identification and Authentication",
+      "description": "Controls for identifying and authenticating users, devices, and services.",
+      "totalControls": 74,
+      "baseControls": 13,
+      "byBaseline": {
+        "low": 16,
+        "moderate": 24,
+        "high": 26
+      }
+    },
+    {
+      "id": "IR",
+      "name": "Incident Response",
+      "description": "Controls for incident handling, reporting, and response capabilities.",
+      "totalControls": 42,
+      "baseControls": 10,
+      "byBaseline": {
+        "low": 7,
+        "moderate": 13,
+        "high": 18
+      }
+    },
+    {
+      "id": "MA",
+      "name": "Maintenance",
+      "description": "Controls for system maintenance, including local and remote maintenance procedures.",
+      "totalControls": 30,
+      "baseControls": 7,
+      "byBaseline": {
+        "low": 4,
+        "moderate": 9,
+        "high": 12
+      }
+    },
+    {
+      "id": "MP",
+      "name": "Media Protection",
+      "description": "Controls for protecting digital and physical media containing sensitive information.",
+      "totalControls": 30,
+      "baseControls": 8,
+      "byBaseline": {
+        "low": 4,
+        "moderate": 7,
+        "high": 10
+      }
+    },
+    {
+      "id": "PE",
+      "name": "Physical and Environmental Protection",
+      "description": "Controls for physical access, environmental hazards, and facility security.",
+      "totalControls": 59,
+      "baseControls": 23,
+      "byBaseline": {
+        "low": 10,
+        "moderate": 18,
+        "high": 25
+      }
+    },
+    {
+      "id": "PL",
+      "name": "Planning",
+      "description": "Controls for security planning, system security plans, and rules of behavior.",
+      "totalControls": 17,
+      "baseControls": 11,
+      "byBaseline": {
+        "low": 6,
+        "moderate": 7,
+        "high": 7
+      }
+    },
+    {
+      "id": "PM",
+      "name": "Program Management",
+      "description": "Controls for organization-wide information security program management.",
+      "totalControls": 37,
+      "baseControls": 32,
+      "byBaseline": {
+        "low": 0,
+        "moderate": 0,
+        "high": 0
+      }
+    },
+    {
+      "id": "PS",
+      "name": "Personnel Security",
+      "description": "Controls for personnel screening, termination, and transfer procedures.",
+      "totalControls": 18,
+      "baseControls": 9,
+      "byBaseline": {
+        "low": 9,
+        "moderate": 9,
+        "high": 10
+      }
+    },
+    {
+      "id": "PT",
+      "name": "Personally Identifiable Information Processing and Transparency",
+      "description": "Controls for handling PII, consent, privacy notices, and data minimization.",
+      "totalControls": 21,
+      "baseControls": 8,
+      "byBaseline": {
+        "low": 0,
+        "moderate": 0,
+        "high": 0
+      }
+    },
+    {
+      "id": "RA",
+      "name": "Risk Assessment",
+      "description": "Controls for risk assessment, vulnerability scanning, and threat intelligence.",
+      "totalControls": 26,
+      "baseControls": 10,
+      "byBaseline": {
+        "low": 8,
+        "moderate": 10,
+        "high": 11
+      }
+    },
+    {
+      "id": "SA",
+      "name": "System and Services Acquisition",
+      "description": "Controls for secure development, acquisition, and supply chain risk management.",
+      "totalControls": 147,
+      "baseControls": 24,
+      "byBaseline": {
+        "low": 9,
+        "moderate": 17,
+        "high": 21
+      }
+    },
+    {
+      "id": "SC",
+      "name": "System and Communications Protection",
+      "description": "Controls for protecting communications, cryptography, and system boundaries.",
+      "totalControls": 162,
+      "baseControls": 51,
+      "byBaseline": {
+        "low": 10,
+        "moderate": 25,
+        "high": 30
+      }
+    },
+    {
+      "id": "SI",
+      "name": "System and Information Integrity",
+      "description": "Controls for malware protection, security alerts, and software integrity.",
+      "totalControls": 119,
+      "baseControls": 23,
+      "byBaseline": {
+        "low": 6,
+        "moderate": 18,
+        "high": 28
+      }
+    },
+    {
+      "id": "SR",
+      "name": "Supply Chain Risk Management",
+      "description": "Controls for managing supply chain risks, component authenticity, and provenance.",
+      "totalControls": 27,
+      "baseControls": 12,
+      "byBaseline": {
+        "low": 11,
+        "moderate": 12,
+        "high": 14
+      }
+    }
+  ],
+  "familyIds": [
+    "AC",
+    "AT",
+    "AU",
+    "CA",
+    "CM",
+    "CP",
+    "IA",
+    "IR",
+    "MA",
+    "MP",
+    "PE",
+    "PL",
+    "PM",
+    "PS",
+    "PT",
+    "RA",
+    "SA",
+    "SC",
+    "SI",
+    "SR"
+  ]
+}
