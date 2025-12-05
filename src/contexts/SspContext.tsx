@@ -43,6 +43,7 @@ interface SspContextValue extends SspState {
   loadProjects: () => Promise<void>
   createProject: (input: CreateSspInput) => Promise<SspProject>
   updateProject: (project: SspProject) => Promise<SspProject>
+  importProject: (project: SspProject) => Promise<SspProject>
   deleteProject: (id: string) => Promise<void>
   archiveProject: (id: string) => Promise<SspProject>
   restoreProject: (id: string) => Promise<SspProject>
@@ -215,6 +216,24 @@ export function SspProvider({ children }: SspProviderProps): JSX.Element {
     }
   }, [])
 
+  // Import an OSCAL SSP as a new project
+  const importProject = useCallback(async (project: SspProject) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const saved = await sspStorage.save(project)
+      dispatch({ type: 'ADD_PROJECT', payload: saved })
+      dispatch({ type: 'SET_LOADING', payload: false })
+      return saved
+    } catch (error) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload:
+          error instanceof Error ? error.message : 'Failed to import project',
+      })
+      throw error
+    }
+  }, [])
+
   // Delete a project
   const deleteProject = useCallback(async (id: string) => {
     try {
@@ -344,6 +363,7 @@ export function SspProvider({ children }: SspProviderProps): JSX.Element {
     loadProjects,
     createProject,
     updateProject,
+    importProject,
     deleteProject,
     archiveProject,
     restoreProject,

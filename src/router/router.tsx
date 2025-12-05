@@ -15,6 +15,7 @@ import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
 import ProjectList from '@/views/Projects/ProjectList'
 import { SspWizard } from '@/views/SspWizard'
+import { ExportPage } from '@/views/Export'
 import ControlCatalog from '@/views/Controls/ControlCatalog'
 import ToolLibrary from '@/views/Tools/ToolLibrary'
 import Settings from '@/views/Settings/Settings'
@@ -83,6 +84,12 @@ const router = createBrowserRouter([
             path: `${RouteIds.PROJECTS}/:id`,
             id: RouteIds.PROJECT_DETAIL,
             element: <SspWizard />,
+            errorElement: <ErrorBoundary />,
+          },
+          {
+            path: `${RouteIds.PROJECTS}/:id/${RouteIds.PROJECT_EXPORT}`,
+            id: RouteIds.PROJECT_EXPORT,
+            element: <ExportPage />,
             errorElement: <ErrorBoundary />,
           },
           {
