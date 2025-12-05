@@ -48,7 +48,7 @@ epics:
     stories: 5
   epic-3:
     name: 'Control Catalog & Browsing'
-    status: backlog
+    status: complete
     stories: 6
   epic-4:
     name: 'SSP Project Management'
@@ -97,14 +97,14 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3: Control Catalog & Browsing (6 stories)
-  epic-3: backlog
-  3-1-create-nist-800-53-rev-5-control-data-file: backlog
-  3-2-create-fedramp-baseline-data-file: backlog
-  3-3-build-control-catalog-browse-page: backlog
-  3-4-implement-control-search: backlog
-  3-5-build-control-detail-view: backlog
-  3-6-implement-baseline-filter: backlog
-  epic-3-retrospective: optional
+  epic-3: complete
+  3-1-create-nist-800-53-rev-5-control-data-file: done
+  3-2-create-fedramp-baseline-data-file: done
+  3-3-build-control-catalog-browse-page: done
+  3-4-implement-control-search: done
+  3-5-build-control-detail-view: done
+  3-6-implement-baseline-filter: done
+  epic-3-retrospective: completed
 
   # Epic 4: SSP Project Management (5 stories)
   epic-4: complete
