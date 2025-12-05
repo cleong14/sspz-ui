@@ -62,7 +62,12 @@ import {
   getOscalFileExtension,
   getOscalMimeType,
 } from '@/lib/oscal'
-import { generateWordDocument, getWordFilename } from '@/lib/export'
+import {
+  generateWordDocument,
+  getWordFilename,
+  generatePdfDocument,
+  getPdfFilename,
+} from '@/lib/export'
 
 // ============================================================================
 // Types
@@ -240,8 +245,10 @@ export default function ExportPage() {
         mimeType =
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       } else if (selectedFormat === 'pdf') {
-        // PDF export will be implemented in Story 6.4
-        throw new Error('PDF export will be available in the next release')
+        // PDF export
+        content = await generatePdfDocument(project, { fedramp: fedrampMode })
+        filename = getPdfFilename(project)
+        mimeType = 'application/pdf'
       } else {
         throw new Error(`Unknown format: ${selectedFormat}`)
       }

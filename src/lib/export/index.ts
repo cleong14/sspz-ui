@@ -10,3 +10,9 @@ export {
   getWordFilename,
   type WordExportOptions,
 } from './word-generator'
+
+export {
+  generatePdfDocument,
+  getPdfFilename,
+  type PdfExportOptions,
+} from './pdf-generator'
