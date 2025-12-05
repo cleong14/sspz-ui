@@ -62,6 +62,7 @@ import {
   getOscalFileExtension,
   getOscalMimeType,
 } from '@/lib/oscal'
+import { generateWordDocument, getWordFilename } from '@/lib/export'
 
 // ============================================================================
 // Types
@@ -233,8 +234,11 @@ export default function ExportPage() {
         filename = `${project.systemInfo?.systemName || project.name}-ssp${getOscalFileExtension(oscalFormat)}`
         mimeType = getOscalMimeType(oscalFormat)
       } else if (selectedFormat === 'docx') {
-        // Word export will be implemented in Story 6.3
-        throw new Error('Word export will be available in the next release')
+        // Word document export
+        content = await generateWordDocument(project, { fedramp: fedrampMode })
+        filename = getWordFilename(project)
+        mimeType =
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       } else if (selectedFormat === 'pdf') {
         // PDF export will be implemented in Story 6.4
         throw new Error('PDF export will be available in the next release')
@@ -243,7 +247,10 @@ export default function ExportPage() {
       }
 
       // Create and download file
-      const blob = new Blob([content], { type: mimeType })
+      const blob =
+        content instanceof Blob
+          ? content
+          : new Blob([content], { type: mimeType })
       saveAs(blob, filename)
 
       setSnackbar({
