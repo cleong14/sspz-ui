@@ -59,6 +59,55 @@ interface ImportSspDialogProps {
 
 type ImportStep = 'select' | 'parsing' | 'preview' | 'error'
 
+// Valid MIME types for OSCAL files
+const VALID_MIME_TYPES = [
+  'application/json',
+  'application/yaml',
+  'application/x-yaml',
+  'text/yaml',
+  'text/x-yaml',
+  'application/xml',
+  'text/xml',
+  '', // Some browsers don't set MIME type for yaml/xml files
+]
+
+// Valid file extensions
+const VALID_EXTENSIONS = ['.json', '.yaml', '.yml', '.xml']
+
+/**
+ * Validate that a file is a supported OSCAL format
+ */
+function isValidOscalFile(file: File): { valid: boolean; reason?: string } {
+  const extension = file.name.toLowerCase().slice(file.name.lastIndexOf('.'))
+
+  // Check extension first (most reliable)
+  if (!VALID_EXTENSIONS.includes(extension)) {
+    return {
+      valid: false,
+      reason: `Unsupported file type "${extension}". Please use JSON, YAML, or XML files.`,
+    }
+  }
+
+  // Check MIME type if available
+  if (file.type && !VALID_MIME_TYPES.includes(file.type)) {
+    return {
+      valid: false,
+      reason: `Unsupported file format "${file.type}". Please use JSON, YAML, or XML files.`,
+    }
+  }
+
+  // Check file size (max 50MB)
+  const maxSize = 50 * 1024 * 1024
+  if (file.size > maxSize) {
+    return {
+      valid: false,
+      reason: 'File is too large. Maximum file size is 50MB.',
+    }
+  }
+
+  return { valid: true }
+}
+
 export default function ImportSspDialog({
   open,
   onClose,
@@ -90,6 +139,26 @@ export default function ImportSspDialog({
   }, [isSubmitting, onClose, resetState])
 
   const handleFileSelect = useCallback(async (file: File) => {
+    // Validate file type before processing
+    const validation = isValidOscalFile(file)
+    if (!validation.valid) {
+      setSelectedFile(file)
+      setParseResult({
+        success: false,
+        errors: [
+          {
+            code: 'INVALID_FILE_TYPE',
+            message: validation.reason || 'Invalid file type',
+            suggestion:
+              'Select a file with .json, .yaml, .yml, or .xml extension.',
+          },
+        ],
+        warnings: [],
+      })
+      setStep('error')
+      return
+    }
+
     setSelectedFile(file)
     setStep('parsing')
 
@@ -107,6 +176,7 @@ export default function ImportSspDialog({
               error instanceof Error
                 ? error.message
                 : 'An unexpected error occurred',
+            suggestion: 'Check that the file is not corrupted and try again.',
           },
         ],
         warnings: [],

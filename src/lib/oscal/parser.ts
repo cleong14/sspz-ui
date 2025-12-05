@@ -168,29 +168,42 @@ function getSuggestionForWarning(code: string): string {
 
 /**
  * Detect the format of an OSCAL file based on content
+ * Uses comprehensive validation to ensure format is correct
  */
 export function detectFormat(content: string): OscalFormat | null {
   const trimmed = content.trim()
 
-  // Check for JSON
-  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    try {
-      JSON.parse(trimmed)
-      return 'json'
-    } catch {
-      // Not valid JSON
+  // Check for XML first (most distinctive)
+  if (trimmed.startsWith('<?xml') || trimmed.startsWith('<')) {
+    // Verify it's well-formed XML-like content
+    if (trimmed.includes('</') || trimmed.includes('/>')) {
+      return 'xml'
     }
   }
 
-  // Check for XML
-  if (trimmed.startsWith('<?xml') || trimmed.startsWith('<')) {
-    return 'xml'
+  // Check for JSON - must be valid AND be an object or array
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(trimmed)
+      // Verify the result is actually an object (OSCAL documents are objects)
+      if (parsed && typeof parsed === 'object') {
+        return 'json'
+      }
+    } catch {
+      // Not valid JSON - could be malformed or actually YAML
+    }
   }
 
-  // Try YAML
+  // Try YAML last (YAML is a superset of JSON, so order matters)
   try {
     const parsed = yaml.load(trimmed)
-    if (parsed && typeof parsed === 'object') {
+    // Verify parsed result is an object and has content
+    if (
+      parsed &&
+      typeof parsed === 'object' &&
+      !Array.isArray(parsed) &&
+      Object.keys(parsed as object).length > 0
+    ) {
       return 'yaml'
     }
   } catch {
@@ -510,6 +523,68 @@ function convertImplementations(
   })
 }
 
+// Valid component types for SystemComponent
+const VALID_COMPONENT_TYPES = [
+  'software',
+  'hardware',
+  'service',
+  'other',
+] as const
+type ValidComponentType = (typeof VALID_COMPONENT_TYPES)[number]
+
+/**
+ * Validate and convert OSCAL component type to internal type
+ */
+function validateComponentType(
+  oscalType: string | undefined,
+  componentName: string,
+  warnings: ParseWarning[]
+): ValidComponentType {
+  if (!oscalType) {
+    return 'other'
+  }
+
+  const normalizedType = oscalType.toLowerCase()
+
+  // Direct matches
+  if (VALID_COMPONENT_TYPES.includes(normalizedType as ValidComponentType)) {
+    return normalizedType as ValidComponentType
+  }
+
+  // Common OSCAL types that map to our types
+  const typeMapping: Record<string, ValidComponentType> = {
+    'this-system': 'software',
+    application: 'software',
+    'operating-system': 'software',
+    database: 'software',
+    network: 'hardware',
+    'network-device': 'hardware',
+    appliance: 'hardware',
+    'web-server': 'software',
+    'api-gateway': 'service',
+    policy: 'other',
+    procedure: 'other',
+    plan: 'other',
+    guidance: 'other',
+    standard: 'other',
+    validation: 'other',
+  }
+
+  if (typeMapping[normalizedType]) {
+    return typeMapping[normalizedType]
+  }
+
+  // Unknown type - add warning
+  warnings.push({
+    code: 'UNKNOWN_COMPONENT_TYPE',
+    message: `Unknown component type "${oscalType}" for component "${componentName}", defaulting to "other"`,
+    field: 'component.type',
+    suggestion: `Consider using one of: ${VALID_COMPONENT_TYPES.join(', ')}`,
+  })
+
+  return 'other'
+}
+
 /**
  * Convert OSCAL SSP document to internal SspProject format
  */
@@ -523,16 +598,12 @@ function convertToSspProject(
 
   const sysChar = ssp['system-characteristics']
 
-  // Convert components with proper IDs
+  // Convert components with proper type validation
   const components: SystemComponent[] =
     ssp['system-implementation'].components?.map((c) => ({
       id: c.uuid || uuidv4(),
       name: c.title,
-      type: (c.type === 'software' ||
-      c.type === 'hardware' ||
-      c.type === 'service'
-        ? c.type
-        : 'other') as SystemComponent['type'],
+      type: validateComponentType(c.type, c.title, warnings),
       description: c.description || '',
       version: undefined,
       vendor: undefined,

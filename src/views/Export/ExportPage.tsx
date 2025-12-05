@@ -283,10 +283,28 @@ export default function ExportPage() {
     }
   }, [project, selectedFormat, fedrampMode])
 
-  // Copy preview to clipboard
+  // Copy preview to clipboard with fallback for older browsers
   const handleCopyPreview = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(previewContent)
+      // Try modern Clipboard API first
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(previewContent)
+      } else {
+        // Fallback for browsers without Clipboard API
+        const textarea = document.createElement('textarea')
+        textarea.value = previewContent
+        textarea.style.position = 'fixed'
+        textarea.style.left = '-9999px'
+        textarea.style.top = '-9999px'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        const success = document.execCommand('copy')
+        document.body.removeChild(textarea)
+        if (!success) {
+          throw new Error('execCommand copy failed')
+        }
+      }
       setSnackbar({
         open: true,
         message: 'Copied to clipboard',

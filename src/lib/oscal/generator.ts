@@ -9,6 +9,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
+import * as yaml from 'js-yaml'
 import type {
   SspProject,
   Baseline,
@@ -174,78 +175,17 @@ export class OscalGenerator {
   }
 
   /**
-   * Convert to YAML format
+   * Convert to YAML format using js-yaml library
    */
   private toYaml(document: OscalSspDocument): string {
-    // Simple YAML serialization (for complex cases, use a library like js-yaml)
-    return this.objectToYaml(document, 0)
-  }
-
-  /**
-   * Recursively convert object to YAML string
-   */
-  private objectToYaml(obj: unknown, indent: number): string {
-    const indentStr = '  '.repeat(indent)
-
-    if (obj === null || obj === undefined) {
-      return 'null'
-    }
-
-    if (typeof obj === 'string') {
-      // Check if string needs quoting
-      if (
-        obj.includes('\n') ||
-        obj.includes(':') ||
-        obj.includes('#') ||
-        obj.match(/^['"]/)
-      ) {
-        return `|\n${obj
-          .split('\n')
-          .map((line) => indentStr + '  ' + line)
-          .join('\n')}`
-      }
-      return obj
-    }
-
-    if (typeof obj === 'number' || typeof obj === 'boolean') {
-      return String(obj)
-    }
-
-    if (Array.isArray(obj)) {
-      if (obj.length === 0) return '[]'
-      return obj
-        .map((item) => {
-          const itemYaml = this.objectToYaml(item, indent + 1)
-          if (typeof item === 'object' && item !== null) {
-            return `\n${indentStr}- ${itemYaml.trim()}`
-          }
-          return `\n${indentStr}- ${itemYaml}`
-        })
-        .join('')
-    }
-
-    if (typeof obj === 'object') {
-      const entries = Object.entries(obj as Record<string, unknown>)
-      if (entries.length === 0) return '{}'
-      return entries
-        .map(([key, value]) => {
-          const valueYaml = this.objectToYaml(value, indent + 1)
-          if (
-            typeof value === 'object' &&
-            value !== null &&
-            !Array.isArray(value)
-          ) {
-            return `${indentStr}${key}:\n${valueYaml}`
-          }
-          if (Array.isArray(value)) {
-            return `${indentStr}${key}:${valueYaml}`
-          }
-          return `${indentStr}${key}: ${valueYaml}`
-        })
-        .join('\n')
-    }
-
-    return String(obj)
+    return yaml.dump(document, {
+      indent: 2,
+      lineWidth: 120,
+      noRefs: true,
+      sortKeys: false,
+      quotingType: '"',
+      forceQuotes: false,
+    })
   }
 
   /**
